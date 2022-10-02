@@ -1,5 +1,5 @@
 from tkinter import *
-
+import psutil
 root = Tk()
 
 screen_height = 700
@@ -61,33 +61,33 @@ activation_key_btn = Button(sidebar, text='Activation Key', fg = 'black', font= 
 activation_key_btn.pack(side= 'top', pady= 20)
 
 # main content area
-dashboard = Frame(root, bg='#CCC',)
+dashboard = Frame(root, bg='#ECF0F5',)
 dashboard.pack( expand=True, fill= BOTH, anchor = 'ne')
 
-caution_frame = Frame(dashboard, bg='#CCC',)
-caution_frame.pack(fill=X, side='top', anchor=CENTER, expand=True, padx = screen_width * 0.2)
+caution_frame = Frame(dashboard, bg='#ECF0F5',)
+caution_frame.pack(fill=X, side='top', anchor='ne', expand=True, padx = screen_width * 0.15, ipadx=50)
 
 caution_icon_path = PhotoImage(file='caution.png')
 caution_icon_path = caution_icon_path.zoom(15)
 caution_icon_path = caution_icon_path.subsample(32)
-caution_icon = Label(caution_frame, image= caution_icon_path, width= 50 , height= 50, bg='#CCC')
+caution_icon = Label(caution_frame, image= caution_icon_path, width= 40 , height= 40, bg='#ECF0F5')
 caution_icon.pack(side= 'left', pady= 5)
 
-optimizing_lbl = Label(caution_frame, text='Optimising items frees up storage space on your device. ', font= ("DM Sans", 11, ), fg = 'black', bg = '#CCC', relief='flat')
+optimizing_lbl = Label(caution_frame, text='Optimising items frees up storage space on your device. ', font= ("DM Sans", 11, ), fg = 'black', bg = '#ECF0F5', relief='flat')
 optimizing_lbl.pack(side= 'left', pady= 5)
 
-t_and_c_btn = Button(caution_frame, text='Scan Now!', activebackground='#CCC' ,font= ("DM Sans", 11, ), bg = '#CCC', fg = '#004AAD', relief='flat')
+t_and_c_btn = Button(caution_frame, text='Scan Now!', activebackground='#ECF0F5' ,font= ("DM Sans", 11, ), bg = '#ECF0F5', fg = '#004AAD', relief='flat')
 t_and_c_btn.pack(side= 'left', pady= 5)
 
 
 scan_btn_path = PhotoImage(file='Group 24.png')
 scan_btn_path = scan_btn_path.zoom(15)
 scan_btn_path = scan_btn_path.subsample(32)
-scan_btn = Button(dashboard, image= scan_btn_path, activebackground='#CCC' , width= screen_height *0.25 , height= screen_height *0.25 , bg='#CCC', relief='flat')
+scan_btn = Button(dashboard, image= scan_btn_path, activebackground='#ECF0F5' , width= screen_height *0.25 , height= screen_height *0.25 , bg='#ECF0F5', relief='flat')
 scan_btn.pack(side = TOP, padx = 20, pady = 10, anchor = CENTER)
 
 
-stats_frame = Frame(dashboard, bg='#CCC',)
+stats_frame = Frame(dashboard, bg='#ECF0F5',)
 stats_frame.pack(fill=X, side='top', anchor=CENTER, expand=True)
 
 
@@ -95,50 +95,59 @@ gradient_circle_path = PhotoImage(file='Group 20.png')
 gradient_circle_path = gradient_circle_path.zoom(20)
 gradient_circle_path = gradient_circle_path.subsample(32)
 
-empty_sizedbox = Label(stats_frame, text='', bg='#CCC')
-empty_sizedbox.pack(side= 'left', anchor = CENTER, padx = 165)
+empty_sizedbox = Label(stats_frame, text='', bg='#ECF0F5')
+empty_sizedbox.pack(side= 'left', anchor = CENTER, padx = 150)
 
-memory_frame = Frame(stats_frame, bg='#CCC',)
+memory_frame = Frame(stats_frame, bg='#ECF0F5',)
 memory_frame.pack(fill=X, side='left', anchor=CENTER, padx = 12)
 
-mem_usage_circle = Label(memory_frame, image= gradient_circle_path, text='70%', compound= CENTER ,width= 50 , height= 50, bg='#CCC')
+
+memory_usage_var = int(psutil.virtual_memory().percent)
+
+mem_usage_circle = Label(memory_frame, image= gradient_circle_path, text=f'{memory_usage_var}%', compound= CENTER ,width= 50 , height= 50, bg='#ECF0F5')
 mem_usage_circle.pack(side= 'top', anchor = CENTER)
 
-cpu_temp_circle = Label(memory_frame, text='Memory\nUsage', bg='#CCC')
+cpu_temp_circle = Label(memory_frame, text='Memory\nUsage', bg='#ECF0F5')
 cpu_temp_circle.pack(side= 'top', anchor = CENTER)
 
-cpu_frame = Frame(stats_frame, bg='#CCC',)
+cpu_frame = Frame(stats_frame, bg='#ECF0F5',)
 cpu_frame.pack(fill=X, side='left', anchor=CENTER, padx = 12)
 
-cpu_temp_circle = Label(cpu_frame, image= gradient_circle_path, text='50°', compound= CENTER ,width= 50 , height= 50, bg='#CCC')
+from pyspectator.temperature_reader import WindowsCpuTemperatureReader
+cpu_temp_var = WindowsCpuTemperatureReader
+
+
+cpu_temp_circle = Label(cpu_frame, image= gradient_circle_path, text=f'{cpu_temp_var}', compound= CENTER ,width= 50 , height= 50, bg='#ECF0F5')
 cpu_temp_circle.pack(side= 'top', anchor = CENTER)
 
-cpu_temp_circle = Label(cpu_frame, text='CPU\nTemprature', bg='#CCC')
+cpu_temp_circle = Label(cpu_frame, text='CPU\nTemprature', bg='#ECF0F5')
 cpu_temp_circle.pack(side= 'top', anchor = CENTER)
 
 
-storage_frame = Frame(stats_frame, bg='#CCC',)
+storage_frame = Frame(stats_frame, bg='#ECF0F5',)
 storage_frame.pack(fill=X, side='left', anchor=CENTER, padx = 12)
 
-storage_usage_circle = Label(storage_frame, image= gradient_circle_path, text='82%', compound= CENTER ,width= 50 , height= 50, bg='#CCC')
+storage_usage_var = int(psutil.disk_usage('/').percent)
+
+storage_usage_circle = Label(storage_frame, image= gradient_circle_path, text=f'{storage_usage_var}%', compound= CENTER ,width= 50 , height= 50, bg='#ECF0F5')
 storage_usage_circle.pack(side= 'top', anchor = CENTER)
 
-storage_usage_circle = Label(storage_frame, text='Storage\nUsage', bg='#CCC')
+storage_usage_circle = Label(storage_frame, text='Storage\nUsage', bg='#ECF0F5')
 storage_usage_circle.pack(side= 'top', anchor = CENTER)
 
 
-space_clear = Label(dashboard, text='1.2 GB space can be cleared', font= ("DM Sans", 12, ), bg='#CCC')
+space_clear = Label(dashboard, text='1.2 GB space can be cleared', font= ("DM Sans", 12, ), bg='#ECF0F5')
 space_clear.pack(side= 'top', anchor = CENTER, pady = 20)
 
 # activationkey.pack_forget()
 # cachecleaner.pack_forget()
-dashboard.pack_forget()
+# dashboard.pack_forget()
 memory_cleaner_frame = Frame(root, bg='#ECF0F5')
 memory_cleaner_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
 
 # memory_cleaner_ui(memory_cleaner_frame)
 
-# scanning_frame = Frame(memory_cleaner_frame, bg='#CCC')
+# scanning_frame = Frame(memory_cleaner_frame, bg='#ECF0F5')
 # scanning_frame.pack(expand=True, fill=BOTH)
 
 gradient_circle_frame_path = PhotoImage(file='gradient_frame.png')
@@ -185,8 +194,8 @@ clean_now_btn.pack(side= 'top', anchor = 'nw', pady=20, ipadx=120, ipady=5)
 rect_frame = Frame(finished_scan_frame, bg='#ECF0F5', width=100,background='#ECF0F5', relief='solid', border=1, borderwidth=1)
 rect_frame.pack(side= 'top', anchor = 'center', fill=X, padx = 50,pady = 15)
 
-junks_frame_label = Label(root, text='Junk-9574 MB', font= ("DM Sans", 12, ), bg='#ECF0F5', fg='black')
-junks_frame_label.place(x=180, y = 345)
+# junks_frame_label = Label(root, text='Junk-9574 MB', font= ("DM Sans", 12, ), bg='#ECF0F5', fg='black')
+# junks_frame_label.place(x=180, y = 345)
 
 empty_sizedbox = Label(rect_frame, text='', bg='#ECF0F5')
 empty_sizedbox.pack(side= 'left', anchor = 'nw', padx = 5)
@@ -216,6 +225,7 @@ finished_scan_frame.pack_forget()
 
 activationkey_frame = Frame(root, bg='#ECF0F5',)
 activationkey_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
+activationkey_frame.pack_forget()
 
 activation_key_label = Label(activationkey_frame, text='Activation Key', font= ("DM Sans", 13, 'bold'), bg='#ECF0F5', fg='black')
 activation_key_label.pack(side='left', anchor= 'ne', padx=80, pady=100)
