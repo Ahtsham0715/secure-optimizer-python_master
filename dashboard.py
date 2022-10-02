@@ -48,16 +48,16 @@ t_and_c_btn = Button(bottomnavbar, text='Terms And Conditions', font= ("DM Sans"
 t_and_c_btn.pack(side= 'right', pady= 10, padx = 5)
 
 # sidebar
-sidebar = Frame(root, bg='#E5E5E5', relief='flat', borderwidth=4, bd= 1)
+sidebar = Frame(root, bg='#ECF0F5', relief='solid', borderwidth=1,border=0, bd= 1)
 sidebar.pack( fill=Y, side=LEFT, anchor='nw')
 
-mem_cleaner_btn = Button(sidebar, text='Memory\nCleaner', fg = 'black', bg = '#E5E5E5', relief='flat')
+mem_cleaner_btn = Button(sidebar, text='Memory Cleaner', fg = 'black', font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat')
 mem_cleaner_btn.pack(side= 'top', pady= 20)
 
-cache_cleaner_btn = Button(sidebar, text='Cache\nCleaner', fg = 'black', bg = '#E5E5E5', relief='flat')
+cache_cleaner_btn = Button(sidebar, text='Cache Cleaner', fg = 'black', font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat')
 cache_cleaner_btn.pack(side= 'top', pady= 20)
 
-activation_key_btn = Button(sidebar, text='Activation\nKey', fg = 'black', bg = '#E5E5E5', relief='flat')
+activation_key_btn = Button(sidebar, text='Activation Key', fg = 'black', font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat')
 activation_key_btn.pack(side= 'top', pady= 20)
 
 # main content area
@@ -199,7 +199,7 @@ listbox = Listbox(listbox_frame, background='#ECF0F5',width=50, relief='flat')
 
 listbox.pack(side = LEFT, fill = BOTH, anchor='nw', ipadx=40, ipady=40)
 
-scrollbar = Scrollbar(listbox_frame,background='#ECF0F5',)
+scrollbar = Scrollbar(listbox_frame,background='#004AAD')
 
 scrollbar.pack(side = LEFT, fill = BOTH, anchor='nw')
   
@@ -212,8 +212,24 @@ listbox.config(yscrollcommand = scrollbar.set)
 scrollbar.config(command = listbox.yview)
 
 
+finished_scan_frame.pack_forget()
 
-activationkey = Frame(root, bg='#ECF0F5',)
-# activationkey.pack(expand = True, fill = BOTH, anchor = 'ne')
+activationkey_frame = Frame(root, bg='#ECF0F5',)
+activationkey_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
+
+activation_key_label = Label(activationkey_frame, text='Activation Key', font= ("DM Sans", 13, 'bold'), bg='#ECF0F5', fg='black')
+activation_key_label.pack(side='left', anchor= 'ne', padx=80, pady=100)
+
+activation_key_var = StringVar()
+
+activation_key_entry = Entry(activationkey_frame, textvariable=activation_key_var, bd=5, show="*",font= ("DM Sans", 15, ), bg='white', fg='black', relief='flat')
+activation_key_entry.pack(side='left', anchor= 'ne', ipadx = 10, ipady= 5,pady=90)
+
+update_key_btn_path = PhotoImage(file='update_key.png')
+update_key_btn_path = update_key_btn_path.zoom(5)
+update_key_btn_path = update_key_btn_path.subsample(10)
+
+update_key_btn = Button(activationkey_frame, image= update_key_btn_path , text='Update Key', compound=CENTER , relief='flat' , font= ("DM Sans", 12, 'bold'), bg='#ECF0F5',activebackground='#ECF0F5', fg='white', activeforeground='white')
+update_key_btn.place(x= 250, y = 180)
 
 root.mainloop()
