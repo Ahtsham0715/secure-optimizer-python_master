@@ -130,13 +130,6 @@ storage_usage_circle.pack(side= 'top', anchor = CENTER)
 space_clear = Label(dashboard, text='1.2 GB space can be cleared', font= ("DM Sans", 12, ), bg='#CCC')
 space_clear.pack(side= 'top', anchor = CENTER, pady = 20)
 
-
-
-
-# cachecleaner = Frame(root, bg='#CCC', width=500, height=500)
-# cachecleaner.pack(expand=True, fill='both', side='right')
-# activationkey = Frame(root, bg='#CCC', width=500, height=500)
-# activationkey.pack(expand=True, fill='both', side='right')
 # activationkey.pack_forget()
 # cachecleaner.pack_forget()
 dashboard.pack_forget()
@@ -161,7 +154,34 @@ cpu_temp_circle.pack(anchor = CENTER, side= TOP, pady= 30)
 scanning_doc = Label(memory_cleaner_frame, text='Scanning Documents .....25MB', font= ("DM Sans", 12, ), bg='#ECF0F5')
 scanning_doc.pack(side= 'top', anchor = CENTER)
 
+memory_cleaner_frame.pack_forget()
+finished_scan_frame = Frame(root, bg='#ECF0F5',)
+finished_scan_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
+
+check_icon_path = PhotoImage(file='checked.png')
+check_icon_path = check_icon_path.zoom(7)
+check_icon_path = check_icon_path.subsample(10)
+
+check_icon = Label(finished_scan_frame, image= check_icon_path ,width= 230 , height= 230, bg='#ECF0F5')
+check_icon.pack(anchor = 'nw', side= TOP, padx= 70, pady= 30)
+
+total_data_frame = Frame(finished_scan_frame, bg='#ECF0F5',)
+total_data_frame.place(x=screen_width * 0.5, y=screen_height * 0.05)
+
+scan_finished_label = Label(total_data_frame, text='Scan Finished', font= ("DM Sans", 14, 'bold'), bg='#ECF0F5')
+scan_finished_label.pack(side= 'top', anchor = CENTER, pady = 30, padx= 40)
+
+total_junks_label = Label(total_data_frame, text='Total Junks: 863 items', font= ("DM Sans", 12, ), bg='#ECF0F5')
+total_junks_label.pack(side= 'top', anchor = 'nw')
+
+total_junks_size_label = Label(total_data_frame, text='Total Junks Size: 9574 MB', font= ("DM Sans", 12, ), bg='#ECF0F5')
+total_junks_size_label.pack(side= 'top', anchor = 'nw', pady=10)
 
 
+clean_now_btn = Button(total_data_frame, text='Clean Now', relief='flat' , font= ("DM Sans", 13, ), bg='#004AAD', fg='white')
+clean_now_btn.pack(side= 'top', anchor = 'nw', pady=20, ipadx=120, ipady=5,)
+
+activationkey = Frame(root, bg='#ECF0F5',)
+# activationkey.pack(expand = True, fill = BOTH, anchor = 'ne')
 
 root.mainloop()
