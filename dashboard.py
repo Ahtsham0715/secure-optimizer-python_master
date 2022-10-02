@@ -163,13 +163,13 @@ check_icon_path = check_icon_path.zoom(7)
 check_icon_path = check_icon_path.subsample(10)
 
 check_icon = Label(finished_scan_frame, image= check_icon_path ,width= 230 , height= 230, bg='#ECF0F5')
-check_icon.pack(anchor = 'nw', side= TOP, padx= 70, pady= 30)
+check_icon.pack(anchor = 'nw', side= TOP, padx= 70, pady= 20)
 
 total_data_frame = Frame(finished_scan_frame, bg='#ECF0F5',)
 total_data_frame.place(x=screen_width * 0.5, y=screen_height * 0.05)
 
 scan_finished_label = Label(total_data_frame, text='Scan Finished', font= ("DM Sans", 14, 'bold'), bg='#ECF0F5')
-scan_finished_label.pack(side= 'top', anchor = CENTER, pady = 30, padx= 40)
+scan_finished_label.pack(side= 'top', anchor = 'ne', pady = 30, padx= 40)
 
 total_junks_label = Label(total_data_frame, text='Total Junks: 863 items', font= ("DM Sans", 12, ), bg='#ECF0F5')
 total_junks_label.pack(side= 'top', anchor = 'nw')
@@ -179,7 +179,39 @@ total_junks_size_label.pack(side= 'top', anchor = 'nw', pady=10)
 
 
 clean_now_btn = Button(total_data_frame, text='Clean Now', relief='flat' , font= ("DM Sans", 13, ), bg='#004AAD', fg='white')
-clean_now_btn.pack(side= 'top', anchor = 'nw', pady=20, ipadx=120, ipady=5,)
+clean_now_btn.pack(side= 'top', anchor = 'nw', pady=20, ipadx=120, ipady=5)
+
+
+rect_frame = Frame(finished_scan_frame, bg='#ECF0F5', width=100,background='#ECF0F5', relief='solid', border=1, borderwidth=1)
+rect_frame.pack(side= 'top', anchor = 'center', fill=X, padx = 50,pady = 15)
+
+junks_frame_label = Label(root, text='Junk-9574 MB', font= ("DM Sans", 12, ), bg='#ECF0F5', fg='black')
+junks_frame_label.place(x=180, y = 345)
+
+empty_sizedbox = Label(rect_frame, text='', bg='#ECF0F5')
+empty_sizedbox.pack(side= 'left', anchor = 'nw', padx = 5)
+
+listbox_frame = Frame(rect_frame, bg='#ECF0F5', width=55,background='#ECF0F5', relief='solid', border=1, borderwidth=1)
+listbox_frame.pack(side= 'top', anchor = 'nw', pady= 20)
+
+# Creating a Listbox and
+listbox = Listbox(listbox_frame, background='#ECF0F5',width=50, relief='flat')
+
+listbox.pack(side = LEFT, fill = BOTH, anchor='nw', ipadx=40, ipady=40)
+
+scrollbar = Scrollbar(listbox_frame,background='#ECF0F5',)
+
+scrollbar.pack(side = LEFT, fill = BOTH, anchor='nw')
+  
+
+for values in range(100):
+    listbox.insert(END, values)
+
+listbox.config(yscrollcommand = scrollbar.set)
+  
+scrollbar.config(command = listbox.yview)
+
+
 
 activationkey = Frame(root, bg='#ECF0F5',)
 # activationkey.pack(expand = True, fill = BOTH, anchor = 'ne')
