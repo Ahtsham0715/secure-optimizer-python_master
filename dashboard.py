@@ -2,7 +2,7 @@ from tkinter import *
 
 root = Tk()
 
-screen_height = 600
+screen_height = 700
 screen_width = 1000
 
 # root.resizable(False, False)
@@ -48,8 +48,8 @@ t_and_c_btn = Button(bottomnavbar, text='Terms And Conditions', font= ("DM Sans"
 t_and_c_btn.pack(side= 'right', pady= 10, padx = 5)
 
 # sidebar
-sidebar = Frame(root, bg='#E5E5E5', relief='flat', borderwidth=4)
-sidebar.pack(expand=True, fill=Y, side=LEFT, anchor='nw')
+sidebar = Frame(root, bg='#E5E5E5', relief='flat', borderwidth=4, bd= 1)
+sidebar.pack( fill=Y, side=LEFT, anchor='nw')
 
 mem_cleaner_btn = Button(sidebar, text='Memory\nCleaner', fg = 'black', bg = '#E5E5E5', relief='flat')
 mem_cleaner_btn.pack(side= 'top', pady= 20)
@@ -84,7 +84,7 @@ scan_btn_path = PhotoImage(file='Group 24.png')
 scan_btn_path = scan_btn_path.zoom(15)
 scan_btn_path = scan_btn_path.subsample(32)
 scan_btn = Button(dashboard, image= scan_btn_path, activebackground='#CCC' , width= screen_height *0.25 , height= screen_height *0.25 , bg='#CCC', relief='flat')
-scan_btn.pack(side = TOP, padx = 20, pady = 40, anchor = CENTER)
+scan_btn.pack(side = TOP, padx = 20, pady = 10, anchor = CENTER)
 
 
 stats_frame = Frame(dashboard, bg='#CCC',)
@@ -128,8 +128,7 @@ storage_usage_circle.pack(side= 'top', anchor = CENTER)
 
 
 space_clear = Label(dashboard, text='1.2 GB space can be cleared', font= ("DM Sans", 12, ), bg='#CCC')
-space_clear.pack(side= 'top', anchor = CENTER, pady = 25)
-
+space_clear.pack(side= 'top', anchor = CENTER, pady = 20)
 
 
 
@@ -141,8 +140,8 @@ space_clear.pack(side= 'top', anchor = CENTER, pady = 25)
 # activationkey.pack_forget()
 # cachecleaner.pack_forget()
 dashboard.pack_forget()
-memory_cleaner_frame = Frame(root, bg='white')
-# memory_cleaner_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
+memory_cleaner_frame = Frame(root, bg='#ECF0F5')
+memory_cleaner_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
 
 # memory_cleaner_ui(memory_cleaner_frame)
 
@@ -153,10 +152,14 @@ gradient_circle_frame_path = PhotoImage(file='gradient_frame.png')
 gradient_circle_frame_path = gradient_circle_frame_path.zoom(15)
 gradient_circle_frame_path = gradient_circle_frame_path.subsample(32)
 
-cpu_temp_circle = Label(memory_cleaner_frame, image= gradient_circle_frame_path,font= ("DM Sans", 12,), text='Scanning 40%', compound= CENTER ,width= 150 , height= 150, bg='#CCC', fg='#7ED957')
-cpu_temp_circle.pack(anchor = CENTER, side= TOP)
+empty_sizedbox = Label(memory_cleaner_frame, text='', bg='#ECF0F5')
+empty_sizedbox.pack(side= 'top', anchor = CENTER, pady = 30)
 
+cpu_temp_circle = Label(memory_cleaner_frame, image= gradient_circle_frame_path,font= ("DM Sans", 12,), text='Scanning... 40%', compound= CENTER ,width= 150 , height= 150, bg='#ECF0F5', fg='#7ED957')
+cpu_temp_circle.pack(anchor = CENTER, side= TOP, pady= 30)
 
+scanning_doc = Label(memory_cleaner_frame, text='Scanning Documents .....25MB', font= ("DM Sans", 12, ), bg='#ECF0F5')
+scanning_doc.pack(side= 'top', anchor = CENTER)
 
 
 
