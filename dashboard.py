@@ -51,13 +51,29 @@ t_and_c_btn.pack(side= 'right', pady= 10, padx = 5)
 sidebar = Frame(root, bg='#ECF0F5', relief='solid', borderwidth=1,border=0, bd= 1)
 sidebar.pack( fill=Y, side=LEFT, anchor='nw')
 
-mem_cleaner_btn = Button(sidebar, text='Memory Cleaner', fg = 'black', font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat')
+def mem_cleaner_func():
+    activationkey_frame.pack_forget()
+    dashboard.pack( expand=True, fill= BOTH, anchor = 'ne')
+    memory_cleaner_frame.pack_forget()
+    
+
+mem_cleaner_btn = Button(sidebar, text='Memory Cleaner', fg = 'black', font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat', command= mem_cleaner_func)
 mem_cleaner_btn.pack(side= 'top', pady= 20)
 
-cache_cleaner_btn = Button(sidebar, text='Cache Cleaner', fg = 'black', font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat')
+def cache_cleaner_func():
+    activationkey_frame.pack_forget()
+    dashboard.pack_forget()
+    memory_cleaner_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
+
+cache_cleaner_btn = Button(sidebar, text='Cache Cleaner', fg = 'black', font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat', command= cache_cleaner_func)
 cache_cleaner_btn.pack(side= 'top', pady= 20)
 
-activation_key_btn = Button(sidebar, text='Activation Key', fg = 'black', font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat')
+def activation_key_func():
+    dashboard.pack_forget()
+    memory_cleaner_frame.pack_forget()
+    activationkey_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
+
+activation_key_btn = Button(sidebar, text='Activation Key', fg = 'black', font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat', command= activation_key_func)
 activation_key_btn.pack(side= 'top', pady= 20)
 
 # main content area
@@ -113,8 +129,7 @@ cpu_temp_circle.pack(side= 'top', anchor = CENTER)
 cpu_frame = Frame(stats_frame, bg='#ECF0F5',)
 cpu_frame.pack(fill=X, side='left', anchor=CENTER, padx = 12)
 
-from pyspectator.temperature_reader import WindowsCpuTemperatureReader
-cpu_temp_var = WindowsCpuTemperatureReader
+cpu_temp_var = '50°'
 
 
 cpu_temp_circle = Label(cpu_frame, image= gradient_circle_path, text=f'{cpu_temp_var}', compound= CENTER ,width= 50 , height= 50, bg='#ECF0F5')
@@ -143,7 +158,7 @@ space_clear.pack(side= 'top', anchor = CENTER, pady = 20)
 # cachecleaner.pack_forget()
 # dashboard.pack_forget()
 memory_cleaner_frame = Frame(root, bg='#ECF0F5')
-memory_cleaner_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
+# memory_cleaner_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
 
 # memory_cleaner_ui(memory_cleaner_frame)
 
@@ -163,9 +178,9 @@ cpu_temp_circle.pack(anchor = CENTER, side= TOP, pady= 30)
 scanning_doc = Label(memory_cleaner_frame, text='Scanning Documents .....25MB', font= ("DM Sans", 12, ), bg='#ECF0F5')
 scanning_doc.pack(side= 'top', anchor = CENTER)
 
-memory_cleaner_frame.pack_forget()
+# memory_cleaner_frame.pack_forget()
 finished_scan_frame = Frame(root, bg='#ECF0F5',)
-finished_scan_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
+# finished_scan_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
 
 check_icon_path = PhotoImage(file='checked.png')
 check_icon_path = check_icon_path.zoom(7)
@@ -221,11 +236,11 @@ listbox.config(yscrollcommand = scrollbar.set)
 scrollbar.config(command = listbox.yview)
 
 
-finished_scan_frame.pack_forget()
+# finished_scan_frame.pack_forget()
 
 activationkey_frame = Frame(root, bg='#ECF0F5',)
-activationkey_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
-activationkey_frame.pack_forget()
+# activationkey_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
+# activationkey_frame.pack_forget()
 
 activation_key_label = Label(activationkey_frame, text='Activation Key', font= ("DM Sans", 13, 'bold'), bg='#ECF0F5', fg='black')
 activation_key_label.pack(side='left', anchor= 'ne', padx=80, pady=100)
