@@ -8,7 +8,7 @@ screen_width = 1000
 # root.resizable(False, False)
 root.geometry('1000x600')
 # appbar
-appbar = Frame(root, bg='#004AAD', height=70, relief='flat', borderwidth=2)
+appbar = Frame(root, bg='#004AAD', height=70, relief='flat')
 appbar.pack(fill=X, side='top', anchor='ne')
 
 logo_path = PhotoImage(file='icon.png')
@@ -52,25 +52,37 @@ sidebar = Frame(root, bg='#ECF0F5', relief='solid', borderwidth=1,border=0, bd= 
 sidebar.pack( fill=Y, side=LEFT, anchor='nw')
 
 def mem_cleaner_func():
+    app_name_lbl['text'] = 'Secure Optimizer'
+    # contact_lbl.pack(side= 'right', pady= 10, padx = 5)
+    # phone_icon.pack(side= 'right', pady= 10)
     activationkey_frame.pack_forget()
     dashboard.pack( expand=True, fill= BOTH, anchor = 'ne')
     memory_cleaner_frame.pack_forget()
+    finished_scan_frame.pack_forget()
     
 
 mem_cleaner_btn = Button(sidebar, text='Memory Cleaner', fg = 'black', font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat', command= mem_cleaner_func)
 mem_cleaner_btn.pack(side= 'top', pady= 20)
 
 def cache_cleaner_func():
+    # contact_lbl.pack_forget()
+    # phone_icon.pack_forget()
+    app_name_lbl['text'] = 'Scan your PC'
     activationkey_frame.pack_forget()
     dashboard.pack_forget()
+    finished_scan_frame.pack_forget()
     memory_cleaner_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
 
 cache_cleaner_btn = Button(sidebar, text='Cache Cleaner', fg = 'black', font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat', command= cache_cleaner_func)
 cache_cleaner_btn.pack(side= 'top', pady= 20)
 
 def activation_key_func():
+    # contact_lbl.pack_forget()
+    # phone_icon.pack_forget()
+    app_name_lbl['text'] = 'Secure Optimizer'
     dashboard.pack_forget()
     memory_cleaner_frame.pack_forget()
+    finished_scan_frame.pack_forget()
     activationkey_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
 
 activation_key_btn = Button(sidebar, text='Activation Key', fg = 'black', font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat', command= activation_key_func)
@@ -92,14 +104,22 @@ caution_icon.pack(side= 'left', pady= 5)
 optimizing_lbl = Label(caution_frame, text='Optimising items frees up storage space on your device. ', font= ("DM Sans", 11, ), fg = 'black', bg = '#ECF0F5', relief='flat')
 optimizing_lbl.pack(side= 'left', pady= 5)
 
-t_and_c_btn = Button(caution_frame, text='Scan Now!', activebackground='#ECF0F5' ,font= ("DM Sans", 11, ), bg = '#ECF0F5', fg = '#004AAD', relief='flat')
-t_and_c_btn.pack(side= 'left', pady= 5)
+def scan_btn_func():
+    app_name_lbl['text'] = 'Scan your PC'
+    # contact_lbl.pack_forget()
+    # phone_icon.pack_forget()
+    activationkey_frame.pack_forget()
+    dashboard.pack_forget()
+    finished_scan_frame.pack_forget()
+    memory_cleaner_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
 
+t_and_c_btn = Button(caution_frame, text='Scan Now!', command= scan_btn_func, activebackground='#ECF0F5' ,font= ("DM Sans", 11, ), bg = '#ECF0F5', fg = '#004AAD', relief='flat')
+t_and_c_btn.pack(side= 'left', pady= 5)
 
 scan_btn_path = PhotoImage(file='Group 24.png')
 scan_btn_path = scan_btn_path.zoom(15)
 scan_btn_path = scan_btn_path.subsample(32)
-scan_btn = Button(dashboard, image= scan_btn_path, activebackground='#ECF0F5' , width= screen_height *0.25 , height= screen_height *0.25 , bg='#ECF0F5', relief='flat')
+scan_btn = Button(dashboard, image= scan_btn_path, activebackground='#ECF0F5',command= scan_btn_func , width= screen_height *0.25 , height= screen_height *0.25 , bg='#ECF0F5', relief='flat')
 scan_btn.pack(side = TOP, padx = 20, pady = 10, anchor = CENTER)
 
 
