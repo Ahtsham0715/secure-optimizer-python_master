@@ -363,7 +363,10 @@ update_key_btn_path = PhotoImage(file='update_key.png')
 update_key_btn_path = update_key_btn_path.zoom(5)
 update_key_btn_path = update_key_btn_path.subsample(10)
 
-update_key_btn = Button(activationkey_frame, image= update_key_btn_path , text='Update Key', compound=CENTER , relief='flat' , font= ("DM Sans", 12, 'bold'), bg='#ECF0F5',activebackground='#ECF0F5', fg='white', activeforeground='white')
+def update_key_func():
+    pass
+
+update_key_btn = Button(activationkey_frame, image= update_key_btn_path , command= update_key_func, text='Update Key', compound=CENTER , relief='flat' , font= ("DM Sans", 12, 'bold'), bg='#ECF0F5',activebackground='#ECF0F5', fg='white', activeforeground='white')
 update_key_btn.place(x= 250, y = 180)
 
 root.mainloop()
