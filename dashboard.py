@@ -78,24 +78,39 @@ def cache_cleaner_func():
     dashboard.pack_forget()
     finished_scan_frame.pack_forget()
     memory_cleaner_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
-    folder = 'C:\Windows\Prefetch'
+    folder = 'C:\Windows\Temp'
     # sleep(1)
-    directory_list = os.listdir(folder)
-    number_files = len(directory_list)
-    print(directory_list)
-    print(number_files)  
-    size=0
-    for ele in os.scandir(folder):
-        size+=os.stat(ele).st_size
-    size_in_mb = round(size/2**20,2)
-    print(size_in_mb)
-    total_junks_label['text'] = f'Total Junks: {number_files} items'
-    total_junks_size_label['text'] = f'Total Junks Size: {size_in_mb} MB'
-    for value in directory_list:
-        listbox.insert(END, value)
-    memory_cleaner_frame.pack_forget()
-    finished_scan_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
-    # sleep(1)
+    # directory_list = os.listdir(folder)
+    # number_files = len(directory_list)
+    # print(directory_list)
+    # print(number_files)  
+    # size=0
+    # for ele in os.scandir(folder):
+    #     size+=os.stat(ele).st_size
+    # size_in_mb = round(size/2**20,2)
+    # print(size_in_mb)
+    try:
+        for filename in os.listdir(folder):
+            file_path = os.path.join(folder, filename)
+            try:
+                if os.path.isfile(file_path) or os.path.islink(file_path):
+                    os.unlink(file_path)
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+            except Exception as e:
+                print(e)
+        root.after(200)
+        if messagebox.showinfo('success', 'Cache cleaned successfully'):
+            app_name_lbl['text'] = 'Secure Optimizer'
+            # contact_lbl.pack(side= 'right', pady= 10, padx = 5)
+            # phone_icon.pack(side= 'right', pady= 10)
+            activationkey_frame.pack_forget()
+            dashboard.pack( expand=True, fill= BOTH, anchor = 'ne')
+            memory_cleaner_frame.pack_forget()
+            finished_scan_frame.pack_forget()
+    except Exception as e:
+        messagebox.showerror('Failure', 'An error occured... Try again!')
+        print('e')
     
 
 cache_cleaner_btn = Button(sidebar, text='Cache Cleaner', fg = 'black', font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat', command= cache_cleaner_func)
@@ -215,6 +230,15 @@ storage_usage_circle.pack(side= 'top', anchor = CENTER)
 
 space_clear = Label(dashboard, text='1.2 GB space can be cleared', font= ("DM Sans", 12, ), bg='#ECF0F5')
 space_clear.pack(side= 'top', anchor = CENTER, pady = 20)
+
+thisfolder = 'C:\Windows\Prefetch' 
+sizegb=0
+for ele in os.scandir(thisfolder):
+    sizegb+=os.stat(ele).st_size
+size_in_gb = round(sizegb/2**30,3)
+print(size_in_gb)
+
+space_clear['text'] = f'{size_in_gb} GB space can be cleared'
 
 # activationkey.pack_forget()
 # cachecleaner.pack_forget()
