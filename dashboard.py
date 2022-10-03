@@ -1,5 +1,10 @@
+import os
+import shutil
+from time import sleep
 from tkinter import *
+from tkinter import messagebox
 import psutil
+
 root = Tk()
 
 screen_height = 700
@@ -64,6 +69,7 @@ def mem_cleaner_func():
 mem_cleaner_btn = Button(sidebar, text='Memory Cleaner', fg = 'black', font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat', command= mem_cleaner_func)
 mem_cleaner_btn.pack(side= 'top', pady= 20)
 
+
 def cache_cleaner_func():
     # contact_lbl.pack_forget()
     # phone_icon.pack_forget()
@@ -72,6 +78,25 @@ def cache_cleaner_func():
     dashboard.pack_forget()
     finished_scan_frame.pack_forget()
     memory_cleaner_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
+    folder = 'C:\Windows\Prefetch'
+    # sleep(1)
+    directory_list = os.listdir(folder)
+    number_files = len(directory_list)
+    print(directory_list)
+    print(number_files)  
+    size=0
+    for ele in os.scandir(folder):
+        size+=os.stat(ele).st_size
+    size_in_mb = round(size/2**20,2)
+    print(size_in_mb)
+    total_junks_label['text'] = f'Total Junks: {number_files} items'
+    total_junks_size_label['text'] = f'Total Junks Size: {size_in_mb} MB'
+    for value in directory_list:
+        listbox.insert(END, value)
+    memory_cleaner_frame.pack_forget()
+    finished_scan_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
+    # sleep(1)
+    
 
 cache_cleaner_btn = Button(sidebar, text='Cache Cleaner', fg = 'black', font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat', command= cache_cleaner_func)
 cache_cleaner_btn.pack(side= 'top', pady= 20)
@@ -112,6 +137,23 @@ def scan_btn_func():
     dashboard.pack_forget()
     finished_scan_frame.pack_forget()
     memory_cleaner_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
+    folder = 'C:\Windows\Prefetch'
+    # sleep(1)
+    directory_list = os.listdir(folder)
+    number_files = len(directory_list)
+    print(directory_list)
+    print(number_files)  
+    size=0
+    for ele in os.scandir(folder):
+        size+=os.stat(ele).st_size
+    size_in_mb = round(size/2**20,2)
+    print(size_in_mb)
+    total_junks_label['text'] = f'Total Junks: {number_files} items'
+    total_junks_size_label['text'] = f'Total Junks Size: {size_in_mb} MB'
+    for value in directory_list:
+        listbox.insert(END, value)
+    memory_cleaner_frame.pack_forget()
+    finished_scan_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
 
 t_and_c_btn = Button(caution_frame, text='Scan Now!', command= scan_btn_func, activebackground='#ECF0F5' ,font= ("DM Sans", 11, ), bg = '#ECF0F5', fg = '#004AAD', relief='flat')
 t_and_c_btn.pack(side= 'left', pady= 5)
@@ -192,10 +234,10 @@ gradient_circle_frame_path = gradient_circle_frame_path.subsample(32)
 empty_sizedbox = Label(memory_cleaner_frame, text='', bg='#ECF0F5')
 empty_sizedbox.pack(side= 'top', anchor = CENTER, pady = 30)
 
-cpu_temp_circle = Label(memory_cleaner_frame, image= gradient_circle_frame_path,font= ("DM Sans", 12,), text='Scanning... 40%', compound= CENTER ,width= 150 , height= 150, bg='#ECF0F5', fg='#7ED957')
+cpu_temp_circle = Label(memory_cleaner_frame, image= gradient_circle_frame_path,font= ("DM Sans", 12,), text='Scanning... ', compound= CENTER ,width= 150 , height= 150, bg='#ECF0F5', fg='#7ED957')
 cpu_temp_circle.pack(anchor = CENTER, side= TOP, pady= 30)
 
-scanning_doc = Label(memory_cleaner_frame, text='Scanning Documents .....25MB', font= ("DM Sans", 12, ), bg='#ECF0F5')
+scanning_doc = Label(memory_cleaner_frame, text='Scanning Documents .....', font= ("DM Sans", 12, ), bg='#ECF0F5')
 scanning_doc.pack(side= 'top', anchor = CENTER)
 
 # memory_cleaner_frame.pack_forget()
@@ -221,8 +263,31 @@ total_junks_label.pack(side= 'top', anchor = 'nw')
 total_junks_size_label = Label(total_data_frame, text='Total Junks Size: 9574 MB', font= ("DM Sans", 12, ), bg='#ECF0F5')
 total_junks_size_label.pack(side= 'top', anchor = 'nw', pady=10)
 
+def clean_now_func():
+    second_folder = 'C:\Windows\Prefetch'
+    try:
+        for filename in os.listdir(second_folder):
+            file_path = os.path.join(second_folder, filename)
+            try:
+                if os.path.isfile(file_path) or os.path.islink(file_path):
+                    os.unlink(file_path)
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+            except Exception as e:
+                print(e)
+        if messagebox.showinfo('success', 'files cleaned successfully'):
+            app_name_lbl['text'] = 'Secure Optimizer'
+            # contact_lbl.pack(side= 'right', pady= 10, padx = 5)
+            # phone_icon.pack(side= 'right', pady= 10)
+            activationkey_frame.pack_forget()
+            dashboard.pack( expand=True, fill= BOTH, anchor = 'ne')
+            memory_cleaner_frame.pack_forget()
+            finished_scan_frame.pack_forget()
+    except Exception as e:
+        messagebox.showerror('Failure', 'An error occured... Try again!')
+        print('e')
 
-clean_now_btn = Button(total_data_frame, text='Clean Now', relief='flat' , font= ("DM Sans", 13, ), bg='#004AAD', fg='white')
+clean_now_btn = Button(total_data_frame, text='Clean Now', command= clean_now_func, relief='flat' , font= ("DM Sans", 13, ), bg='#004AAD', fg='white')
 clean_now_btn.pack(side= 'top', anchor = 'nw', pady=20, ipadx=120, ipady=5)
 
 
@@ -248,8 +313,8 @@ scrollbar = Scrollbar(listbox_frame,background='#004AAD')
 scrollbar.pack(side = LEFT, fill = BOTH, anchor='nw')
   
 
-for values in range(100):
-    listbox.insert(END, values)
+# for values in range(100):
+    # listbox.insert(END, values)
 
 listbox.config(yscrollcommand = scrollbar.set)
   
