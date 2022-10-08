@@ -5,7 +5,7 @@ from tkinter import *
 from tkinter import messagebox
 import psutil
 import firebase_admin
-from firebase_admin import credentials
+from firebase_admin import credentials, firestore
 
 
 cred = credentials.Certificate(r"cleaner-app-50143-firebase-adminsdk-cej46-ef12406467.json")
@@ -216,13 +216,13 @@ def main_app():
     cpu_frame = Frame(stats_frame, bg='#ECF0F5',)
     cpu_frame.pack(fill=X, side='left', anchor=CENTER, padx = 12)
 
-    cpu_temp_var = '50°'
+    cpu_temp_var = int(psutil.cpu_percent())
 
 
-    cpu_temp_circle = Label(cpu_frame, image= gradient_circle_path, text=f'{cpu_temp_var}', compound= CENTER ,width= 50 , height= 50, bg='#ECF0F5')
+    cpu_temp_circle = Label(cpu_frame, image= gradient_circle_path, text=f'{cpu_temp_var}%', compound= CENTER ,width= 50 , height= 50, bg='#ECF0F5')
     cpu_temp_circle.pack(side= 'top', anchor = CENTER)
 
-    cpu_temp_circle = Label(cpu_frame, text='CPU\nTemprature', bg='#ECF0F5')
+    cpu_temp_circle = Label(cpu_frame, text='CPU\nUsage', bg='#ECF0F5')
     cpu_temp_circle.pack(side= 'top', anchor = CENTER)
 
 
@@ -374,9 +374,27 @@ def main_app():
     update_key_btn_path = update_key_btn_path.subsample(10)
 
     def update_key_func():
-        pass
+        try:
+            db = firestore.client()
+            doc_ref = db.collection(u'activationKeys').stream()
+            for data in doc_ref:
+                doc_data = data.to_dict()
+                if doc_data['key'] == activation_key_var.get():
+                    # with open('sec_file.txt', 'w') as f:
+                    #     f.write('')
+                    if (messagebox.showinfo('success', 'You registered successfully.')):
+                        break
+            else:
+                messagebox.showerror('Error', 'Wrong Activation Key\nTry Again!!!')
+        except Exception as e:
+            messagebox.showerror('Error', 'Wrong Activation Key\nTry Again!!!')
+        
 
     update_key_btn = Button(activationkey_frame, image= update_key_btn_path , command= update_key_func, text='Update Key', compound=CENTER , relief='flat' , font= ("DM Sans", 12, 'bold'), bg='#ECF0F5',activebackground='#ECF0F5', fg='white', activeforeground='white')
     update_key_btn.place(x= 250, y = 180)
 
     root.mainloop()
+
+    
+    
+main_app()

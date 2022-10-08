@@ -22,13 +22,16 @@ def write_data(data):
 
 def verify_registration():
     db = firestore.client()
-    doc_ref = db.collection(u'users').document(u'data')
-    doc = doc_ref.get()
-    if doc.exists:
-        doc = doc.to_dict()
-        print(doc)
-    else:
-        print(u'No such document!')
+    doc_ref = db.collection(u'activationKeys').stream()
+    for data in doc_ref:
+        doc_data = data.to_dict()
+        print(doc_data['key'])
+    # doc = doc_ref.get()
+    # if doc.exists:
+    #     doc = doc.to_dict()
+    #     print(doc)
+    # else:
+    #     print(u'No such document!')
 
 verify_registration()
 
