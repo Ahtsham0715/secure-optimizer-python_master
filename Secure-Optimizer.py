@@ -11,6 +11,34 @@ from firebase_admin import credentials, firestore
 
 cred = credentials.Certificate(r"cleaner-app-50143-firebase-adminsdk-cej46-ef12406467.json")
 firebase_admin.initialize_app(cred)
+
+class circleroration(object):
+    def __init__(self, master, filename, **kwargs):
+        self.master = master
+        self.filename = filename
+        self.canvas = Canvas(master, width=300, height=300)
+        self.canvas.pack(anchor = 'center', side= TOP)
+        
+        self.update = self.draw().__next__
+        master.after(100, self.update)
+        master.after(5000, self.stop)
+    
+    def stop(self):
+        self.canvas.pack_forget()
+        
+    def draw(self):
+        image = Image.open(self.filename)
+        angle = 0
+        while True:
+            tkimage = ImageTk.PhotoImage(image.rotate(angle))
+            canvas_obj = self.canvas.create_image(
+                150, 150, image=tkimage)
+            self.master.after_idle(self.update)
+            yield
+            self.canvas.delete(canvas_obj)
+            angle += 2
+            angle %= 360
+
 class Screen:
     def __init__(self):
         self.root = Tk()
@@ -87,7 +115,7 @@ class Screen:
             count = 0
 
         # to show the gif only for 10 seconds
-        if int(time.time()-self.start) != 5:
+        if int(time.time()-self.start) != 6:
             self.x = self.root.after(80,self.show_animation,count)
         else:
             self.root.after_cancel(self.x)
@@ -186,28 +214,28 @@ class Screen:
             #     size+=os.stat(ele).st_size
             # size_in_mb = round(size/2**20,2)
             # print(size_in_mb)
-            try:
-                for filename in os.listdir(folder):
-                    file_path = os.path.join(folder, filename)
-                    try:
-                        if os.path.isfile(file_path) or os.path.islink(file_path):
-                            os.unlink(file_path)
-                        elif os.path.isdir(file_path):
-                            shutil.rmtree(file_path)
-                    except Exception as e:
-                        print(e)
-                self.root.after(200)
-                if messagebox.showinfo('success', 'Cache cleaned successfully'):
-                    app_name_lbl['text'] = 'Secure Optimizer'
-                    # contact_lbl.pack(side= 'right', pady= 10, padx = 5)
-                    # phone_icon.pack(side= 'right', pady= 10)
-                    activationkey_frame.pack_forget()
-                    dashboard.pack( expand=True, fill= BOTH, anchor = 'ne')
-                    memory_cleaner_frame.pack_forget()
-                    finished_scan_frame.pack_forget()
-            except Exception as e:
-                messagebox.showerror('Failure', 'An error occured... Try again!')
-                print('e')
+            # try:
+            #     for filename in os.listdir(folder):
+            #         file_path = os.path.join(folder, filename)
+            #         try:
+            #             if os.path.isfile(file_path) or os.path.islink(file_path):
+            #                 os.unlink(file_path)
+            #             elif os.path.isdir(file_path):
+            #                 shutil.rmtree(file_path)
+            #         except Exception as e:
+            #             print(e)
+            #     self.root.after(200)
+            #     if messagebox.showinfo('success', 'Cache cleaned successfully'):
+            #         app_name_lbl['text'] = 'Secure Optimizer'
+            #         # contact_lbl.pack(side= 'right', pady= 10, padx = 5)
+            #         # phone_icon.pack(side= 'right', pady= 10)
+            #         activationkey_frame.pack_forget()
+            #         dashboard.pack( expand=True, fill= BOTH, anchor = 'ne')
+            #         memory_cleaner_frame.pack_forget()
+            #         finished_scan_frame.pack_forget()
+            # except Exception as e:
+            #     messagebox.showerror('Failure', 'An error occured... Try again!')
+            #     print('e')
             
 
         cache_cleaner_btn = Button(sidebar, text='Cache Cleaner', fg = 'black', font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat', command= cache_cleaner_func)
@@ -355,9 +383,11 @@ class Screen:
         empty_sizedbox = Label(memory_cleaner_frame, text='', bg='#ECF0F5')
         empty_sizedbox.pack(side= 'top', anchor = CENTER, pady = 30)
 
-        cpu_temp_circle = Label(memory_cleaner_frame, image= self.gradient_circle_frame_path,font= ("DM Sans", 12,), text='Scanning... ', compound= CENTER ,width= 150 , height= 150, bg='#ECF0F5', fg='#7ED957')
-        cpu_temp_circle.pack(anchor = CENTER, side= TOP, pady= 30)
-
+        circleroration(memory_cleaner_frame, 'assets/gradient_frame.png')
+        # cpu_temp_circle = Label(memory_cleaner_frame , font= ("DM Sans", 12,), text='Scanning... ', compound= CENTER ,width= 150 , height= 150, bg='#ECF0F5', fg='#7ED957')
+        # cpu_temp_circle.pack(anchor = CENTER, side= TOP, pady= 30)
+        # circleroration(cpu_temp_circle, 'assets/gradient_frame.png')
+        
         scanning_doc = Label(memory_cleaner_frame, text='Scanning Documents .....', font= ("DM Sans", 12, ), bg='#ECF0F5')
         scanning_doc.pack(side= 'top', anchor = CENTER)
 
