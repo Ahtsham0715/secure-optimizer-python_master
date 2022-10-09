@@ -5,9 +5,9 @@ from tkinter import *
 from PIL import ImageTk, Image
 
 class CleanedAnimation:
-    def __init__(self, root):
+    def __init__(self, root, path):
         self.root = root
-        # self.ff_func = ff_func()
+        self.path = path
         self.main_frame = Frame(self.root, bg='black')
         self.main_frame.pack(expand=True, fill= BOTH, anchor = 'ne')
 
@@ -51,7 +51,7 @@ class CleanedAnimation:
         if int(time.time()-self.start) != 10:
             self.x = self.root.after(80,self.show_animation,count)
         else:
-            second_folder = 'C:\Windows\Prefetch'
+            second_folder = self.path
             for filename in os.listdir(second_folder):
                 file_path = os.path.join(second_folder, filename)
                 try:

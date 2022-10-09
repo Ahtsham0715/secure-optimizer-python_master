@@ -99,14 +99,11 @@ class Screen:
             # self.root.destroy()
             self.main_app(self.main_frame)
 
-            """
-            to delete the gif_frames folder and images inside it so that when we run the program again
-            then we don't get the error saying gif_frames folder already exists.
-            """
-            shutil.rmtree('gif_frames')
+            # shutil.rmtree('gif_frames')
 
             # to show the title bar
             self.root.wm_overrideredirect(False)
+            
     def main_app(self, f):
         
         screen_height = 700
@@ -118,9 +115,7 @@ class Screen:
         appbar = Frame(self.root, bg='#004AAD', height=70, relief='flat')
         appbar.pack(fill=X, side='top', anchor='ne')
 
-        # logo_path = PhotoImage(file='assets/icon.png')
-        # logo_path = logo_path.zoom(2)
-        # logo_path = logo_path.subsample(32)
+
         logo = Label(appbar, image= self.logo_path, width= 60 , height= 30, bg='#004AAD')
         logo.pack(side= 'left', pady= 10)
 
@@ -132,9 +127,6 @@ class Screen:
         contact_lbl = Label(appbar, text='657-541-749', font= ("DM Sans", 12), fg = 'white', bg = '#004AAD', relief='flat')
         contact_lbl.pack(side= 'right', pady= 10, padx = 5)
 
-        # phone_icon_path = PhotoImage(file='assets/phone.png')
-        # phone_icon_path = phone_icon_path.zoom(15)
-        # phone_icon_path = phone_icon_path.subsample(32)
         phone_icon = Label(appbar, image= self.phone_icon_path, width= 40 , height= 40, bg='#004AAD')
         phone_icon.pack(side= 'right', pady= 10)
 
@@ -160,8 +152,6 @@ class Screen:
 
         def mem_cleaner_func():
             app_name_lbl['text'] = 'Secure Optimizer'
-            # contact_lbl.pack(side= 'right', pady= 10, padx = 5)
-            # phone_icon.pack(side= 'right', pady= 10)
             self.activationkey_frame.pack_forget()
             self.dashboard.pack( expand=True, fill= BOTH, anchor = 'ne')
             self.memory_cleaner_frame.pack_forget()
@@ -173,54 +163,18 @@ class Screen:
 
 
         def cache_cleaner_func():
-            # contact_lbl.pack_forget()
-            # phone_icon.pack_forget()
             app_name_lbl['text'] = 'Scan your PC'
             self.activationkey_frame.pack_forget()
             self.dashboard.pack_forget()
             self.finished_scan_frame.pack_forget()
-            self.memory_cleaner_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
-            folder = 'C:\Windows\Temp'
-            # sleep(1)
-            directory_list = os.listdir(folder)
-            number_files = len(directory_list)
-            print(directory_list)
-            print(number_files)  
-            size=0
-            for ele in os.scandir(folder):
-                size+=os.stat(ele).st_size
-            size_in_mb = round(size/2**20,2)
-            print(size_in_mb)
-            try:
-                for filename in os.listdir(folder):
-                    file_path = os.path.join(folder, filename)
-                    try:
-                        if os.path.isfile(file_path) or os.path.islink(file_path):
-                            os.unlink(file_path)
-                        elif os.path.isdir(file_path):
-                            shutil.rmtree(file_path)
-                    except Exception as e:
-                        print(e)
-                self.root.after(5000)
-                if messagebox.showinfo('success', 'Cache cleaned successfully'):
-                    app_name_lbl['text'] = 'Secure Optimizer'
-                    # contact_lbl.pack(side= 'right', pady= 10, padx = 5)
-                    # phone_icon.pack(side= 'right', pady= 10)
-                    self.activationkey_frame.pack_forget()
-                    self.dashboard.pack( expand=True, fill= BOTH, anchor = 'ne')
-                    self.memory_cleaner_frame.pack_forget()
-                    self.finished_scan_frame.pack_forget()
-            except Exception as e:
-                messagebox.showerror('Failure', 'An error occured... Try again!')
-                print('e')
-            
+            # self.memory_cleaner_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
+            scanned_animation.CleanedAnimation(self.root, path='C:\Windows\Temp')
+           
 
         cache_cleaner_btn = Button(sidebar, text='Cache Cleaner', fg = 'black', font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat', command= cache_cleaner_func)
         cache_cleaner_btn.pack(side= 'top', pady= 20)
 
         def activation_key_func():
-            # contact_lbl.pack_forget()
-            # phone_icon.pack_forget()
             app_name_lbl['text'] = 'Secure Optimizer'
             self.dashboard.pack_forget()
             self.memory_cleaner_frame.pack_forget()
@@ -236,10 +190,7 @@ class Screen:
 
         caution_frame = Frame(self.dashboard, bg='#ECF0F5',)
         caution_frame.pack(fill=X, side='top', anchor='ne', expand=True, padx = screen_width * 0.15, ipadx=50)
-
-        # caution_icon_path = PhotoImage(file='assets/caution.png')
-        # caution_icon_path = caution_icon_path.zoom(15)
-        # caution_icon_path = caution_icon_path.subsample(32)
+        
         caution_icon = Label(caution_frame, image= self.caution_icon_path, width= 40 , height= 40, bg='#ECF0F5')
         caution_icon.pack(side= 'left', pady= 5)
 
@@ -248,8 +199,6 @@ class Screen:
 
         def scan_btn_func():
             app_name_lbl['text'] = 'Scan your PC'
-            # contact_lbl.pack_forget()
-            # phone_icon.pack_forget()
             self.activationkey_frame.pack_forget()
             self.dashboard.pack_forget()
             self.finished_scan_frame.pack_forget()
@@ -275,9 +224,6 @@ class Screen:
         t_and_c_btn = Button(caution_frame, text='Scan Now!', command= scan_btn_func, activebackground='#ECF0F5' ,font= ("DM Sans", 11, ), bg = '#ECF0F5', fg = '#004AAD', relief='flat')
         t_and_c_btn.pack(side= 'left', pady= 5)
 
-        # scan_btn_path = PhotoImage(file='assets/Group 24.png')
-        # scan_btn_path = scan_btn_path.zoom(15)
-        # scan_btn_path = scan_btn_path.subsample(32)
         scan_btn = Button(self.dashboard, image= self.scan_btn_path, activebackground='#ECF0F5',command= scan_btn_func , width= screen_height *0.25 , height= screen_height *0.25 , bg='#ECF0F5', relief='flat')
         scan_btn.pack(side = TOP, padx = 20, pady = 10, anchor = CENTER)
 
@@ -285,10 +231,6 @@ class Screen:
         stats_frame = Frame(self.dashboard, bg='#ECF0F5',)
         stats_frame.pack(fill=X, side='top', anchor=CENTER, expand=True)
 
-
-        # self.gradient_circle_path = PhotoImage(file='assets/Group 20.png')
-        # self.gradient_circle_path = self.gradient_circle_path.zoom(20)
-        # self.gradient_circle_path = self.gradient_circle_path.subsample(32)
 
         empty_sizedbox = Label(stats_frame, text='', bg='#ECF0F5')
         empty_sizedbox.pack(side= 'left', anchor = CENTER, padx = 150)
@@ -342,39 +284,15 @@ class Screen:
 
         space_clear['text'] = f'{size_in_gb} GB space can be cleared'
 
-        # activationkey.pack_forget()
-        # cachecleaner.pack_forget()
-        # self.dashboard.pack_forget()
-        # self.memory_cleaner_frame = Frame(self.root, bg='#ECF0F5')
-        # self.memory_cleaner_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
-
-        # memory_cleaner_ui(self.memory_cleaner_frame)
-
-        # scanning_frame = Frame(self.memory_cleaner_frame, bg='#ECF0F5')
-        # scanning_frame.pack(expand=True, fill=BOTH)
-
-        # self.gradient_circle_frame_path = PhotoImage(file='assets/gradient_frame.png')
-        # self.gradient_circle_frame_path = self.gradient_circle_frame_path.zoom(15)
-        # self.gradient_circle_frame_path = self.gradient_circle_frame_path.subsample(32)
-
         empty_sizedbox = Label(self.memory_cleaner_frame, text='', bg='#ECF0F5')
         empty_sizedbox.pack(side= 'top', anchor = CENTER, pady = 30)
 
-        # circleroration(self.memory_cleaner_frame, 'assets/gradient_frame.png')
         cpu_temp_circle = Label(self.memory_cleaner_frame , font= ("DM Sans", 12,), text='Scanning... ', compound= CENTER ,width= 150 , height= 150, bg='#ECF0F5', fg='#7ED957')
         cpu_temp_circle.pack(anchor = CENTER, side= TOP, pady= 30)
-        # circleroration(cpu_temp_circle, 'assets/gradient_frame.png')
         
         scanning_doc = Label(self.memory_cleaner_frame, text='Scanning Documents .....', font= ("DM Sans", 12, ), bg='#ECF0F5')
         scanning_doc.pack(side= 'top', anchor = CENTER)
 
-        # self.memory_cleaner_frame.pack_forget()
-        # self.finished_scan_frame = Frame(self.root, bg='#ECF0F5',)
-        # self.finished_scan_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
-
-        # self.check_icon_path = PhotoImage(file='assets/checked.png')
-        # self.check_icon_path = self.check_icon_path.zoom(7)
-        # self.check_icon_path = self.check_icon_path.subsample(10)
 
         check_icon = Label(self.finished_scan_frame, image= self.check_icon_path ,width= 230 , height= 230, bg='#ECF0F5')
         check_icon.pack(anchor = 'nw', side= TOP, padx= 70, pady= 20)
@@ -391,47 +309,11 @@ class Screen:
         total_junks_size_label = Label(total_data_frame, text='Total Junks Size: 9574 MB', font= ("DM Sans", 12, ), bg='#ECF0F5')
         total_junks_size_label.pack(side= 'top', anchor = 'nw', pady=10)
 
-        # def forget_frames():
-        #     app_name_lbl['text'] = 'Secure Optimizer'
-        #     self.activationkey_frame.pack_forget()
-        #     self.dashboard.pack( expand=True, fill= BOTH, anchor = 'ne')
-        #     self.memory_cleaner_frame.pack_forget()
-        #     self.finished_scan_frame.pack_forget()
-
         def clean_now_func():
             self.finished_scan_frame.pack_forget()
             self.activationkey_frame.pack_forget()
             self.memory_cleaner_frame.pack_forget()
-            scanned_animation.CleanedAnimation(self.root)
-            # second_folder = 'C:\Windows\Prefetch'
-            # try:
-            #     for filename in os.listdir(second_folder):
-            #         file_path = os.path.join(second_folder, filename)
-            #         try:
-            #             if os.path.isfile(file_path) or os.path.islink(file_path):
-            #                 os.unlink(file_path)
-            #             elif os.path.isdir(file_path):
-            #                 shutil.rmtree(file_path)
-            #         except Exception as e:
-            #             print(e)
-                    # self.finished_scan_frame.pack_forget()
-                    # self.activationkey_frame.pack_forget()
-                    # self.memory_cleaner_frame.pack_forget()
-                    # scanned_animation.CleanedAnimation(self.root)
-                    # app_name_lbl['text'] = 'Secure Optimizer'
-                    # self.finished_scan_frame.pack_forget()
-                    # self.activationkey_frame.pack_forget()
-                    # self.dashboard.pack( expand=True, fill= BOTH, anchor = 'ne')
-                    # self.memory_cleaner_frame.pack_forget()
-                    # contact_lbl.pack(side= 'right', pady= 10, padx = 5)
-                    # phone_icon.pack(side= 'right', pady= 10)
-                    # self.activationkey_frame.pack_forget()
-                    # self.dashboard.pack( expand=True, fill= BOTH, anchor = 'ne')
-                    # self.memory_cleaner_frame.pack_forget()
-                    # self.finished_scan_frame.pack_forget()
-            # except Exception as e:
-                # messagebox.showerror('Failure', 'An error occured... Try again!')
-                # print(e)
+            scanned_animation.CleanedAnimation(self.root, path='C:\Windows\Prefetch')
 
         clean_now_btn = Button(total_data_frame, text='Clean Now', command= clean_now_func, relief='flat' , font= ("DM Sans", 13, ), bg='#004AAD', fg='white')
         clean_now_btn.pack(side= 'top', anchor = 'nw', pady=20, ipadx=120, ipady=5)
