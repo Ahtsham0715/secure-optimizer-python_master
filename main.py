@@ -1,27 +1,28 @@
 import os
 import shutil
-from time import sleep
+import time
 from tkinter import *
 from tkinter import messagebox
 import psutil
 import firebase_admin
 from firebase_admin import credentials, firestore
 
-
 cred = credentials.Certificate(r"cleaner-app-50143-firebase-adminsdk-cej46-ef12406467.json")
 firebase_admin.initialize_app(cred)
+
+root = Tk()
+
+screen_height = 700
+screen_width = 1000
+
+# root.resizable(False, False)
+root.geometry('1000x600')
 
 
 
 def main_app():
-
-    root = Tk()
-
-    screen_height = 700
-    screen_width = 1000
-
-    # root.resizable(False, False)
-    root.geometry('1000x600')
+    
+    
     # appbar
     appbar = Frame(root, bg='#004AAD', height=70, relief='flat')
     appbar.pack(fill=X, side='top', anchor='ne')
@@ -393,8 +394,71 @@ def main_app():
     update_key_btn = Button(activationkey_frame, image= update_key_btn_path , command= update_key_func, text='Update Key', compound=CENTER , relief='flat' , font= ("DM Sans", 12, 'bold'), bg='#ECF0F5',activebackground='#ECF0F5', fg='white', activeforeground='white')
     update_key_btn.place(x= 250, y = 180)
 
-    root.mainloop()
+    # root.mainloop()
 
+def splash_screen():
+    root.wm_overrideredirect(True)
+
+    main_frame = Frame(root, bg='black')
+    main_frame.pack(fill="both",expand=True)
+
+    image_label = Label(main_frame,image="", bg = 'black')
+    image_label.pack(pady=100)
+    if os.path.exists('gif_frames'):
+        shutil.rmtree('gif_frames')
+    os.mkdir('gif_frames')
+    start = time.time()
+
+    gif_frames = []
+    images = []
+
+    def animation():
+        # global images
+        gif = Image.open('assets/splash.gif')
+        no_of_frames = gif.n_frames - 8
+
+        for i in range(no_of_frames):
+            gif.seek(i)
+            gif.save(os.path.join('gif_frames',f'splash{i}.png'))
+            gif_frames.append(os.path.join('gif_frames',f'splash{i}.png'))
+
+        for image in gif_frames:
+            im = Image.open(image)
+            im = im.resize((690,388),)
+            im = ImageTk.PhotoImage(im)
+            images.append(im)
+
+        show_animation(0)
+
+    def show_animation(count):
+        # global image_label, start, main_frame
+        image = images[count]
+        image_label.configure(image=image)
+        count += 1
+        if count == len(images)-1:
+            count = 0
+
+        # to show the gif only for 10 seconds
+        x= 'idle'
+        if int(time.time()-start) != 4:
+            x = root.after(80,show_animation,count)
+        else:
+            root.after_cancel(x)
+            # root.destroy()
+            main_frame.pack_forget()
+            main_app()
+
+            """
+            to delete the gif_frames folder and images inside it so that when we run the program again
+            then we don't get the error saying gif_frames folder already exists.
+            """
+            shutil.rmtree('gif_frames')
+
+            # to show the title bar
+            root.wm_overrideredirect(False)
+    animation()
+    root.mainloop()
     
+splash_screen()
     
-main_app()
+# main_app()
