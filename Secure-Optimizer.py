@@ -110,6 +110,8 @@ class Screen:
         screen_width = 1000
         
         f.pack_forget()
+        self.root.wm_iconbitmap('icon.ico')
+        self.root.title('Secure Optimizer')
         self.root.wm_overrideredirect(False)
         # appbar
         appbar = Frame(self.root, bg='#004AAD', height=70, relief='flat')
@@ -180,6 +182,28 @@ class Screen:
             self.memory_cleaner_frame.pack_forget()
             self.finished_scan_frame.pack_forget()
             self.activationkey_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
+
+        def quick_clean_func():
+            app_name_lbl['text'] = 'Scan your PC'
+            self.activationkey_frame.pack_forget()
+            self.dashboard.pack_forget()
+            self.finished_scan_frame.pack_forget()
+            # self.memory_cleaner_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
+            scanned_animation.CleanedAnimation(self.root, path='C:\Windows\Temp')
+
+        quick_clean_btn = Button(sidebar, text='Quick Clean', fg = 'black', font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat', command= quick_clean_func)
+        quick_clean_btn.pack(side= 'top', pady= 20)
+
+        def deep_clean_func():
+            app_name_lbl['text'] = 'Scan your PC'
+            self.activationkey_frame.pack_forget()
+            self.dashboard.pack_forget()
+            self.finished_scan_frame.pack_forget()
+            # self.memory_cleaner_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
+            scanned_animation.CleanedAnimation(self.root, path='C:\Windows\Prefetch')
+
+        deep_clean_btn = Button(sidebar, text='Deep Clean', fg = 'black', font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat', command= deep_clean_func)
+        deep_clean_btn.pack(side= 'top', pady= 20)
 
         activation_key_btn = Button(sidebar, text='Activation Key', fg = 'black', font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat', command= activation_key_func)
         activation_key_btn.pack(side= 'top', pady= 20)
