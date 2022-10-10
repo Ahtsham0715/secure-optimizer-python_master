@@ -9,6 +9,7 @@ import psutil
 import firebase_admin
 from firebase_admin import credentials, firestore
 import scanned_animation
+from threading import Thread
 
 cred = credentials.Certificate(r"cleaner-app-50143-firebase-adminsdk-cej46-ef12406467.json")
 firebase_admin.initialize_app(cred)
@@ -164,14 +165,17 @@ class Screen:
         mem_cleaner_btn.pack(side= 'top', pady= 20)
 
 
-        def cache_cleaner_func():
+        def cache_cleaner_thread():
             app_name_lbl['text'] = 'Scan your PC'
             self.activationkey_frame.pack_forget()
             self.dashboard.pack_forget()
             self.finished_scan_frame.pack_forget()
             # self.memory_cleaner_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
             scanned_animation.CleanedAnimation(self.root, path='C:\Windows\Temp')
-           
+        
+        def cache_cleaner_func():
+            self.thread = Thread(target = cache_cleaner_thread)
+            self.thread.start()
 
         cache_cleaner_btn = Button(sidebar, text='Cache Cleaner', fg = 'black', font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat', command= cache_cleaner_func)
         cache_cleaner_btn.pack(side= 'top', pady= 20)
@@ -183,7 +187,7 @@ class Screen:
             self.finished_scan_frame.pack_forget()
             self.activationkey_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
 
-        def quick_clean_func():
+        def quick_clean_thread():
             app_name_lbl['text'] = 'Scan your PC'
             self.activationkey_frame.pack_forget()
             self.dashboard.pack_forget()
@@ -191,16 +195,24 @@ class Screen:
             # self.memory_cleaner_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
             scanned_animation.CleanedAnimation(self.root, path='C:\Windows\Temp')
 
+        def quick_clean_func():
+            self.thread = Thread(target = quick_clean_thread)
+            self.thread.start()
+
         quick_clean_btn = Button(sidebar, text='Quick Clean', fg = 'black', font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat', command= quick_clean_func)
         quick_clean_btn.pack(side= 'top', pady= 20)
 
-        def deep_clean_func():
+        def deep_clean_thread():
             app_name_lbl['text'] = 'Scan your PC'
             self.activationkey_frame.pack_forget()
             self.dashboard.pack_forget()
             self.finished_scan_frame.pack_forget()
             # self.memory_cleaner_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
             scanned_animation.CleanedAnimation(self.root, path='C:\Windows\Prefetch')
+
+        def deep_clean_func():
+            self.thread = Thread(target = deep_clean_thread)
+            self.thread.start()
 
         deep_clean_btn = Button(sidebar, text='Deep Clean', fg = 'black', font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat', command= deep_clean_func)
         deep_clean_btn.pack(side= 'top', pady= 20)
@@ -220,8 +232,7 @@ class Screen:
 
         optimizing_lbl = Label(caution_frame, text='Optimising items frees up storage space on your device. ', font= ("DM Sans", 11, ), fg = 'black', bg = '#ECF0F5', relief='flat')
         optimizing_lbl.pack(side= 'left', pady= 5)
-
-        def scan_btn_func():
+        def scan_btn_thread():
             app_name_lbl['text'] = 'Scan your PC'
             self.activationkey_frame.pack_forget()
             self.dashboard.pack_forget()
@@ -244,6 +255,12 @@ class Screen:
                 listbox.insert(END, value)
             self.memory_cleaner_frame.pack_forget()
             self.finished_scan_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
+            
+            
+        def scan_btn_func():
+            self.thread = Thread(target = scan_btn_thread)
+            self.thread.start()
+            # self.thread.join()
 
         t_and_c_btn = Button(caution_frame, text='Scan Now!', command= scan_btn_func, activebackground='#ECF0F5' ,font= ("DM Sans", 11, ), bg = '#ECF0F5', fg = '#004AAD', relief='flat')
         t_and_c_btn.pack(side= 'left', pady= 5)
@@ -333,11 +350,15 @@ class Screen:
         total_junks_size_label = Label(total_data_frame, text='Total Junks Size: 9574 MB', font= ("DM Sans", 12, ), bg='#ECF0F5')
         total_junks_size_label.pack(side= 'top', anchor = 'nw', pady=10)
 
-        def clean_now_func():
+        def clean_now_thread():
             self.finished_scan_frame.pack_forget()
             self.activationkey_frame.pack_forget()
             self.memory_cleaner_frame.pack_forget()
             scanned_animation.CleanedAnimation(self.root, path='C:\Windows\Prefetch')
+
+        def clean_now_func():
+            self.thread = Thread(target = clean_now_thread)
+            self.thread.start()
 
         clean_now_btn = Button(total_data_frame, text='Clean Now', command= clean_now_func, relief='flat' , font= ("DM Sans", 13, ), bg='#004AAD', fg='white')
         clean_now_btn.pack(side= 'top', anchor = 'nw', pady=20, ipadx=120, ipady=5)
@@ -391,7 +412,12 @@ class Screen:
         # self.update_key_btn_path = self.update_key_btn_path.zoom(5)
         # self.update_key_btn_path = self.update_key_btn_path.subsample(10)
 
-        def update_key_func():
+        def update_key_thread():
+            update_key_btn['text'] = 'Processing'
+            update_key_btn['state'] = DISABLED
+            update_key_btn['image'] = ''
+            
+            
             try:
                 db = firestore.client()
                 doc_ref = db.collection(u'activationKeys').stream()
@@ -404,9 +430,21 @@ class Screen:
                             break
                 else:
                     messagebox.showerror('Error', 'Wrong Activation Key\nTry Again!!!')
+                update_key_btn['text'] = 'Update Key'
+                update_key_btn['state'] = NORMAL
+                update_key_btn['image'] = self.update_key_btn_path
+                
+                
             except Exception as e:
                 messagebox.showerror('Error', 'Wrong Activation Key\nTry Again!!!')
+                update_key_btn['text'] = 'Update Key'
+                update_key_btn['state'] = NORMAL
+                update_key_btn['image'] = self.update_key_btn_path
             
+            
+        def update_key_func():
+            self.thread = Thread(target = update_key_thread)
+            self.thread.start()
 
         update_key_btn = Button(self.activationkey_frame, image= self.update_key_btn_path , command= update_key_func, text='Update Key', compound=CENTER , relief='flat' , font= ("DM Sans", 12, 'bold'), bg='#ECF0F5',activebackground='#ECF0F5', fg='white', activeforeground='white')
         update_key_btn.place(x= 250, y = 180)

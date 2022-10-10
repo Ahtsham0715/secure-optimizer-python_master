@@ -48,8 +48,8 @@ class CleanedAnimation:
             count = 0
 
         # to show the gif only for 10 seconds
-        if int(time.time()-self.start) != 10:
-            self.x = self.root.after(80,self.show_animation,count)
+        if int(time.time()-self.start) != 11:
+            self.x = self.root.after(100,self.show_animation,count)
         else:
             second_folder = self.path
             for filename in os.listdir(second_folder):
