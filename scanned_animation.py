@@ -8,10 +8,10 @@ class CleanedAnimation:
     def __init__(self, root, path):
         self.root = root
         self.path = path
-        self.main_frame = Frame(self.root, bg='black')
+        self.main_frame = Frame(self.root, bg='#ECF0F5')
         self.main_frame.pack(expand=True, fill= BOTH, anchor = 'ne')
 
-        self.image_label = Label(self.main_frame,image="", bg = 'black')
+        self.image_label = Label(self.main_frame,image="", bg = '#ECF0F5')
         self.image_label.pack(pady=100)
         if os.path.exists('gif_frames'):
             shutil.rmtree('gif_frames')
@@ -24,7 +24,7 @@ class CleanedAnimation:
 
         root.mainloop()
     def animation(self):
-        gif = Image.open('assets/scanned.gif')
+        gif = Image.open('assets/scanned21.gif')
         self.no_of_frames = gif.n_frames
 
         for i in range(self.no_of_frames):
@@ -48,7 +48,7 @@ class CleanedAnimation:
             count = 0
 
         # to show the gif only for 10 seconds
-        if int(time.time()-self.start) != 11:
+        if int(time.time()-self.start) != 8:
             self.x = self.root.after(100,self.show_animation,count)
         else:
             second_folder = self.path
@@ -63,7 +63,7 @@ class CleanedAnimation:
                 except Exception as e:
                     print(e)
             self.root.after_cancel(self.x)
-            self.main_frame.pack_forget()
+            self.image_label.pack_forget()
             # self.root.destroy()
             # self.main_app(self.main_frame)
 
