@@ -19,7 +19,7 @@ class Screen:
     def __init__(self):
         self.root = Tk()
         self.root.geometry("1000x600+220+100")
-        self.root.configure(bg='black')
+        self.root.configure(bg='#ECF0F5')
         # self.root.eval('tk::PlaceWindow . top')
 
         # to remove the title bar

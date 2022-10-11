@@ -63,7 +63,7 @@ class CleanedAnimation:
                 except Exception as e:
                     print(e)
             self.root.after_cancel(self.x)
-            self.image_label.pack_forget()
+            self.main_frame.pack_forget()
             # self.root.destroy()
             # self.main_app(self.main_frame)
 
