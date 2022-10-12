@@ -138,7 +138,7 @@ class Screen:
         app_name_lbl = Label(appbar, text='Secure Optimizer', font= ("DM Sans", 12, 'bold'), fg = 'white', bg = '#004AAD', relief='flat')
         app_name_lbl.pack(side= 'left', pady= 10, padx = 15)
 
-        self.contact_lbl = Label(appbar, text='', font= ("DM Sans", 12), fg = 'white', bg = '#004AAD', relief='flat')
+        self.contact_lbl = Label(appbar, text='loading...', font= ("DM Sans", 12), fg = 'white', bg = '#004AAD', relief='flat')
         self.contact_lbl.pack(side= 'right', pady= 10, padx = 5)
 
         phone_icon = Label(appbar, image= self.phone_icon_path, width= 40 , height= 40, bg='#004AAD')
