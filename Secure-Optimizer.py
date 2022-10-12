@@ -17,6 +17,7 @@ firebase_admin.initialize_app(cred)
 
 class Screen:
     def __init__(self):
+        # self.fetch_phone()
         self.root = Tk()
         self.root.geometry("1000x600+220+100")
         self.root.configure(bg='#ECF0F5')
@@ -104,9 +105,21 @@ class Screen:
 
             # to show the title bar
             self.root.wm_overrideredirect(False)
-            
+    
     def main_app(self, f):
         
+        def fetch_phone():
+            try:
+                db = firestore.client()
+                self.doc_ref = db.collection(u'users').document(u'data').get()
+                self.doc_data = self.doc_ref.to_dict()
+                self.contact_lbl['text'] = self.doc_data['phone']
+                print(self.doc_data['phone'])
+                       
+            except Exception as e:
+                print(e)
+                self.contact_lbl['text'] = self.doc_data['phone']
+        Thread(target = fetch_phone).start()
         screen_height = 700
         screen_width = 1000
         
@@ -125,10 +138,8 @@ class Screen:
         app_name_lbl = Label(appbar, text='Secure Optimizer', font= ("DM Sans", 12, 'bold'), fg = 'white', bg = '#004AAD', relief='flat')
         app_name_lbl.pack(side= 'left', pady= 10, padx = 15)
 
-
-
-        contact_lbl = Label(appbar, text='657-541-749', font= ("DM Sans", 12), fg = 'white', bg = '#004AAD', relief='flat')
-        contact_lbl.pack(side= 'right', pady= 10, padx = 5)
+        self.contact_lbl = Label(appbar, text='', font= ("DM Sans", 12), fg = 'white', bg = '#004AAD', relief='flat')
+        self.contact_lbl.pack(side= 'right', pady= 10, padx = 5)
 
         phone_icon = Label(appbar, image= self.phone_icon_path, width= 40 , height= 40, bg='#004AAD')
         phone_icon.pack(side= 'right', pady= 10)
