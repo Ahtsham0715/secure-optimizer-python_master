@@ -199,7 +199,7 @@ class Screen:
 
 
         dashboard_btn = Button(sidebar, text='Dashboard', fg = 'black', font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat')
-        dashboard_btn.pack(side= 'top', pady= 20)
+        dashboard_btn.pack(side= 'top', pady= 2)
 
         def mem_cleaner_func():
             app_name_lbl['text'] = 'Secure Optimizer'
@@ -243,18 +243,6 @@ class Screen:
         mem_cleaner_btn.pack(side= 'top', pady= 20)
 
 
-        # def cache_cleaner_thread():
-        #     app_name_lbl['text'] = 'Scan your PC'
-        #     self.activationkey_frame.pack_forget()
-        #     self.dashboard.pack_forget()
-        #     self.finished_scan_frame.pack_forget()
-        #     # self.memory_cleaner_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
-        #     scanned_animation.CleanedAnimation(self.root, path='C:\Windows\Temp')
-        
-        # def cache_cleaner_func():
-        #     self.thread = Thread(target = cache_cleaner_thread)
-        #     self.thread.start()
-
         cache_cleaner_btn = Button(sidebar, text='Cache Cleaner', fg = 'black', font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat', command= scan_btn_func)
         cache_cleaner_btn.pack(side= 'top', pady= 20)
 
@@ -265,32 +253,11 @@ class Screen:
             self.finished_scan_frame.pack_forget()
             self.activationkey_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
 
-        # def quick_clean_thread():
-        #     app_name_lbl['text'] = 'Scan your PC'
-        #     self.activationkey_frame.pack_forget()
-        #     self.dashboard.pack_forget()
-        #     self.finished_scan_frame.pack_forget()
-        #     # self.memory_cleaner_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
-        #     scanned_animation.CleanedAnimation(self.root, path='C:\Windows\Temp')
-
-        # def quick_clean_func():
-        #     self.thread = Thread(target = quick_clean_thread)
-        #     self.thread.start()
 
         quick_clean_btn = Button(sidebar, text='Quick Clean', fg = 'black', font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat', command= scan_btn_func)
         quick_clean_btn.pack(side= 'top', pady= 20)
 
-        # def deep_clean_thread():
-        #     app_name_lbl['text'] = 'Scan your PC'
-        #     self.activationkey_frame.pack_forget()
-        #     self.dashboard.pack_forget()
-        #     self.finished_scan_frame.pack_forget()
-        #     # self.memory_cleaner_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
-        #     scanned_animation.CleanedAnimation(self.root, path='C:\Windows\Prefetch')
 
-        # def deep_clean_func():
-        #     self.thread = Thread(target = deep_clean_thread)
-        #     self.thread.start()
 
         deep_clean_btn = Button(sidebar, text='Deep Clean', fg = 'black', font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat', command= scan_btn_func)
         deep_clean_btn.pack(side= 'top', pady= 20)
@@ -298,9 +265,41 @@ class Screen:
         activation_key_btn = Button(sidebar, text='Activation Key', fg = 'black', font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat', command= activation_key_func)
         activation_key_btn.pack(side= 'top', pady= 20)
 
-        # main content area
+          # main content area
+        self.dashboard_frame = Frame(self.root, bg='#ECF0F5')
+        self.dashboard_frame.pack( expand=True, fill= X, anchor = 'ne')
+
+        dashboard_top_bar1 = Frame(self.dashboard_frame, bg='#004AAD', height=50, relief='solid', borderwidth=1,border=0, bd= 1)
+        dashboard_top_bar1.pack(fill=X, side='top', anchor='ne')        
+
+        pc_icon = Label(dashboard_top_bar1, image= self.logo_path, width= 60 , height= 30, bg='#004AAD')
+        pc_icon.pack(side= 'left', pady= 10)
+
+        pc_status_lbl = Label(dashboard_top_bar1, text='PC Status Check', font= ("DM Sans", 12, 'bold'), fg = 'white', bg = '#004AAD', relief='flat')
+        pc_status_lbl.pack(side= 'left', pady= 10, padx = 15)
+       
+        latest_issues_no = Label(dashboard_top_bar1, text='14021', font= ("DM Sans", 11, 'bold'), fg = 'white', bg = '#004AAD', relief='flat')
+        latest_issues_no.pack(side= 'right', pady= 10, padx = 5)
+       
+        latest_issues = Label(dashboard_top_bar1, text='Latest Issues Found:', font= ("DM Sans", 11, 'bold'), fg = '#e1e0e0', bg = '#004AAD', relief='flat')
+        latest_issues.pack(side= 'right', pady= 10,)
+       
+       
+        dashboard_top_bar2 = Frame(self.dashboard_frame, bg='#004AAD', height=40,  relief='solid', borderwidth=1,border=0, bd= 1)
+        dashboard_top_bar2.pack(fill=X, side='top', anchor='ne')        
+
+        last_scan_lbl = Label(dashboard_top_bar2, text='Last Scan:', font= ("DM Sans", 11, 'bold'), fg = '#e1e0e0', bg = '#004AAD', relief='flat')
+        last_scan_lbl.pack(side= 'left', pady= 5, anchor='center', padx = 8)
+        
+        last_scan_time_lbl = Label(dashboard_top_bar2, text='10.10.2022. 21:02:12', font= ("DM Sans", 11, 'bold'), fg = 'white', bg = '#004AAD', relief='flat')
+        last_scan_time_lbl.pack(side= 'left', pady= 5, anchor='center')
+        
+        smart_menu_lbl = Label(self.dashboard_frame, text='Smart Menu', font= ("DM Sans", 12, 'bold'), fg = 'black', bg = '#ECF0F5', relief='flat')
+        smart_menu_lbl.pack(side= 'top', pady= 20, anchor='center')
+
+        # memory cleaner
         self.dashboard = Frame(self.root, bg='#ECF0F5',)
-        self.dashboard.pack( expand=True, fill= BOTH, anchor = 'ne')
+        # self.dashboard.pack( expand=True, fill= BOTH, anchor = 'ne')
 
         caution_frame = Frame(self.dashboard, bg='#ECF0F5',)
         caution_frame.pack(side='top', anchor='center' , expand=True)
