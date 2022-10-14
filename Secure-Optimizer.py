@@ -40,29 +40,17 @@ class Screen:
         self.images = []
         self.animation()
         self.logo_path = ImageTk.PhotoImage(Image.open('assets/icon.png').resize((140,70), Image.ANTIALIAS))
-        # self.logo_path = self.logo_path.zoom(2)
-        # self.logo_path = self.logo_path.subsample(32)
         self.phone_icon_path = ImageTk.PhotoImage(Image.open('assets/phone.png').resize((30,30), Image.ANTIALIAS))
-        # self.phone_icon_path = self.phone_icon_path.zoom(15)
-        # self.phone_icon_path = self.phone_icon_path.subsample(32)
         self.caution_icon_path = PhotoImage(file='assets/caution.png')
         self.caution_icon_path = self.caution_icon_path.zoom(15)
         self.caution_icon_path = self.caution_icon_path.subsample(32)
         self.scan_btn_path = ImageTk.PhotoImage(Image.open('assets/Group 24.png').resize((150,150), Image.ANTIALIAS))
-        # self.scan_btn_path = self.scan_btn_path.zoom(1)
-        # self.scan_btn_path = self.scan_btn_path.subsample(5)
         self.gradient_circle_path = ImageTk.PhotoImage(Image.open('assets/Group 20.png').resize((55,55), Image.ANTIALIAS))
-        # self.gradient_circle_path = self.gradient_circle_path.zoom(5)
-        # self.gradient_circle_path = self.gradient_circle_path.subsample(10)
         self.gradient_circle_frame_path = PhotoImage(file='assets/gradient_frame.png')
         self.gradient_circle_frame_path = self.gradient_circle_frame_path.zoom(15)
         self.gradient_circle_frame_path = self.gradient_circle_frame_path.subsample(32)
         self.check_icon_path = ImageTk.PhotoImage(Image.open('assets/checked.png').resize((180,180), Image.ANTIALIAS))
-        # self.check_icon_path = self.check_icon_path.zoom(7)
-        # self.check_icon_path = self.check_icon_path.subsample(10)
         self.update_key_btn_path = ImageTk.PhotoImage(Image.open('assets/update_key.png').resize((140,45), Image.ANTIALIAS))
-        # self.update_key_btn_path = self.update_key_btn_path.zoom(5)
-        # self.update_key_btn_path = self.update_key_btn_path.subsample(10)
         self.activationkey_frame = Frame(self.root, bg='#ECF0F5',)
         self.finished_scan_frame = Frame(self.root, bg='#ECF0F5',)
         self.memory_cleaner_frame = Frame(self.root, bg='#ECF0F5')
@@ -267,7 +255,42 @@ class Screen:
 
           # main content area
         self.dashboard_frame = Frame(self.root, bg='#ECF0F5')
-        self.dashboard_frame.pack( expand=True, fill= X, anchor = 'ne')
+        self.dashboard_frame.pack( expand=True, fill= BOTH, anchor = 'ne')
+
+        dashboard_bottom_bar = Frame(self.dashboard_frame, bg='#004AAD', height=30, relief='flat', borderwidth=2)
+        dashboard_bottom_bar.pack(fill=X, side=BOTTOM, anchor = 'sw', expand= True)
+
+
+        total_memory = Label(dashboard_bottom_bar, text= 'Total Memory:', font= ("DM Sans", 11, 'bold'), fg = '#e1e0e0', bg = '#004AAD', relief='flat')
+        total_memory.pack(side= 'left', pady= 5, anchor ='center')
+
+        tot_mem = int(psutil.virtual_memory().total)/2**30
+        
+
+        total_memory_stat = Label(dashboard_bottom_bar, text= f'{str(round(tot_mem,1)).split(".")[0]} GB', font= ("DM Sans", 11, 'bold'), fg = 'white', bg = '#004AAD', relief='flat')
+        total_memory_stat.pack(side= 'left', pady= 5, anchor ='center')        
+
+        empty_sizedbox1 = Label(dashboard_bottom_bar, text='', bg='#004AAD')
+        empty_sizedbox1.pack(side= 'left', anchor = CENTER, padx = 100)
+
+        free_memory = Label(dashboard_bottom_bar, text= 'Memory Free:', font= ("DM Sans", 11, 'bold'), fg = '#e1e0e0', bg = '#004AAD', relief='flat')
+        free_memory.pack(side= 'left', pady= 5, anchor ='center',)
+
+        free_mem = int(psutil.virtual_memory().free)/2**30
+
+        free_memory_stat = Label(dashboard_bottom_bar, text= f'{round(free_mem,1)} GB', font= ("DM Sans", 11, 'bold'), fg = 'white', bg = '#004AAD', relief='flat')
+        free_memory_stat.pack(side= 'left', pady= 5, padx= 5 , anchor ='center')
+
+
+        cpu_use_stat = Label(dashboard_bottom_bar, text= f'{int(psutil.cpu_percent())}%', font= ("DM Sans", 11, 'bold'), fg = 'white', bg = '#004AAD', relief='flat')
+        cpu_use_stat.pack(side= 'right', pady= 5, padx= 5 , anchor ='center')
+
+        cpu_use = Label(dashboard_bottom_bar, text= 'CPU Usage:', font= ("DM Sans", 11, 'bold'), fg = '#e1e0e0', bg = '#004AAD', relief='flat')
+        cpu_use.pack(side= 'right', pady= 5, anchor ='center',)
+
+
+
+
 
         dashboard_top_bar1 = Frame(self.dashboard_frame, bg='#004AAD', height=50, relief='solid', borderwidth=1,border=0, bd= 1)
         dashboard_top_bar1.pack(fill=X, side='top', anchor='ne')        
@@ -296,6 +319,8 @@ class Screen:
         
         smart_menu_lbl = Label(self.dashboard_frame, text='Smart Menu', font= ("DM Sans", 12, 'bold'), fg = 'black', bg = '#ECF0F5', relief='flat')
         smart_menu_lbl.pack(side= 'top', pady= 20, anchor='center')
+
+
 
         # memory cleaner
         self.dashboard = Frame(self.root, bg='#ECF0F5',)
