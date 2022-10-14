@@ -106,6 +106,21 @@ class Screen:
             # to show the title bar
             self.root.wm_overrideredirect(False)
     
+    def changeOnHover(self,button, bgcolorOnHover, fgcolorOnHover, bgcolorOnLeave, fgcolorOnLeave):
+
+        button.bind("<Enter>", func=lambda e: button.config(
+        background=bgcolorOnHover))
+  
+        button.bind("<Enter>", func=lambda e: button.config(
+        foreground=fgcolorOnHover))
+  
+    # background color on leving widget
+        button.bind("<Leave>", func=lambda e: button.config(
+        background=bgcolorOnLeave))
+    
+        button.bind("<Leave>", func=lambda e: button.config(
+        foreground=fgcolorOnLeave))
+    
     def main_app(self, f):
         
         def fetch_phone():
@@ -164,85 +179,17 @@ class Screen:
         sidebar = Frame(self.root, bg='#ECF0F5', relief='solid', borderwidth=1,border=0, bd= 1)
         sidebar.pack( fill=Y, side=LEFT, anchor='nw')
 
+
+        dashboard_btn = Button(sidebar, text='Dashboard', fg = 'black', font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat')
+        dashboard_btn.pack(side= 'top', pady= 20)
+
         def mem_cleaner_func():
             app_name_lbl['text'] = 'Secure Optimizer'
             self.activationkey_frame.pack_forget()
             self.dashboard.pack( expand=True, fill= BOTH, anchor = 'ne')
             self.memory_cleaner_frame.pack_forget()
             self.finished_scan_frame.pack_forget()
-            
-
-        mem_cleaner_btn = Button(sidebar, text='Memory Cleaner', fg = 'black', font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat', command= mem_cleaner_func)
-        mem_cleaner_btn.pack(side= 'top', pady= 20)
-
-
-        def cache_cleaner_thread():
-            app_name_lbl['text'] = 'Scan your PC'
-            self.activationkey_frame.pack_forget()
-            self.dashboard.pack_forget()
-            self.finished_scan_frame.pack_forget()
-            # self.memory_cleaner_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
-            scanned_animation.CleanedAnimation(self.root, path='C:\Windows\Temp')
         
-        def cache_cleaner_func():
-            self.thread = Thread(target = cache_cleaner_thread)
-            self.thread.start()
-
-        cache_cleaner_btn = Button(sidebar, text='Cache Cleaner', fg = 'black', font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat', command= cache_cleaner_func)
-        cache_cleaner_btn.pack(side= 'top', pady= 20)
-
-        def activation_key_func():
-            app_name_lbl['text'] = 'Secure Optimizer'
-            self.dashboard.pack_forget()
-            self.memory_cleaner_frame.pack_forget()
-            self.finished_scan_frame.pack_forget()
-            self.activationkey_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
-
-        def quick_clean_thread():
-            app_name_lbl['text'] = 'Scan your PC'
-            self.activationkey_frame.pack_forget()
-            self.dashboard.pack_forget()
-            self.finished_scan_frame.pack_forget()
-            # self.memory_cleaner_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
-            scanned_animation.CleanedAnimation(self.root, path='C:\Windows\Temp')
-
-        def quick_clean_func():
-            self.thread = Thread(target = quick_clean_thread)
-            self.thread.start()
-
-        quick_clean_btn = Button(sidebar, text='Quick Clean', fg = 'black', font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat', command= quick_clean_func)
-        quick_clean_btn.pack(side= 'top', pady= 20)
-
-        def deep_clean_thread():
-            app_name_lbl['text'] = 'Scan your PC'
-            self.activationkey_frame.pack_forget()
-            self.dashboard.pack_forget()
-            self.finished_scan_frame.pack_forget()
-            # self.memory_cleaner_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
-            scanned_animation.CleanedAnimation(self.root, path='C:\Windows\Prefetch')
-
-        def deep_clean_func():
-            self.thread = Thread(target = deep_clean_thread)
-            self.thread.start()
-
-        deep_clean_btn = Button(sidebar, text='Deep Clean', fg = 'black', font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat', command= deep_clean_func)
-        deep_clean_btn.pack(side= 'top', pady= 20)
-
-        activation_key_btn = Button(sidebar, text='Activation Key', fg = 'black', font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat', command= activation_key_func)
-        activation_key_btn.pack(side= 'top', pady= 20)
-
-        # main content area
-        self.dashboard = Frame(self.root, bg='#ECF0F5',)
-        self.dashboard.pack( expand=True, fill= BOTH, anchor = 'ne')
-
-        caution_frame = Frame(self.dashboard, bg='#ECF0F5',)
-        caution_frame.pack(fill=X, side='top', anchor='ne', expand=True, padx = screen_width * 0.15, ipadx=50)
-        
-        caution_icon = Label(caution_frame, image= self.caution_icon_path, width= 40 , height= 40, bg='#ECF0F5')
-        caution_icon.pack(side= 'left', pady= 5)
-
-        optimizing_lbl = Label(caution_frame, text='Optimising items frees up storage space on your device. ', font= ("DM Sans", 11, ), fg = 'black', bg = '#ECF0F5', relief='flat')
-        optimizing_lbl.pack(side= 'left', pady= 5)
         def scan_btn_thread():
             app_name_lbl['text'] = 'Scan your PC'
             self.activationkey_frame.pack_forget()
@@ -272,20 +219,94 @@ class Screen:
             self.thread = Thread(target = scan_btn_thread)
             self.thread.start()
             # self.thread.join()
+            
 
-        t_and_c_btn = Button(caution_frame, text='Scan Now!', command= scan_btn_func, activebackground='#ECF0F5' ,font= ("DM Sans", 11, ), bg = '#ECF0F5', fg = '#004AAD', relief='flat')
-        t_and_c_btn.pack(side= 'left', pady= 5)
+        mem_cleaner_btn = Button(sidebar, text='Memory Cleaner', fg = 'black', font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat', command= mem_cleaner_func)
+        mem_cleaner_btn.pack(side= 'top', pady= 20)
 
-        scan_btn = Button(self.dashboard, image= self.scan_btn_path, activebackground='#ECF0F5',command= scan_btn_func , width= screen_height *0.25 , height= screen_height *0.25 , bg='#ECF0F5', relief='flat')
+
+        # def cache_cleaner_thread():
+        #     app_name_lbl['text'] = 'Scan your PC'
+        #     self.activationkey_frame.pack_forget()
+        #     self.dashboard.pack_forget()
+        #     self.finished_scan_frame.pack_forget()
+        #     # self.memory_cleaner_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
+        #     scanned_animation.CleanedAnimation(self.root, path='C:\Windows\Temp')
+        
+        # def cache_cleaner_func():
+        #     self.thread = Thread(target = cache_cleaner_thread)
+        #     self.thread.start()
+
+        cache_cleaner_btn = Button(sidebar, text='Cache Cleaner', fg = 'black', font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat', command= scan_btn_func)
+        cache_cleaner_btn.pack(side= 'top', pady= 20)
+
+        def activation_key_func():
+            app_name_lbl['text'] = 'Secure Optimizer'
+            self.dashboard.pack_forget()
+            self.memory_cleaner_frame.pack_forget()
+            self.finished_scan_frame.pack_forget()
+            self.activationkey_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
+
+        # def quick_clean_thread():
+        #     app_name_lbl['text'] = 'Scan your PC'
+        #     self.activationkey_frame.pack_forget()
+        #     self.dashboard.pack_forget()
+        #     self.finished_scan_frame.pack_forget()
+        #     # self.memory_cleaner_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
+        #     scanned_animation.CleanedAnimation(self.root, path='C:\Windows\Temp')
+
+        # def quick_clean_func():
+        #     self.thread = Thread(target = quick_clean_thread)
+        #     self.thread.start()
+
+        quick_clean_btn = Button(sidebar, text='Quick Clean', fg = 'black', font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat', command= scan_btn_func)
+        quick_clean_btn.pack(side= 'top', pady= 20)
+
+        # def deep_clean_thread():
+        #     app_name_lbl['text'] = 'Scan your PC'
+        #     self.activationkey_frame.pack_forget()
+        #     self.dashboard.pack_forget()
+        #     self.finished_scan_frame.pack_forget()
+        #     # self.memory_cleaner_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
+        #     scanned_animation.CleanedAnimation(self.root, path='C:\Windows\Prefetch')
+
+        # def deep_clean_func():
+        #     self.thread = Thread(target = deep_clean_thread)
+        #     self.thread.start()
+
+        deep_clean_btn = Button(sidebar, text='Deep Clean', fg = 'black', font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat', command= scan_btn_func)
+        deep_clean_btn.pack(side= 'top', pady= 20)
+
+        activation_key_btn = Button(sidebar, text='Activation Key', fg = 'black', font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat', command= activation_key_func)
+        activation_key_btn.pack(side= 'top', pady= 20)
+
+        # main content area
+        self.dashboard = Frame(self.root, bg='#ECF0F5',)
+        self.dashboard.pack( expand=True, fill= BOTH, anchor = 'ne')
+
+        caution_frame = Frame(self.dashboard, bg='#ECF0F5',)
+        caution_frame.pack(side='top', anchor='center' , expand=True)
+        
+        caution_icon = Label(caution_frame, image= self.caution_icon_path, width= 40 , height= 40, bg='#ECF0F5')
+        caution_icon.pack(side= 'left', pady= 1)
+
+        optimizing_lbl = Label(caution_frame, text='Optimising items frees up storage space on your device. ', font= ("DM Sans", 11, ), fg = 'black', bg = '#ECF0F5', relief='flat')
+        optimizing_lbl.pack(side= 'left', pady= 1, anchor = CENTER)
+
+        t_and_c_btn = Button(caution_frame, text='Scan Now!', cursor='hand2', command= scan_btn_func, activebackground='#ECF0F5' ,font= ("DM Sans", 11, ), bg = '#ECF0F5', fg = '#004AAD', relief='flat')
+        t_and_c_btn.pack(side= LEFT, pady= 1, anchor = CENTER)
+
+        scan_btn = Button(self.dashboard, image= self.scan_btn_path,cursor= 'hand2', activebackground='#ECF0F5',command= scan_btn_func , width= screen_height *0.25 , height= screen_height *0.25 , bg='#ECF0F5', relief='flat')
         scan_btn.pack(side = TOP, padx = 20, pady = 10, anchor = CENTER)
 
+        # self.changeOnHover(t_and_c_btn, bgcolorOnHover='white', bgcolorOnLeave='#ECF0F5')
 
         stats_frame = Frame(self.dashboard, bg='#ECF0F5',)
-        stats_frame.pack(fill=X, side='top', anchor=CENTER, expand=True)
+        stats_frame.pack(side='top', anchor=CENTER, expand=True)
 
 
         empty_sizedbox = Label(stats_frame, text='', bg='#ECF0F5')
-        empty_sizedbox.pack(side= 'left', anchor = CENTER, padx = 150)
+        empty_sizedbox.pack(side= 'left', anchor = CENTER, padx = 1)
 
         memory_frame = Frame(stats_frame, bg='#ECF0F5',)
         memory_frame.pack(fill=X, side='left', anchor=CENTER, padx = 12)
