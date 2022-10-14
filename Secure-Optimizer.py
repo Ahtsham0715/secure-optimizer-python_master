@@ -39,35 +39,53 @@ class Screen:
         self.gif_frames = []
         self.images = []
         self.animation()
-        self.logo_path = PhotoImage(file='assets/icon.png')
-        self.logo_path = self.logo_path.zoom(2)
-        self.logo_path = self.logo_path.subsample(32)
-        self.phone_icon_path = PhotoImage(file='assets/phone.png')
-        self.phone_icon_path = self.phone_icon_path.zoom(15)
-        self.phone_icon_path = self.phone_icon_path.subsample(32)
+        self.logo_path = ImageTk.PhotoImage(Image.open('assets/icon.png').resize((140,70), Image.ANTIALIAS))
+        # self.logo_path = self.logo_path.zoom(2)
+        # self.logo_path = self.logo_path.subsample(32)
+        self.phone_icon_path = ImageTk.PhotoImage(Image.open('assets/phone.png').resize((30,30), Image.ANTIALIAS))
+        # self.phone_icon_path = self.phone_icon_path.zoom(15)
+        # self.phone_icon_path = self.phone_icon_path.subsample(32)
         self.caution_icon_path = PhotoImage(file='assets/caution.png')
         self.caution_icon_path = self.caution_icon_path.zoom(15)
         self.caution_icon_path = self.caution_icon_path.subsample(32)
-        self.scan_btn_path = PhotoImage(file='assets/Group 24.png')
-        self.scan_btn_path = self.scan_btn_path.zoom(15)
-        self.scan_btn_path = self.scan_btn_path.subsample(32)
-        self.gradient_circle_path = PhotoImage(file='assets/Group 20.png')
-        self.gradient_circle_path = self.gradient_circle_path.zoom(20)
-        self.gradient_circle_path = self.gradient_circle_path.subsample(32)
+        self.scan_btn_path = ImageTk.PhotoImage(Image.open('assets/Group 24.png').resize((150,150), Image.ANTIALIAS))
+        # self.scan_btn_path = self.scan_btn_path.zoom(1)
+        # self.scan_btn_path = self.scan_btn_path.subsample(5)
+        self.gradient_circle_path = ImageTk.PhotoImage(Image.open('assets/Group 20.png').resize((55,55), Image.ANTIALIAS))
+        # self.gradient_circle_path = self.gradient_circle_path.zoom(5)
+        # self.gradient_circle_path = self.gradient_circle_path.subsample(10)
         self.gradient_circle_frame_path = PhotoImage(file='assets/gradient_frame.png')
         self.gradient_circle_frame_path = self.gradient_circle_frame_path.zoom(15)
         self.gradient_circle_frame_path = self.gradient_circle_frame_path.subsample(32)
-        self.check_icon_path = PhotoImage(file='assets/checked.png')
-        self.check_icon_path = self.check_icon_path.zoom(7)
-        self.check_icon_path = self.check_icon_path.subsample(10)
-        self.update_key_btn_path = PhotoImage(file='assets/update_key.png')
-        self.update_key_btn_path = self.update_key_btn_path.zoom(5)
-        self.update_key_btn_path = self.update_key_btn_path.subsample(10)
+        self.check_icon_path = ImageTk.PhotoImage(Image.open('assets/checked.png').resize((180,180), Image.ANTIALIAS))
+        # self.check_icon_path = self.check_icon_path.zoom(7)
+        # self.check_icon_path = self.check_icon_path.subsample(10)
+        self.update_key_btn_path = ImageTk.PhotoImage(Image.open('assets/update_key.png').resize((140,45), Image.ANTIALIAS))
+        # self.update_key_btn_path = self.update_key_btn_path.zoom(5)
+        # self.update_key_btn_path = self.update_key_btn_path.subsample(10)
         self.activationkey_frame = Frame(self.root, bg='#ECF0F5',)
         self.finished_scan_frame = Frame(self.root, bg='#ECF0F5',)
         self.memory_cleaner_frame = Frame(self.root, bg='#ECF0F5')
         
         self.root.mainloop()
+
+    def check_registration(self):
+        try:
+            db = firestore.client()
+            doc_ref = db.collection(u'activationKeys').stream()
+            for data in doc_ref:
+                doc_data = data.to_dict()
+                if doc_data['key'] == '': #TODO
+                    # with open('sec_file.txt', 'w') as f:
+                    #     f.write('')
+                    if (messagebox.showinfo('success', 'You registered successfully.')):
+                        break
+            else:
+                messagebox.showerror('Error', 'Wrong Activation Key\nTry Again!!!')
+                
+                
+        except Exception as e:
+            messagebox.showerror('Error', 'Wrong Activation Key\nTry Again!!!')
 
     def animation(self):
         gif = Image.open('assets/splash.gif')
