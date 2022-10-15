@@ -10,6 +10,7 @@ import firebase_admin
 from firebase_admin import credentials, firestore
 import scanned_animation
 from threading import Thread
+import customtkinter
 
 cred = credentials.Certificate(r"cleaner-app-50143-firebase-adminsdk-cej46-ef12406467.json")
 firebase_admin.initialize_app(cred)
@@ -51,6 +52,7 @@ class Screen:
         self.gradient_circle_frame_path = self.gradient_circle_frame_path.subsample(32)
         self.check_icon_path = ImageTk.PhotoImage(Image.open('assets/checked.png').resize((180,180), Image.ANTIALIAS))
         self.update_key_btn_path = ImageTk.PhotoImage(Image.open('assets/update_key.png').resize((140,45), Image.ANTIALIAS))
+        self.folder_icon = ImageTk.PhotoImage(Image.open('assets/folder.png').resize((30,30), Image.ANTIALIAS))
         self.activationkey_frame = Frame(self.root, bg='#ECF0F5',)
         self.finished_scan_frame = Frame(self.root, bg='#ECF0F5',)
         self.memory_cleaner_frame = Frame(self.root, bg='#ECF0F5')
@@ -257,7 +259,7 @@ class Screen:
         self.dashboard_frame = Frame(self.root, bg='#ECF0F5')
         self.dashboard_frame.pack( expand=True, fill= BOTH, anchor = 'ne')
 
-        dashboard_bottom_bar = Frame(self.dashboard_frame, bg='#004AAD', height=30, relief='flat', borderwidth=2)
+        dashboard_bottom_bar = Frame(self.dashboard_frame, bg='#004AAD', height=30, relief='solid', borderwidth=1,border=0,bd=1)
         dashboard_bottom_bar.pack(fill=X, side=BOTTOM, anchor = 'sw', expand= True)
 
 
@@ -319,8 +321,49 @@ class Screen:
         
         smart_menu_lbl = Label(self.dashboard_frame, text='Smart Menu', font= ("DM Sans", 12, 'bold'), fg = 'black', bg = '#ECF0F5', relief='flat')
         smart_menu_lbl.pack(side= 'top', pady= 20, anchor='center')
+        
+        
+        self.clean_frame = Frame(self.dashboard_frame, bg='#ECF0F5')
+        self.clean_frame.pack(side = 'top', expand=True, anchor = 'center')
 
+        self.memory_cleaner_button = Button(master=self.clean_frame, image=self.folder_icon, font= ("DM Sans", 10, 'bold','underline') , text="Memory Cleaner",
+                                                compound="top", relief='flat', bg='#ECF0F5', fg='black' , cursor= 'hand2',)
+        self.memory_cleaner_button.pack(side = 'left', anchor = 'center', padx = 30, pady= 10, ipady = 5)
+         
+       
+        self.cache_cleaner_button = Button(master=self.clean_frame, image=self.folder_icon, font= ("DM Sans", 10, 'bold','underline') , text="Cache Cleaner",
+                                                compound="top", relief='flat', bg='#ECF0F5', fg='black' , cursor= 'hand2',)
+        self.cache_cleaner_button.pack(side = 'left', anchor = 'center', padx = 30, pady= 10, ipady = 5)
+         
+       
+        self.deep_clean_button = Button(master=self.clean_frame, image=self.folder_icon, font= ("DM Sans", 10, 'bold','underline') , text="Deep Clean",
+                                                compound="top", relief='flat', bg='#ECF0F5', fg='black' , cursor= 'hand2',)
+        self.deep_clean_button.pack(side = 'left', anchor = 'center', padx = 30, pady= 10, ipady = 5)
 
+        self.active_key_frame = Frame(self.dashboard_frame, bg='#ECF0F5')
+        self.active_key_frame.pack(side = 'top', expand=True, anchor = 'center', pady = 10)
+       
+        self.quick_clean_button = Button(master=self.active_key_frame, image=self.folder_icon, font= ("DM Sans", 10, 'bold','underline') , text="Quick Clean",
+                                                compound="top", relief='flat', bg='#ECF0F5', fg='black' , cursor= 'hand2',)
+        self.quick_clean_button.pack(side = 'left', anchor = 'center', padx = 30, pady= 10, ipady = 5)
+         
+       
+        self.activation_key_button = Button(master=self.active_key_frame, image=self.folder_icon, font= ("DM Sans", 10, 'bold','underline') , text="Activation Key",
+                                                compound="top", relief='flat', bg='#ECF0F5', fg='black' , cursor= 'hand2',)
+        self.activation_key_button.pack(side = 'left', anchor = 'center', padx = 30, pady= 10, ipady = 5)
+         
+       
+        self.health_status_frame = Frame(self.dashboard_frame, bg='#e3e3e3', relief= 'solid', borderwidth=1, border=0, bd=1)
+        self.health_status_frame.pack(side = 'top', expand=True, anchor = 'ne', pady = 20)
+
+        self.health_status_caution_icon = Label(self.health_status_frame, image= self.caution_icon_path, width= 40 , height= 40, bg='#e3e3e3')
+        self.health_status_caution_icon.pack(side= 'left', pady= 1, padx = 5)
+
+        self.health_status_lbl = Label(self.health_status_frame, text='System Health Status:', font= ("DM Sans", 14, 'bold'), fg = 'black', bg = '#e3e3e3', relief='flat')
+        self.health_status_lbl.pack(side= 'left', pady= 1, anchor = CENTER, padx = 10)
+        
+        self.critical_lbl = Label(self.health_status_frame, text='Critical', font= ("DM Sans", 14, 'bold'), fg = 'red', bg = '#e3e3e3', relief='flat')
+        self.critical_lbl.pack(side= 'left', pady= 1, anchor = CENTER, padx = 10)
 
         # memory cleaner
         self.dashboard = Frame(self.root, bg='#ECF0F5',)
@@ -441,9 +484,6 @@ class Screen:
         rect_frame = Frame(self.finished_scan_frame, bg='#ECF0F5', width=100,background='#ECF0F5', relief='solid', border=1, borderwidth=1)
         rect_frame.pack(side= 'top', anchor = 'center', fill=X, padx = 50,pady = 15)
 
-        # junks_frame_label = Label(self.root, text='Junk-9574 MB', font= ("DM Sans", 12, ), bg='#ECF0F5', fg='black')
-        # junks_frame_label.place(x=180, y = 345)
-
         empty_sizedbox = Label(rect_frame, text='', bg='#ECF0F5')
         empty_sizedbox.pack(side= 'left', anchor = 'nw', padx = 5)
 
@@ -458,21 +498,11 @@ class Screen:
         scrollbar = Scrollbar(listbox_frame,background='#004AAD')
 
         scrollbar.pack(side = LEFT, fill = BOTH, anchor='nw')
-        
-
-        # for values in range(100):
-            # listbox.insert(END, values)
+    
 
         listbox.config(yscrollcommand = scrollbar.set)
         
         scrollbar.config(command = listbox.yview)
-
-
-        # self.finished_scan_frame.pack_forget()
-
-        # self.activationkey_frame = Frame(self.root, bg='#ECF0F5',)
-        # self.activationkey_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
-        # self.activationkey_frame.pack_forget()
 
         activation_key_label = Label(self.activationkey_frame, text='Activation Key', font= ("DM Sans", 13, 'bold'), bg='#ECF0F5', fg='black')
         activation_key_label.pack(side='left', anchor= 'ne', padx=80, pady=100)
@@ -481,10 +511,6 @@ class Screen:
 
         activation_key_entry = Entry(self.activationkey_frame, textvariable=activation_key_var, bd=5, show="*",font= ("DM Sans", 15, ), bg='white', fg='black', relief='flat')
         activation_key_entry.pack(side='left', anchor= 'ne', ipadx = 10, ipady= 5,pady=90)
-
-        # self.update_key_btn_path = PhotoImage(file='assets/update_key.png')
-        # self.update_key_btn_path = self.update_key_btn_path.zoom(5)
-        # self.update_key_btn_path = self.update_key_btn_path.subsample(10)
 
         def update_key_thread():
             update_key_btn['text'] = 'Processing'
