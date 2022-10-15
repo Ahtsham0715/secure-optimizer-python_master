@@ -5,6 +5,7 @@ import os
 import shutil
 import time
 from tkinter import messagebox
+from click import progressbar
 import psutil
 import firebase_admin
 from firebase_admin import credentials, firestore
@@ -371,6 +372,8 @@ class Screen:
         self.smart_pc_lbl = Label(self.health_status, text='Smart PC Cleaner Health', font= ("DM Sans", 12, 'bold'), fg = 'black', bg = '#ECF0F5', relief='flat')
         self.smart_pc_lbl.pack(side= 'right', pady= 0, anchor = 'nw', padx = 5)
 
+
+
         # cleaner diagnosis
         self.cleaner_diagnosis = Frame(self.root, bg='#ECF0F5',)
         self.cleaner_diagnosis.pack( expand=True, fill= BOTH, anchor = 'ne')
@@ -383,13 +386,13 @@ class Screen:
         self.pc_lbl_cd.pack(side= 'left', anchor = 'nw', )
       
         self.smart_pc_cleaner_lbl = Label(self.cleaner_diagnosis, text='Smart PC Cleaner Diagnosis', font= ("DM Sans", 12, 'bold'), fg = 'black', bg = '#ECF0F5', relief='flat')
-        self.smart_pc_cleaner_lbl.pack(side= 'top', pady= 20, anchor='center') 
+        self.smart_pc_cleaner_lbl.pack(side= 'top', pady= 15, anchor='center') 
        
         self.cleaner_diagnosis_frame = Frame(self.cleaner_diagnosis, bg='#e3e3e3', relief='solid', borderwidth=1,border=0, bd= 1)
         self.cleaner_diagnosis_frame.pack(fill=X, side='top', anchor='center', padx = 20,ipady = 20)  
        
         self.cleaner_diagnosis_left_frame = Frame(self.cleaner_diagnosis_frame, bg='#e3e3e3', relief='flat')
-        self.cleaner_diagnosis_left_frame.pack(side='left', anchor='w', expand= True , padx = 20,)  
+        self.cleaner_diagnosis_left_frame.pack(side='left', anchor='w' , padx = 20,)  
        
         self.file_names = [' Pdf ', ' Xlsx ', ' log ', ' tmp ', ' db ',' pf ']
         self.files_count = 0
@@ -415,6 +418,26 @@ class Screen:
        
         self.percentage_lbl = Label(self.cleaner_diagnosis_right_frame, font= ("DM Sans", 13, 'bold') ,text= '0 %' , bg='#e3e3e3', fg='black')
         self.percentage_lbl.pack(side='bottom', anchor = 'e',padx=1,)
+       
+        self.scan_status_frame = Frame(self.cleaner_diagnosis, bg='#ECF0F5', relief='flat')
+        self.scan_status_frame.pack(side='top', anchor='ne', fill=X, pady= 5 ,padx= 20)  
+       
+        self.scan_status_lbl = Label(self.scan_status_frame, font= ("DM Sans", 12, 'bold') ,text= 'Scan Status: Waiting...' , bg='#ECF0F5', fg='black')
+        self.scan_status_lbl.pack(side='left', anchor = 'sw',)
+       
+        self.elapsed_time_lbl = Label(self.scan_status_frame, font= ("DM Sans", 12, 'bold') ,text= 'Elapsed Time' , bg='#ECF0F5', fg='black')
+        self.elapsed_time_lbl.pack(side='right', anchor = 'sw',padx=5,)
+       
+       
+        self.elapsed_time_lbl = Label(self.cleaner_diagnosis, font= ("DM Sans", 12, 'bold') ,text= '00:00:00' , bg='#ECF0F5', fg='black')
+        self.elapsed_time_lbl.pack(side='top', anchor = 'ne',padx=25,pady= 2)
+        
+        self.progress_bar = customtkinter.CTkProgressBar(master=self.cleaner_diagnosis, fg_color='#e3e3e3', determinate_speed=2)
+        self.progress_bar.pack(side = 'top', anchor = 'center', fill = X, padx = 20, pady= 5)       
+    
+        self.start_scan_btn = customtkinter.CTkButton(master= self.cleaner_diagnosis, text='Start Scan', height= 30,  text_color='white', fg_color= '#004AAD', cursor= 'hand2', hover=False)
+        self.start_scan_btn.pack(side = 'top', anchor = 'center', pady=5)
+       
        
         # memory cleaner
         self.dashboard = Frame(self.root, bg='#ECF0F5',)
