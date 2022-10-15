@@ -257,7 +257,7 @@ class Screen:
 
           # main content area
         self.dashboard_frame = Frame(self.root, bg='#ECF0F5')
-        self.dashboard_frame.pack( expand=True, fill= BOTH, anchor = 'ne')
+        # self.dashboard_frame.pack( expand=True, fill= BOTH, anchor = 'ne')
 
         dashboard_bottom_bar = Frame(self.dashboard_frame, bg='#004AAD', height=30, relief='solid', borderwidth=1,border=0,bd=1)
         dashboard_bottom_bar.pack(fill=X, side=BOTTOM, anchor = 'sw', expand= True)
@@ -371,6 +371,51 @@ class Screen:
         self.smart_pc_lbl = Label(self.health_status, text='Smart PC Cleaner Health', font= ("DM Sans", 12, 'bold'), fg = 'black', bg = '#ECF0F5', relief='flat')
         self.smart_pc_lbl.pack(side= 'right', pady= 0, anchor = 'nw', padx = 5)
 
+        # cleaner diagnosis
+        self.cleaner_diagnosis = Frame(self.root, bg='#ECF0F5',)
+        self.cleaner_diagnosis.pack( expand=True, fill= BOTH, anchor = 'ne')
+       
+        self.cleaner_top_frame = Frame(self.cleaner_diagnosis, bg='#004AAD', height=50, relief='solid', borderwidth=1,border=0, bd= 1)
+        self.cleaner_top_frame.pack(fill=X, side='top', anchor='ne')        
+       
+       
+        self.pc_lbl_cd = Label(self.cleaner_top_frame, image= self.logo_path, compound= 'left', font= ("DM Sans", 12, 'bold') ,text= 'Press Start Scan' , height= 40, bg='#004AAD', fg='white')
+        self.pc_lbl_cd.pack(side= 'left', anchor = 'nw', )
+      
+        self.smart_pc_cleaner_lbl = Label(self.cleaner_diagnosis, text='Smart PC Cleaner Diagnosis', font= ("DM Sans", 12, 'bold'), fg = 'black', bg = '#ECF0F5', relief='flat')
+        self.smart_pc_cleaner_lbl.pack(side= 'top', pady= 20, anchor='center') 
+       
+        self.cleaner_diagnosis_frame = Frame(self.cleaner_diagnosis, bg='#e3e3e3', relief='solid', borderwidth=1,border=0, bd= 1)
+        self.cleaner_diagnosis_frame.pack(fill=X, side='top', anchor='center', padx = 20,ipady = 20)  
+       
+        self.cleaner_diagnosis_left_frame = Frame(self.cleaner_diagnosis_frame, bg='#e3e3e3', relief='flat')
+        self.cleaner_diagnosis_left_frame.pack(side='left', anchor='w', expand= True , padx = 20,)  
+       
+        self.file_names = [' Pdf ', ' Xlsx ', ' log ', ' tmp ', ' db ',' pf ']
+        self.files_count = 0
+        
+        for i in range(2):
+            for j in range(3):
+                self.cleaner_files = Label(self.cleaner_diagnosis_left_frame, image= self.folder_icon, compound= 'left', font= ("DM Sans", 12, ) ,text= self.file_names[self.files_count] , height= 40, bg='#e3e3e3', fg='black')
+                self.cleaner_files.grid(row= i+2, column = j+1, padx = 10)
+                self.files_count += 1
+       
+       
+        self.cleaner_diagnosis_right_frame = Frame(self.cleaner_diagnosis_frame, bg='#e3e3e3', relief='flat')
+        self.cleaner_diagnosis_right_frame.pack(side='right', anchor='ne', expand= True, fill=Y)  
+       
+        self.smart_pccleaner_lbl = Label(self.cleaner_diagnosis_right_frame, font= ("DM Sans", 13, 'bold') ,text= 'Smart PC Cleaner' , bg='#e3e3e3', fg='black')
+        self.smart_pccleaner_lbl.pack(side='top', anchor = 'center', pady = 5, padx= 10)
+       
+        self.pc_icon_s_pc_c = Label(self.cleaner_diagnosis_right_frame, image= self.logo_path, width= 80 , height= 100, bg='#e3e3e3')
+        self.pc_icon_s_pc_c.pack(side= 'top', pady= 10, anchor='center', padx= 10)
+       
+        self.unknown_lbl = Label(self.cleaner_diagnosis_right_frame, font= ("DM Sans", 15, 'bold') ,text= 'Unknown' , bg='#e3e3e3', fg='black')
+        self.unknown_lbl.pack(side='top', anchor = 'center',  padx= 10)
+       
+        self.percentage_lbl = Label(self.cleaner_diagnosis_right_frame, font= ("DM Sans", 13, 'bold') ,text= '0 %' , bg='#e3e3e3', fg='black')
+        self.percentage_lbl.pack(side='bottom', anchor = 'e',padx=1,)
+       
         # memory cleaner
         self.dashboard = Frame(self.root, bg='#ECF0F5',)
         # self.dashboard.pack( expand=True, fill= BOTH, anchor = 'ne')
