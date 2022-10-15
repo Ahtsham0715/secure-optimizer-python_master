@@ -102,36 +102,37 @@
 
 # # root.mainloop()
 
-import tkinter as tk
-from PIL import ImageTk
-from PIL import Image
+# import tkinter as tk
+# from PIL import ImageTk
+# from PIL import Image
 
-class circleroration(object):
-    def __init__(self, master, filename, **kwargs):
-        self.master = master
-        self.filename = filename
-        self.canvas = tk.Canvas(master, width=200, height=200, bg='grey')
-        self.canvas.pack()
+# class circleroration(object):
+#     def __init__(self, master, filename, **kwargs):
+#         self.master = master
+#         self.filename = filename
+#         self.canvas = tk.Canvas(master, width=200, height=200, bg='grey')
+#         self.canvas.pack()
 
-        self.update = self.draw().__next__
-        master.after(100, self.update)
+#         self.update = self.draw().__next__
+#         master.after(100, self.update)
 
-    def draw(self):
-        image = Image.open(self.filename)
-        angle = 0
-        while True:
-            tkimage = ImageTk.PhotoImage(image.rotate(angle))
-            canvas_obj = self.canvas.create_image(
-                100, 100, image=tkimage)
-            self.master.after_idle(self.update)
-            yield
-            self.canvas.delete(canvas_obj)
-            angle += 2
-            angle %= 360
+#     def draw(self):
+#         image = Image.open(self.filename)
+#         angle = 0
+#         while True:
+#             tkimage = ImageTk.PhotoImage(image.rotate(angle))
+#             canvas_obj = self.canvas.create_image(
+#                 100, 100, image=tkimage)
+#             self.master.after_idle(self.update)
+#             yield
+#             self.canvas.delete(canvas_obj)
+#             angle += 2
+#             angle %= 360
 
-root = tk.Tk()
-app = circleroration(root, 'assets/gradient_frame.png')
-root.mainloop()
+# root = tk.Tk()
+# app = circleroration(root, 'assets/gradient_frame.png')
+# root.mainloop()
+
 # import time
 # import tkinter
 # from tkinter import *

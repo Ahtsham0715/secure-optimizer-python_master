@@ -435,13 +435,56 @@ class Screen:
         self.elapsed_time_lbl = Label(self.cleaner_diagnosis, font= ("DM Sans", 12, 'bold') ,text= '00:00:00' , bg='#ECF0F5', fg='black')
         self.elapsed_time_lbl.pack(side='top', anchor = 'ne',padx=25,pady= 2)
         
-        self.progress_bar = customtkinter.CTkProgressBar(master=self.cleaner_diagnosis, fg_color='#e3e3e3', determinate_speed=2)
+        self.progress_bar = customtkinter.CTkProgressBar(master=self.cleaner_diagnosis, fg_color='#e3e3e3')
+        self.progress_bar.set(0.0)
+    
         self.progress_bar.pack(side = 'top', anchor = 'center', fill = X, padx = 20, pady= 5)       
+    
+        def bar():
+            self.start_scan_btn.configure(state= DISABLED)
+            # self.start_scan_btn.configure(fg_color= 'grey')
+            import time
+            
+            self.progress_bar.set(0.0)
+            self.root.update_idletasks()
+            time.sleep(1)
+            
+            self.progress_bar.set(0.15)
+            self.root.update_idletasks()
+            time.sleep(1)
+            
+            
+            self.progress_bar.set(0.3)
+            self.root.update_idletasks()
+            time.sleep(1)
+            
+            
+            self.progress_bar.set(0.45)
+            self.root.update_idletasks()
+            time.sleep(1)
+            
+            
+            self.progress_bar.set(0.75)
+            self.root.update_idletasks()
+            time.sleep(1)
+            
+            self.progress_bar.set(0.9)
+            self.root.update_idletasks()
+            time.sleep(1)
+
+            self.progress_bar.set(1.0)
+            self.start_scan_btn.configure(state= NORMAL)
+            # self.start_scan_btn['fg_color'] = '#004AAD'
+
+    
+        def bar_thread():
+            self.thread = Thread(target = bar)
+            self.thread.start()
     
         self.last_scanlbl = Label(self.cleaner_diagnosis, compound= 'left' ,text= f'Last Scan: 01.01.2022', font= ("DM Sans", 11, 'bold'), fg = 'white', bg = '#004AAD', relief='solid', borderwidth=1, border=1, bd=1)
         self.last_scanlbl.pack(side= 'bottom', anchor ='sw', fill = X)
     
-        self.start_scan_btn = customtkinter.CTkButton(master= self.cleaner_diagnosis, corner_radius=25, text='Start Scan', height= 40,  text_color='white', fg_color= '#004AAD', cursor= 'hand2', hover=False, text_font=("DM Sans", 11, ))
+        self.start_scan_btn = customtkinter.CTkButton(master= self.cleaner_diagnosis, command= bar_thread ,corner_radius=25, text='Start Scan', height= 40,  text_color='white', fg_color= '#004AAD', hover=False, text_font=("DM Sans", 11, ))
         self.start_scan_btn.pack(side = 'bottom', anchor = 'center', pady=5)
        
 
