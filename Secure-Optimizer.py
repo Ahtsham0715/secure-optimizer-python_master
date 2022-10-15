@@ -55,6 +55,8 @@ class Screen:
         self.check_icon_path = ImageTk.PhotoImage(Image.open('assets/checked.png').resize((180,180), Image.ANTIALIAS))
         self.update_key_btn_path = ImageTk.PhotoImage(Image.open('assets/update_key.png').resize((140,45), Image.ANTIALIAS))
         self.folder_icon = ImageTk.PhotoImage(Image.open('assets/folder.png').resize((30,30), Image.ANTIALIAS))
+        self.pc_icon = ImageTk.PhotoImage(Image.open('assets/pc.png').resize((100,100), Image.ANTIALIAS))
+        self.windows_pc_icon = ImageTk.PhotoImage(Image.open('assets/pc1.png').resize((30,30), Image.ANTIALIAS))
         self.activationkey_frame = Frame(self.root, bg='#ECF0F5',)
         self.finished_scan_frame = Frame(self.root, bg='#ECF0F5',)
         self.memory_cleaner_frame = Frame(self.root, bg='#ECF0F5')
@@ -299,7 +301,7 @@ class Screen:
         dashboard_top_bar1 = Frame(self.dashboard_frame, bg='#004AAD', height=50, relief='solid', borderwidth=1,border=0, bd= 1)
         dashboard_top_bar1.pack(fill=X, side='top', anchor='ne')        
 
-        pc_icon = Label(dashboard_top_bar1, image= self.logo_path, width= 60 , height= 30, bg='#004AAD')
+        pc_icon = Label(dashboard_top_bar1, image= self.windows_pc_icon, width= 30 , height= 30, bg='#004AAD')
         pc_icon.pack(side= 'left', pady= 10)
 
         pc_status_lbl = Label(dashboard_top_bar1, text='PC Status Check', font= ("DM Sans", 12, 'bold'), fg = 'white', bg = '#004AAD', relief='flat')
@@ -383,8 +385,8 @@ class Screen:
         self.cleaner_top_frame.pack(fill=X, side='top', anchor='ne')        
        
        
-        self.pc_lbl_cd = Label(self.cleaner_top_frame, image= self.logo_path, compound= 'left', font= ("DM Sans", 12, 'bold') ,text= 'Press Start Scan' , height= 40, bg='#004AAD', fg='white')
-        self.pc_lbl_cd.pack(side= 'left', anchor = 'nw', )
+        self.pc_lbl_cd = Label(self.cleaner_top_frame, image= self.windows_pc_icon, compound= 'left', font= ("DM Sans", 12, 'bold') ,text= '    Press Start Scan' , bg='#004AAD', fg='white')
+        self.pc_lbl_cd.pack(side= 'left', anchor = 'nw', ipadx = 10)
       
         self.smart_pc_cleaner_lbl = Label(self.cleaner_diagnosis, text='Smart PC Cleaner Diagnosis', font= ("DM Sans", 12, 'bold'), fg = 'black', bg = '#ECF0F5', relief='flat')
         self.smart_pc_cleaner_lbl.pack(side= 'top', anchor='center', pady= 10) 
@@ -411,7 +413,7 @@ class Screen:
         self.smart_pccleaner_lbl = Label(self.cleaner_diagnosis_right_frame, font= ("DM Sans", 13, 'bold') ,text= 'Smart PC Cleaner' , bg='#e3e3e3', fg='black')
         self.smart_pccleaner_lbl.pack(side='top', anchor = 'center', pady = 5, padx= 10)
        
-        self.pc_icon_s_pc_c = Label(self.cleaner_diagnosis_right_frame, image= self.logo_path, width= 80 , height= 100, bg='#e3e3e3')
+        self.pc_icon_s_pc_c = Label(self.cleaner_diagnosis_right_frame, image= self.pc_icon, width= 80 , height= 100, bg='#e3e3e3')
         self.pc_icon_s_pc_c.pack(side= 'top', pady= 5, anchor='center', padx= 10)
        
         self.unknown_lbl = Label(self.cleaner_diagnosis_right_frame, font= ("DM Sans", 15, 'bold') ,text= 'Unknown' , bg='#e3e3e3', fg='black')
