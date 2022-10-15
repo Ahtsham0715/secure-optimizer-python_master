@@ -57,6 +57,27 @@ class Screen:
         self.folder_icon = ImageTk.PhotoImage(Image.open('assets/folder.png').resize((30,30), Image.ANTIALIAS))
         self.pc_icon = ImageTk.PhotoImage(Image.open('assets/pc.png').resize((100,100), Image.ANTIALIAS))
         self.windows_pc_icon = ImageTk.PhotoImage(Image.open('assets/pc1.png').resize((30,30), Image.ANTIALIAS))
+        self.antivirus_icon = ImageTk.PhotoImage(Image.open('assets/antivirus.png').resize((50,50), Image.ANTIALIAS))
+        self.application_icon = ImageTk.PhotoImage(Image.open('assets/application.png').resize((30,30), Image.ANTIALIAS))
+        self.broom_icon = ImageTk.PhotoImage(Image.open('assets/broom.png').resize((50,50), Image.ANTIALIAS))
+        self.browser_icon = ImageTk.PhotoImage(Image.open('assets/browser.png').resize((30,30), Image.ANTIALIAS))
+        self.clean_code_icon = ImageTk.PhotoImage(Image.open('assets/clean-code.png').resize((50,50), Image.ANTIALIAS))
+        self.compact_disk_icon = ImageTk.PhotoImage(Image.open('assets/compact-disk.png').resize((50,50), Image.ANTIALIAS))
+        self.code_icon = ImageTk.PhotoImage(Image.open('assets/code.png').resize((50,50), Image.ANTIALIAS))
+        self.contract_icon = ImageTk.PhotoImage(Image.open('assets/contract.png').resize((50,50), Image.ANTIALIAS))
+        self.folder_search_icon = ImageTk.PhotoImage(Image.open('assets/folder_search.png').resize((50,50), Image.ANTIALIAS))
+        self.harddisk_icon = ImageTk.PhotoImage(Image.open('assets/harddisk.png').resize((50,50), Image.ANTIALIAS))
+        self.key_icon = ImageTk.PhotoImage(Image.open('assets/key.png').resize((50,50), Image.ANTIALIAS))
+        self.management_icon = ImageTk.PhotoImage(Image.open('assets/management.png').resize((30,30), Image.ANTIALIAS))
+        self.message_icon = ImageTk.PhotoImage(Image.open('assets/message.png').resize((50,50), Image.ANTIALIAS))
+        self.open_folder_icon = ImageTk.PhotoImage(Image.open('assets/open-folder.png').resize((50,50), Image.ANTIALIAS))
+        self.photo_icon = ImageTk.PhotoImage(Image.open('assets/photo.png').resize((40,40), Image.ANTIALIAS))
+        self.recycle_bin_icon = ImageTk.PhotoImage(Image.open('assets/recycle-bin.png').resize((50,50), Image.ANTIALIAS))
+        self.sound_waves_icon = ImageTk.PhotoImage(Image.open('assets/sound-waves.png').resize((50,50), Image.ANTIALIAS))
+        self.usb_icon = ImageTk.PhotoImage(Image.open('assets/usb.png').resize((30,30), Image.ANTIALIAS))
+        self.video_icon = ImageTk.PhotoImage(Image.open('assets/video.png').resize((30,30), Image.ANTIALIAS))
+        
+        
         self.activationkey_frame = Frame(self.root, bg='#ECF0F5',)
         self.finished_scan_frame = Frame(self.root, bg='#ECF0F5',)
         self.memory_cleaner_frame = Frame(self.root, bg='#ECF0F5')
@@ -191,13 +212,25 @@ class Screen:
         sidebar = Frame(self.root, bg='#ECF0F5', relief='solid', borderwidth=1,border=0, bd= 1)
         sidebar.pack( fill=Y, side=LEFT, anchor='nw')
 
+        def dashboard_btn_thread():
+            self.activationkey_frame.pack_forget()
+            self.cleaner_diagnosis.pack_forget()
+            self.dashboard.pack_forget()
+            self.finished_scan_frame.pack_forget()
+            self.dashboard_frame.pack( expand=True, fill= BOTH, anchor = 'ne')
 
-        dashboard_btn = Button(sidebar, text='Dashboard', fg = 'black', font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat')
+        def dashboard_btn_func():
+            self.thread = Thread(target = dashboard_btn_thread)
+            self.thread.start()
+
+        dashboard_btn = Button(sidebar, text='Dashboard', fg = 'black', command= dashboard_btn_func, font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat')
         dashboard_btn.pack(side= 'top', pady= 2)
 
         def mem_cleaner_func():
             app_name_lbl['text'] = 'Secure Optimizer'
             self.activationkey_frame.pack_forget()
+            self.dashboard_frame.pack_forget()
+            self.cleaner_diagnosis.pack_forget()
             self.dashboard.pack( expand=True, fill= BOTH, anchor = 'ne')
             self.memory_cleaner_frame.pack_forget()
             self.finished_scan_frame.pack_forget()
@@ -205,6 +238,8 @@ class Screen:
         def scan_btn_thread():
             app_name_lbl['text'] = 'Scan your PC'
             self.activationkey_frame.pack_forget()
+            self.dashboard_frame.pack_forget()
+            self.cleaner_diagnosis.pack_forget()
             self.dashboard.pack_forget()
             self.finished_scan_frame.pack_forget()
             self.memory_cleaner_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
@@ -252,7 +287,6 @@ class Screen:
         quick_clean_btn.pack(side= 'top', pady= 20)
 
 
-
         deep_clean_btn = Button(sidebar, text='Deep Clean', fg = 'black', font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat', command= scan_btn_func)
         deep_clean_btn.pack(side= 'top', pady= 20)
 
@@ -261,7 +295,7 @@ class Screen:
 
           # main content area
         self.dashboard_frame = Frame(self.root, bg='#ECF0F5')
-        # self.dashboard_frame.pack( expand=True, fill= BOTH, anchor = 'ne')
+        self.dashboard_frame.pack( expand=True, fill= BOTH, anchor = 'ne')
 
         dashboard_bottom_bar = Frame(self.dashboard_frame, bg='#004AAD', height=30, relief='solid', borderwidth=1,border=0,bd=1)
         dashboard_bottom_bar.pack(fill=X, side=BOTTOM, anchor = 'sw', expand= True)
@@ -330,35 +364,48 @@ class Screen:
         self.clean_frame = Frame(self.dashboard_frame, bg='#ECF0F5')
         self.clean_frame.pack(side = 'top', expand=True, anchor = 'center')
 
-        self.memory_cleaner_button = Button(master=self.clean_frame, image=self.folder_icon, font= ("DM Sans", 10, 'bold','underline') , text="Memory Cleaner",
-                                                compound="top", relief='flat', bg='#ECF0F5', fg='black' , cursor= 'hand2',)
-        self.memory_cleaner_button.pack(side = 'left', anchor = 'center', padx = 30, pady= 10, ipady = 5)
+        def mem_btn_thread():
+            self.activationkey_frame.pack_forget()
+            self.dashboard.pack_forget()
+            self.dashboard_frame.pack_forget()
+            self.finished_scan_frame.pack_forget()
+            self.cleaner_diagnosis.pack(side= 'top', expand=True, fill= BOTH, anchor = 'ne')
+
+
+        def mem_btn_func():
+            self.thread = Thread(target = mem_btn_thread)
+            self.thread.start()
+
+
+        self.memory_cleaner_button = Button(master=self.clean_frame, image=self.antivirus_icon, font= ("DM Sans", 10, 'bold','underline') , text="\nMemory Cleaner",
+                                                compound="top", relief='flat', bg='#ECF0F5', fg='black', command= mem_btn_func , cursor= 'hand2',)
+        self.memory_cleaner_button.pack(side = 'left', anchor = 'center', padx = 30, pady= 2, ipady = 5)
          
        
-        self.cache_cleaner_button = Button(master=self.clean_frame, image=self.folder_icon, font= ("DM Sans", 10, 'bold','underline') , text="Cache Cleaner",
-                                                compound="top", relief='flat', bg='#ECF0F5', fg='black' , cursor= 'hand2',)
-        self.cache_cleaner_button.pack(side = 'left', anchor = 'center', padx = 30, pady= 10, ipady = 5)
+        self.cache_cleaner_button = Button(master=self.clean_frame, image=self.clean_code_icon, font= ("DM Sans", 10, 'bold','underline') , text="\nCache Cleaner",
+                                                compound="top", relief='flat', bg='#ECF0F5', fg='black', command= scan_btn_func, cursor= 'hand2',)
+        self.cache_cleaner_button.pack(side = 'left', anchor = 'center', padx = 30, pady= 2, ipady = 5)
          
        
-        self.deep_clean_button = Button(master=self.clean_frame, image=self.folder_icon, font= ("DM Sans", 10, 'bold','underline') , text="Deep Clean",
-                                                compound="top", relief='flat', bg='#ECF0F5', fg='black' , cursor= 'hand2',)
-        self.deep_clean_button.pack(side = 'left', anchor = 'center', padx = 30, pady= 10, ipady = 5)
+        self.deep_clean_button = Button(master=self.clean_frame, image=self.code_icon, font= ("DM Sans", 10, 'bold','underline') , text="\nDeep Clean",
+                                                compound="top", relief='flat', bg='#ECF0F5', fg='black', command= scan_btn_func,  cursor= 'hand2',)
+        self.deep_clean_button.pack(side = 'left', anchor = 'center', padx = 30, pady= 2, ipady = 5)
 
         self.active_key_frame = Frame(self.dashboard_frame, bg='#ECF0F5')
-        self.active_key_frame.pack(side = 'top', expand=True, anchor = 'center', pady = 10)
+        self.active_key_frame.pack(side = 'top', expand=True, anchor = 'center', pady = 2)
        
-        self.quick_clean_button = Button(master=self.active_key_frame, image=self.folder_icon, font= ("DM Sans", 10, 'bold','underline') , text="Quick Clean",
-                                                compound="top", relief='flat', bg='#ECF0F5', fg='black' , cursor= 'hand2',)
-        self.quick_clean_button.pack(side = 'left', anchor = 'center', padx = 30, pady= 10, ipady = 5)
+        self.quick_clean_button = Button(master=self.active_key_frame, image=self.harddisk_icon, font= ("DM Sans", 10, 'bold','underline') , text="\nQuick Clean",
+                                                compound="top", relief='flat', bg='#ECF0F5', fg='black', command= scan_btn_func , cursor= 'hand2',)
+        self.quick_clean_button.pack(side = 'left', anchor = 'center', padx = 30, pady= 2, ipady = 5)
          
        
-        self.activation_key_button = Button(master=self.active_key_frame, image=self.folder_icon, font= ("DM Sans", 10, 'bold','underline') , text="Activation Key",
-                                                compound="top", relief='flat', bg='#ECF0F5', fg='black' , cursor= 'hand2',)
-        self.activation_key_button.pack(side = 'left', anchor = 'center', padx = 30, pady= 10, ipady = 5)
+        self.activation_key_button = Button(master=self.active_key_frame, image=self.key_icon, font= ("DM Sans", 10, 'bold','underline') , text="\nActivation Key",
+                                                compound="top", relief='flat', bg='#ECF0F5', fg='black', command=activation_key_func , cursor= 'hand2',)
+        self.activation_key_button.pack(side = 'left', anchor = 'center', padx = 30, pady= 2, ipady = 5)
          
        
         self.health_status = Frame(self.dashboard_frame, bg='#ECF0F5', relief = 'flat')
-        self.health_status.pack(side = 'top', expand=True, anchor = 'ne', pady = 15)
+        self.health_status.pack(side = 'top', expand=True, anchor = 'ne', pady = 5)
         
         self.health_status_frame = Frame(self.health_status, bg='#e3e3e3', relief= 'solid', borderwidth=1, border=0, bd=1)
         self.health_status_frame.pack(side = 'top', expand=True, anchor = 'nw')
@@ -379,7 +426,7 @@ class Screen:
 
         # cleaner diagnosis
         self.cleaner_diagnosis = Frame(self.root, bg='#ECF0F5',)
-        self.cleaner_diagnosis.pack(side= 'top', expand=True, fill= BOTH, anchor = 'ne')
+        # self.cleaner_diagnosis.pack(side= 'top', expand=True, fill= BOTH, anchor = 'ne')
        
         self.cleaner_top_frame = Frame(self.cleaner_diagnosis, bg='#004AAD', height=50, relief='solid', borderwidth=1,border=0, bd= 1)
         self.cleaner_top_frame.pack(fill=X, side='top', anchor='ne')        
@@ -397,13 +444,15 @@ class Screen:
         self.cleaner_diagnosis_left_frame = Frame(self.cleaner_diagnosis_frame, bg='#e3e3e3', relief='flat')
         self.cleaner_diagnosis_left_frame.pack(side='left', anchor='w' , padx = 20,)  
        
-        self.file_names = [' Pdf ', ' Xlsx ', ' log ', ' tmp ', ' db ',' pf ']
+        self.file_icons = [self.sound_waves_icon, self.contract_icon, self.recycle_bin_icon, self.compact_disk_icon, self.open_folder_icon, self.photo_icon]
+       
+        self.file_names = [' audio ', ' Xlsx ', ' log ', ' tmp ', ' folder ',' pictures ']
         self.files_count = 0
         
         for i in range(2):
             for j in range(3):
-                self.cleaner_files = Label(self.cleaner_diagnosis_left_frame, image= self.folder_icon, compound= 'left', font= ("DM Sans", 12, ) ,text= self.file_names[self.files_count] , height= 40, bg='#e3e3e3', fg='black')
-                self.cleaner_files.grid(row= i+2, column = j+1, padx = 10)
+                self.cleaner_files = Label(self.cleaner_diagnosis_left_frame, image= self.file_icons[self.files_count], compound= 'left', font= ("DM Sans", 12, ) ,text= self.file_names[self.files_count] , height= 40, bg='#e3e3e3', fg='black')
+                self.cleaner_files.grid(row= i+2, column = j+1, padx = 15, pady = 30)
                 self.files_count += 1
        
        
@@ -443,34 +492,45 @@ class Screen:
         def bar():
             self.start_scan_btn.configure(state= DISABLED)
             # self.start_scan_btn.configure(fg_color= 'grey')
-            import time
+            import time, random
+            self.progress = 0.1
+            rand_time = random.randint(5,15)
+            rem_time = rand_time
+            self.elapsed_time_lbl['text'] = f'00:00:{rem_time}'
+            for i in range(0,rand_time,1):
+                self.progress_bar.set(self.progress)
+                rem_time = rem_time - 1
+                if self.progress >= 1.0:                    
+                    self.elapsed_time_lbl['text'] = f'00:00:00'
+                else:
+                    self.elapsed_time_lbl['text'] = f'00:00:{rem_time}'
+                self.root.update_idletasks()
+                time.sleep(i)
+                self.progress += 0.15
+                
             
-            self.progress_bar.set(0.0)
-            self.root.update_idletasks()
-            time.sleep(1)
-            
-            self.progress_bar.set(0.15)
-            self.root.update_idletasks()
-            time.sleep(1)
+            # self.progress_bar.set(0.15)
+            # self.root.update_idletasks()
+            # time.sleep(1)
             
             
-            self.progress_bar.set(0.3)
-            self.root.update_idletasks()
-            time.sleep(1)
+            # self.progress_bar.set(0.3)
+            # self.root.update_idletasks()
+            # time.sleep(1)
             
             
-            self.progress_bar.set(0.45)
-            self.root.update_idletasks()
-            time.sleep(1)
+            # self.progress_bar.set(0.45)
+            # self.root.update_idletasks()
+            # time.sleep(1)
             
             
-            self.progress_bar.set(0.75)
-            self.root.update_idletasks()
-            time.sleep(1)
+            # self.progress_bar.set(0.75)
+            # self.root.update_idletasks()
+            # time.sleep(1)
             
-            self.progress_bar.set(0.9)
-            self.root.update_idletasks()
-            time.sleep(1)
+            # self.progress_bar.set(0.9)
+            # self.root.update_idletasks()
+            # time.sleep(1)
 
             self.progress_bar.set(1.0)
             self.start_scan_btn.configure(state= NORMAL)
@@ -674,4 +734,7 @@ class Screen:
         update_key_btn.place(x= 250, y = 180)
 
 Screen()
+
+# pyinstaller --noconfirm --onedir --windowed --add-data "C:/Users/Umer/AppData/Local/Programs/Python/Python37/Lib/site-packages/customtkinter;customtkinter/"  home_page.py
+
 
