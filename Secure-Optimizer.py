@@ -1,5 +1,6 @@
 # import tkinter as tk
 from tkinter import *
+from tkinter import font
 from PIL import Image,ImageTk
 import os
 import shutil
@@ -376,7 +377,7 @@ class Screen:
 
         # cleaner diagnosis
         self.cleaner_diagnosis = Frame(self.root, bg='#ECF0F5',)
-        self.cleaner_diagnosis.pack( expand=True, fill= BOTH, anchor = 'ne')
+        self.cleaner_diagnosis.pack(side= 'top', expand=True, fill= BOTH, anchor = 'ne')
        
         self.cleaner_top_frame = Frame(self.cleaner_diagnosis, bg='#004AAD', height=50, relief='solid', borderwidth=1,border=0, bd= 1)
         self.cleaner_top_frame.pack(fill=X, side='top', anchor='ne')        
@@ -386,10 +387,10 @@ class Screen:
         self.pc_lbl_cd.pack(side= 'left', anchor = 'nw', )
       
         self.smart_pc_cleaner_lbl = Label(self.cleaner_diagnosis, text='Smart PC Cleaner Diagnosis', font= ("DM Sans", 12, 'bold'), fg = 'black', bg = '#ECF0F5', relief='flat')
-        self.smart_pc_cleaner_lbl.pack(side= 'top', pady= 15, anchor='center') 
+        self.smart_pc_cleaner_lbl.pack(side= 'top', anchor='center', pady= 10) 
        
         self.cleaner_diagnosis_frame = Frame(self.cleaner_diagnosis, bg='#e3e3e3', relief='solid', borderwidth=1,border=0, bd= 1)
-        self.cleaner_diagnosis_frame.pack(fill=X, side='top', anchor='center', padx = 20,ipady = 20)  
+        self.cleaner_diagnosis_frame.pack(fill=X, side='top', anchor='center', padx = 20,ipady = 20, expand= True)  
        
         self.cleaner_diagnosis_left_frame = Frame(self.cleaner_diagnosis_frame, bg='#e3e3e3', relief='flat')
         self.cleaner_diagnosis_left_frame.pack(side='left', anchor='w' , padx = 20,)  
@@ -411,7 +412,7 @@ class Screen:
         self.smart_pccleaner_lbl.pack(side='top', anchor = 'center', pady = 5, padx= 10)
        
         self.pc_icon_s_pc_c = Label(self.cleaner_diagnosis_right_frame, image= self.logo_path, width= 80 , height= 100, bg='#e3e3e3')
-        self.pc_icon_s_pc_c.pack(side= 'top', pady= 10, anchor='center', padx= 10)
+        self.pc_icon_s_pc_c.pack(side= 'top', pady= 5, anchor='center', padx= 10)
        
         self.unknown_lbl = Label(self.cleaner_diagnosis_right_frame, font= ("DM Sans", 15, 'bold') ,text= 'Unknown' , bg='#e3e3e3', fg='black')
         self.unknown_lbl.pack(side='top', anchor = 'center',  padx= 10)
@@ -420,7 +421,7 @@ class Screen:
         self.percentage_lbl.pack(side='bottom', anchor = 'e',padx=1,)
        
         self.scan_status_frame = Frame(self.cleaner_diagnosis, bg='#ECF0F5', relief='flat')
-        self.scan_status_frame.pack(side='top', anchor='ne', fill=X, pady= 5 ,padx= 20)  
+        self.scan_status_frame.pack(side='top', anchor='ne', fill=X, pady= 2 ,padx= 20)  
        
         self.scan_status_lbl = Label(self.scan_status_frame, font= ("DM Sans", 12, 'bold') ,text= 'Scan Status: Waiting...' , bg='#ECF0F5', fg='black')
         self.scan_status_lbl.pack(side='left', anchor = 'sw',)
@@ -435,9 +436,13 @@ class Screen:
         self.progress_bar = customtkinter.CTkProgressBar(master=self.cleaner_diagnosis, fg_color='#e3e3e3', determinate_speed=2)
         self.progress_bar.pack(side = 'top', anchor = 'center', fill = X, padx = 20, pady= 5)       
     
-        self.start_scan_btn = customtkinter.CTkButton(master= self.cleaner_diagnosis, text='Start Scan', height= 30,  text_color='white', fg_color= '#004AAD', cursor= 'hand2', hover=False)
-        self.start_scan_btn.pack(side = 'top', anchor = 'center', pady=5)
+        self.last_scanlbl = Label(self.cleaner_diagnosis, compound= 'left' ,text= f'Last Scan: 01.01.2022', font= ("DM Sans", 11, 'bold'), fg = 'white', bg = '#004AAD', relief='solid', borderwidth=1, border=1, bd=1)
+        self.last_scanlbl.pack(side= 'bottom', anchor ='sw', fill = X)
+    
+        self.start_scan_btn = customtkinter.CTkButton(master= self.cleaner_diagnosis, corner_radius=25, text='Start Scan', height= 40,  text_color='white', fg_color= '#004AAD', cursor= 'hand2', hover=False, text_font=("DM Sans", 11, ))
+        self.start_scan_btn.pack(side = 'bottom', anchor = 'center', pady=5)
        
+
        
         # memory cleaner
         self.dashboard = Frame(self.root, bg='#ECF0F5',)
