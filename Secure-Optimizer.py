@@ -320,7 +320,7 @@ class Screen:
         last_scan_time_lbl.pack(side= 'left', pady= 5, anchor='center')
         
         smart_menu_lbl = Label(self.dashboard_frame, text='Smart Menu', font= ("DM Sans", 12, 'bold'), fg = 'black', bg = '#ECF0F5', relief='flat')
-        smart_menu_lbl.pack(side= 'top', pady= 20, anchor='center')
+        smart_menu_lbl.pack(side= 'top', pady= 10, anchor='center')
         
         
         self.clean_frame = Frame(self.dashboard_frame, bg='#ECF0F5')
@@ -353,17 +353,23 @@ class Screen:
         self.activation_key_button.pack(side = 'left', anchor = 'center', padx = 30, pady= 10, ipady = 5)
          
        
-        self.health_status_frame = Frame(self.dashboard_frame, bg='#e3e3e3', relief= 'solid', borderwidth=1, border=0, bd=1)
-        self.health_status_frame.pack(side = 'top', expand=True, anchor = 'ne', pady = 20)
+        self.health_status = Frame(self.dashboard_frame, bg='#ECF0F5', relief = 'flat')
+        self.health_status.pack(side = 'top', expand=True, anchor = 'ne', pady = 15)
+        
+        self.health_status_frame = Frame(self.health_status, bg='#e3e3e3', relief= 'solid', borderwidth=1, border=0, bd=1)
+        self.health_status_frame.pack(side = 'top', expand=True, anchor = 'nw')
 
         self.health_status_caution_icon = Label(self.health_status_frame, image= self.caution_icon_path, width= 40 , height= 40, bg='#e3e3e3')
-        self.health_status_caution_icon.pack(side= 'left', pady= 1, padx = 5)
+        self.health_status_caution_icon.pack(side= 'left',padx = 15)
 
         self.health_status_lbl = Label(self.health_status_frame, text='System Health Status:', font= ("DM Sans", 14, 'bold'), fg = 'black', bg = '#e3e3e3', relief='flat')
-        self.health_status_lbl.pack(side= 'left', pady= 1, anchor = CENTER, padx = 10)
+        self.health_status_lbl.pack(side= 'left', anchor = CENTER)
         
         self.critical_lbl = Label(self.health_status_frame, text='Critical', font= ("DM Sans", 14, 'bold'), fg = 'red', bg = '#e3e3e3', relief='flat')
-        self.critical_lbl.pack(side= 'left', pady= 1, anchor = CENTER, padx = 10)
+        self.critical_lbl.pack(side= 'left', anchor = CENTER, padx = 5)
+
+        self.smart_pc_lbl = Label(self.health_status, text='Smart PC Cleaner Health', font= ("DM Sans", 12, 'bold'), fg = 'black', bg = '#ECF0F5', relief='flat')
+        self.smart_pc_lbl.pack(side= 'right', pady= 0, anchor = 'nw', padx = 5)
 
         # memory cleaner
         self.dashboard = Frame(self.root, bg='#ECF0F5',)
