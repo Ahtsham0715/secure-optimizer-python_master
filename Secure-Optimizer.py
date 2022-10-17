@@ -26,6 +26,7 @@ firebase_admin.initialize_app(cred)
 
 class Screen:
     def __init__(self):
+        Thread(target = self.check_registration).start()
         # self.fetch_phone()
         self.activation_key = ''
         self.isActivated = False
@@ -98,25 +99,12 @@ class Screen:
         self.finished_scan_frame = Frame(self.root, bg='#ECF0F5',)
         self.memory_cleaner_frame = Frame(self.root, bg='#ECF0F5')
         
-        Thread(target = self.check_registration).start()
-        Thread(target = self.fetch_phone).start()
 
         self.root.mainloop()
-
-    def fetch_phone(self):
-        try:
-            db = firestore.client()
-            self.doc_ref = db.collection(u'users').document(u'data').get()
-            self.doc_data = self.doc_ref.to_dict()
-            self.contact_lbl['text'] = self.doc_data['phone']
-            print(self.doc_data['phone'])
-                    
-        except Exception as e:
-            print(e)
-            self.contact_lbl['text'] = self.doc_data['phone']
     
 
     def check_registration(self):
+        os.remove('temp.txt')
         if not os.path.exists('temp.txt'):
             with open('temp.txt', 'w') as f:
                 f.write('')
@@ -130,7 +118,7 @@ class Screen:
                 print('in loop')
                 print(getpass.getuser())
                 print(socket.gethostname())
-                if str(data['user_id']) == getpass.getuser() and str(data['machine_id']) == socket.gethostname():
+                if str(data['machine_id']) == socket.gethostname():
                     print(data['activation_key'])
                     self.activation_key = str(data['activation_key'])
                     with open('temp.txt', 'w') as f:
@@ -181,12 +169,28 @@ class Screen:
         foreground=fgcolorOnLeave))
     
     def main_app(self, f):
-        
         with open('temp.txt', 'r') as file:
             if file.read() == 'True':
                 self.isActivated = True
             else:
                 self.isActivated = False
+                
+        def fetch_phone():
+            try:
+                db = firestore.client()
+                self.doc_ref = db.collection(u'users').document(u'data').get()
+                self.doc_data = self.doc_ref.to_dict()
+                self.contact_lbl['text'] = self.doc_data['phone']
+                print(self.doc_data['phone'])
+                        
+            except Exception as e:
+                print(e)
+                self.contact_lbl['text'] = self.doc_data['phone']
+        
+        Thread(target = fetch_phone).start()
+
+        
+       
         
         screen_height = 700
         screen_width = 1000
@@ -825,7 +829,7 @@ class Screen:
                     u'activation_key': str(activation_key_var.get()),
                 }, merge=True)
                 
-                messagebox.showinfo('success', 'You registered successfully.')
+                messagebox.showinfo('success', 'You registered successfully.\nRestart Application to get access')
                 update_key_btn['text'] = 'Update Key'
                 update_key_btn['state'] = NORMAL
                 update_key_btn['image'] = self.update_key_btn_path
@@ -847,5 +851,5 @@ class Screen:
 Screen()
 
 # pyinstaller --noconfirm --onedir --windowed --add-data "C:/Users/Umer/AppData/Local/Programs/Python/Python37/Lib/site-packages/customtkinter;customtkinter/"  home_page.py
-
+# pyinstaller --noconsole --icon=icon.ico --windowed --add-data "C:/Users/Umer/AppData/Local/Programs/Python/Python37/Lib/site-packages/customtkinter;customtkinter/"  Secure-Optimizer.py
 

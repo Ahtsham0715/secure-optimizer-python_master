@@ -22,7 +22,7 @@ class CleanedAnimation:
         self.logo_label = Label(self.dialog,image=self.icon_path, bg = '#ECF0F5')
         self.logo_label.pack(side = 'top', anchor = 'center', pady = 15)
 
-        self.splash_progress_bar = customtkinter.CTkProgressBar(master=self.dialog, fg_color='#ECF0F5', )
+        self.splash_progress_bar = customtkinter.CTkProgressBar(master=self.dialog, fg_color='#ECF0F5', progress_color='green')
         self.splash_progress_bar.set(0.0)
     
         self.splash_progress_bar.pack(side = 'bottom', anchor = 'center', fill = X,) 
