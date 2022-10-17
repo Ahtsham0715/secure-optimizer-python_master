@@ -35,12 +35,12 @@
 
 # verify_registration()
 
-# # import getpass
-# # userID = getpass.getuser()
-# # import socket
-# # machineID = socket.gethostname()
-# # print(userID)
-# # print(machineID)
+# import getpass
+# userID = getpass.getuser()
+# import socket
+# machineID = socket.gethostname()
+# print(userID)
+# print(machineID)
 
 # # from tkinter import *
 # # import random
@@ -132,8 +132,36 @@
 # root = tk.Tk()
 # app = circleroration(root, 'assets/gradient_frame.png')
 # root.mainloop()
+from datetime import datetime
+
+date1 = '2022-10-13 14:46:54.423287'
+
+date2 = '2022-10-17 14:46:54.423287'
+
+print(date1.split(' ')[0].split('-')[2])
+print(str(datetime.now()).split(' ')[0].split('-')[2])
 
 
+# import firebase_admin
+# from firebase_admin import credentials, firestore
+# import socket
+
+# cred = credentials.Certificate(r"cleaner-app-50143-firebase-adminsdk-cej46-ef12406467.json")
+# firebase_admin.initialize_app(cred)
+
+
+# db = firestore.client()
+
+
+# query_ref = db.collection(u'allowed_users').where(u'machine_id', u'==', socket.gethostname()).stream()
+
+
+# for doc in query_ref:
+#     data= doc.to_dict()
+#     print(data)
+#     print(data['activation_key'])
+# else:
+#     print('None')
 
 # import time
 # import tkinter

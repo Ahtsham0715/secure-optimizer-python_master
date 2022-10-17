@@ -17,6 +17,8 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 from datetime import datetime
 import threading
+import getpass
+import socket
 
 cred = credentials.Certificate(r"cleaner-app-50143-firebase-adminsdk-cej46-ef12406467.json")
 firebase_admin.initialize_app(cred)
@@ -25,6 +27,8 @@ firebase_admin.initialize_app(cred)
 class Screen:
     def __init__(self):
         # self.fetch_phone()
+        self.activation_key = ''
+        self.isActivated = False
         self.root = Tk()
         self.root.geometry("600x300+350+250")
         self.root.configure(bg='#ECF0F5')
@@ -93,8 +97,8 @@ class Screen:
         self.activationkey_frame = Frame(self.root, bg='#ECF0F5',)
         self.finished_scan_frame = Frame(self.root, bg='#ECF0F5',)
         self.memory_cleaner_frame = Frame(self.root, bg='#ECF0F5')
-
-
+        
+        Thread(target = self.check_registration).start()
         Thread(target = self.fetch_phone).start()
 
         self.root.mainloop()
@@ -113,33 +117,51 @@ class Screen:
     
 
     def check_registration(self):
+        if not os.path.exists('temp.txt'):
+            with open('temp.txt', 'w') as f:
+                f.write('')
         try:
             db = firestore.client()
-            doc_ref = db.collection(u'activationKeys').stream()
-            for data in doc_ref:
-                doc_data = data.to_dict()
-                if doc_data['key'] == '': #TODO
-                    # with open('sec_file.txt', 'w') as f:
-                    #     f.write('')
-                    if (messagebox.showinfo('success', 'You registered successfully.')):
-                        break
-            # else:
-                # messagebox.showerror('Error', 'Wrong Activation Key\nTry Again!!!')
+            query_ref = db.collection(u'allowed_users').where(u'machine_id', u'==', socket.gethostname()).stream()
+
+
+            for doc in query_ref:
+                data= doc.to_dict()
+                print('in loop')
+                print(getpass.getuser())
+                print(socket.gethostname())
+                if str(data['user_id']) == getpass.getuser() and str(data['machine_id']) == socket.gethostname():
+                    print(data['activation_key'])
+                    self.activation_key = str(data['activation_key'])
+                    with open('temp.txt', 'w') as f:
+                        f.write('True')
+                    self.isActivated = True
+                    print(self.isActivated)
+                else:
+                    with open('temp.txt', 'w') as f:
+                            f.write('False')
+                    self.isActivated = False
+                    self.isActivated = ''
                 
                 
         except Exception as e:
+            with open('temp.txt', 'w') as f:
+                f.write('False')
             # messagebox.showerror('Error', 'Wrong Activation Key\nTry Again!!!')
             print(e)     
 
 
     def bar(self):
-            if float(self.splash_progress_bar.get()) >= 1.0:
-                self.root.after_cancel(self.x)
-                self.main_app(self.main_frame)
-                self.root.wm_overrideredirect(False)
-            else:
-                self.x = self.root.after(300,self.bar)
-                self.splash_progress_bar.set(float(self.splash_progress_bar.get())+0.1)
+        # isactive = ''
+        # with open('temp.txt', 'r') as f:
+        #     isactive = f.read()
+        if float(self.splash_progress_bar.get()) >= 1.0:
+            self.root.after_cancel(self.x)
+            self.main_app(self.main_frame)
+            self.root.wm_overrideredirect(False)
+        else:
+            self.x = self.root.after(300,self.bar)
+            self.splash_progress_bar.set(float(self.splash_progress_bar.get())+0.1)
     
     
     
@@ -159,6 +181,12 @@ class Screen:
         foreground=fgcolorOnLeave))
     
     def main_app(self, f):
+        
+        with open('temp.txt', 'r') as file:
+            if file.read() == 'True':
+                self.isActivated = True
+            else:
+                self.isActivated = False
         
         screen_height = 700
         screen_width = 1000
@@ -206,6 +234,15 @@ class Screen:
         sidebar = Frame(self.root, bg='#ECF0F5', relief='solid', borderwidth=1,border=0, bd= 1)
         sidebar.pack( fill=Y, side=LEFT, anchor='nw')
 
+        def activation_key_func():
+            app_name_lbl['text'] = 'Secure Optimizer'
+            self.dashboard.pack_forget()
+            self.dashboard_frame.pack_forget()
+            self.memory_cleaner_frame.pack_forget()
+            self.finished_scan_frame.pack_forget()
+            self.cleaner_diagnosis.pack_forget()
+            self.activationkey_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
+
         def dashboard_btn_thread():
             self.activationkey_frame.pack_forget()
             self.cleaner_diagnosis.pack_forget()
@@ -214,20 +251,27 @@ class Screen:
             self.dashboard_frame.pack( expand=True, fill= BOTH, anchor = 'ne')
 
         def dashboard_btn_func():
-            self.thread = Thread(target = dashboard_btn_thread)
-            self.thread.start()
+            if self.isActivated:
+                self.thread = Thread(target = dashboard_btn_thread)
+                self.thread.start()
+            else:
+                activation_key_func()
+            
 
         dashboard_btn = Button(sidebar, text='Dashboard', fg = 'black', command= dashboard_btn_func, font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat')
         dashboard_btn.pack(side= 'top', pady= 2)
 
         def mem_cleaner_func():
-            app_name_lbl['text'] = 'Secure Optimizer'
-            self.activationkey_frame.pack_forget()
-            self.dashboard_frame.pack_forget()
-            self.cleaner_diagnosis.pack_forget()
-            self.dashboard.pack( expand=True, fill= BOTH, anchor = 'ne')
-            self.memory_cleaner_frame.pack_forget()
-            self.finished_scan_frame.pack_forget()
+            if self.isActivated:
+                app_name_lbl['text'] = 'Secure Optimizer'
+                self.activationkey_frame.pack_forget()
+                self.dashboard_frame.pack_forget()
+                self.cleaner_diagnosis.pack_forget()
+                self.dashboard.pack( expand=True, fill= BOTH, anchor = 'ne')
+                self.memory_cleaner_frame.pack_forget()
+                self.finished_scan_frame.pack_forget()
+            else:
+                self.activationkey_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
         
         def scan_btn_thread():
             app_name_lbl['text'] = 'Scan your PC'
@@ -258,8 +302,12 @@ class Screen:
             
             
         def scan_btn_func():
-            self.thread = Thread(target = scan_btn_thread)
-            self.thread.start()
+            if self.isActivated:
+                self.thread = Thread(target = scan_btn_thread)
+                self.thread.start()
+            else:
+                activation_key_func()
+            
             # self.thread.join()
             
 
@@ -270,14 +318,6 @@ class Screen:
         cache_cleaner_btn = Button(sidebar, text='Cache Cleaner', fg = 'black', font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat', command= scan_btn_func)
         cache_cleaner_btn.pack(side= 'top', pady= 20)
 
-        def activation_key_func():
-            app_name_lbl['text'] = 'Secure Optimizer'
-            self.dashboard.pack_forget()
-            self.dashboard_frame.pack_forget()
-            self.memory_cleaner_frame.pack_forget()
-            self.finished_scan_frame.pack_forget()
-            self.cleaner_diagnosis.pack_forget()
-            self.activationkey_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
 
 
         quick_clean_btn = Button(sidebar, text='Quick Clean', fg = 'black', font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat', command= scan_btn_func)
@@ -292,7 +332,10 @@ class Screen:
 
           # main content area
         self.dashboard_frame = Frame(self.root, bg='#ECF0F5')
-        self.dashboard_frame.pack( expand=True, fill= BOTH, anchor = 'ne')
+        if self.isActivated:
+            self.dashboard_frame.pack( expand=True, fill= BOTH, anchor = 'ne')
+        else:
+            self.activationkey_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
 
         dashboard_bottom_bar = Frame(self.dashboard_frame, bg='#004AAD', height=30, relief='solid', borderwidth=1,border=0,bd=1)
         dashboard_bottom_bar.pack(fill=X, side=BOTTOM, anchor = 'sw', expand= True)
@@ -324,9 +367,6 @@ class Screen:
 
         cpu_use = Label(dashboard_bottom_bar, text= 'CPU Usage:', font= ("DM Sans", 11, 'bold'), fg = '#e1e0e0', bg = '#004AAD', relief='flat')
         cpu_use.pack(side= 'right', pady= 5, anchor ='center',)
-
-
-
 
 
         dashboard_top_bar1 = Frame(self.dashboard_frame, bg='#004AAD', height=50, relief='solid', borderwidth=1,border=0, bd= 1)
@@ -369,11 +409,15 @@ class Screen:
         self.clean_frame.pack(side = 'top', expand=True, anchor = 'center')
 
         def mem_btn_thread():
-            self.activationkey_frame.pack_forget()
-            self.dashboard.pack_forget()
-            self.dashboard_frame.pack_forget()
-            self.finished_scan_frame.pack_forget()
-            self.cleaner_diagnosis.pack(side= 'top', expand=True, fill= BOTH, anchor = 'ne')
+            if self.isActivated:
+                self.activationkey_frame.pack_forget()
+                self.dashboard.pack_forget()
+                self.dashboard_frame.pack_forget()
+                self.finished_scan_frame.pack_forget()
+                self.cleaner_diagnosis.pack(side= 'top', expand=True, fill= BOTH, anchor = 'ne')
+                # self.dashboard_frame.pack( expand=True, fill= BOTH, anchor = 'ne')
+            else:
+                activation_key_func()
 
 
         def mem_btn_func():
@@ -407,9 +451,24 @@ class Screen:
                                                 compound="top", relief='flat', bg='#ECF0F5', fg='black', command=activation_key_func , cursor= 'hand2',)
         self.activation_key_button.pack(side = 'left', anchor = 'center', padx = 30, pady= 2, ipady = 5)
          
+
+
        
         self.health_status = Frame(self.dashboard_frame, bg='#ECF0F5', relief = 'flat')
-        self.health_status.pack(side = 'top', expand=True, anchor = 'ne', pady = 5)
+
+        self.last_scan_var = ''
+
+        with open('last_scan.txt', 'r') as lsfile:
+            self.last_scan_var = str(lsfile.read())
+        
+        d1 = int(str(self.last_scan_var).split(' ')[0].split('-')[2])
+        d2 = int(str(datetime.now()).split(' ')[0].split('-')[2])
+        # print(d1)
+        # print(d2)
+        # print(d2-d1)
+        
+        if d2 - d1 >= 5:
+            self.health_status.pack(side = 'top', expand=True, anchor = 'ne', pady = 5)
         
         self.health_status_frame = Frame(self.health_status, bg='#e3e3e3', relief= 'solid', borderwidth=1, border=0, bd=1)
         self.health_status_frame.pack(side = 'top', expand=True, anchor = 'nw')
@@ -758,20 +817,18 @@ class Screen:
             
             try:
                 db = firestore.client()
-                doc_ref = db.collection(u'activationKeys').stream()
-                for data in doc_ref:
-                    doc_data = data.to_dict()
-                    if doc_data['key'] == activation_key_var.get():
-                        # with open('sec_file.txt', 'w') as f:
-                        #     f.write('')
-                        if (messagebox.showinfo('success', 'You registered successfully.')):
-                            break
-                else:
-                    messagebox.showerror('Error', 'Wrong Activation Key\nTry Again!!!')
+                # doc_ref = db.collection(u'activationKeys').stream()
+                doc_ref = db.collection(u'allowed_users').document()
+                doc_ref.set({
+                    u'user_id': str(getpass.getuser()),
+                    u'machine_id': str(socket.gethostname()),
+                    u'activation_key': str(activation_key_var.get()),
+                }, merge=True)
+                
+                messagebox.showinfo('success', 'You registered successfully.')
                 update_key_btn['text'] = 'Update Key'
                 update_key_btn['state'] = NORMAL
                 update_key_btn['image'] = self.update_key_btn_path
-                
                 
             except Exception as e:
                 messagebox.showerror('Error', 'Wrong Activation Key\nTry Again!!!')
