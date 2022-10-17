@@ -688,9 +688,10 @@ class Screen:
         total_junks_size_label.pack(side= 'top', anchor = 'nw', pady=10)
 
         def clean_now_thread():
-            self.finished_scan_frame.pack_forget()
-            self.activationkey_frame.pack_forget()
-            self.memory_cleaner_frame.pack_forget()
+            # self.finished_scan_frame.pack_forget()
+            # self.activationkey_frame.pack_forget()
+            # self.memory_cleaner_frame.pack_forget()
+            self.root.withdraw()
             scanned_animation.CleanedAnimation(self.root, path='C:\Windows\Prefetch')
 
         def clean_now_func():

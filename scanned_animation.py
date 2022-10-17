@@ -9,33 +9,36 @@ class CleanedAnimation:
         self.path = path
         
         self.dialog = customtkinter.CTkToplevel(self.root, fg_color='#ECF0F5')
-        self.dialog.title('Secure Optimizer')
-        self.dialog.wm_iconbitmap('icon.ico')
-        self.dialog.geometry("500x200+350+250")
+        # self.dialog.title('Secure Optimizer')
+        # self.dialog.wm_iconbitmap('icon.ico')
         
+        self.dialog.geometry("400x200+500+250")
+        self.dialog.wm_overrideredirect(True)        
         # self.empty_label = Label(self.dialog,text='', bg = 'white', fg='white')
         # self.empty_label.pack(side = 'top', anchor = 'center', pady= 5)
         
         self.icon_path = ImageTk.PhotoImage(Image.open('assets/management.png').resize((70,70), Image.ADAPTIVE))
         
         self.logo_label = Label(self.dialog,image=self.icon_path, bg = 'white')
-        self.logo_label.pack(side = 'top', anchor = 'center',)
+        self.logo_label.pack(side = 'top', anchor = 'center', pady = 15)
 
-        self.splash_progress_bar = customtkinter.CTkProgressBar(master=self.main_frame, fg_color='#e6e6e6', )
+        self.splash_progress_bar = customtkinter.CTkProgressBar(master=self.dialog, fg_color='#ECF0F5', )
         self.splash_progress_bar.set(0.0)
     
         self.splash_progress_bar.pack(side = 'bottom', anchor = 'center', fill = X,) 
     
-        self.clearing_label = Label(self.main_frame,text = ' Cleaning Files... ', font= ("DM Sans", 15), bg = 'white', fg = 'black')
+        self.clearing_label = Label(self.dialog,text = ' Cleaning Files... ', font= ("DM Sans", 15), bg = '#ECF0F5', fg = 'black')
         self.clearing_label.pack(side = 'bottom', anchor = 'center',pady=10)
         
         self.bar()
         
     def bar(self):
+        self.file_cleaner()
         if float(self.splash_progress_bar.get()) >= 1.0:
             self.root.after_cancel(self.x)
-            self.main_app(self.main_frame)
-            self.root.wm_overrideredirect(False)
+            self.dialog.destroy()
+            self.root.deiconify()
+            # self.root.wm_overrideredirect(False)
         else:
             self.x = self.root.after(400,self.bar)
             self.splash_progress_bar.set(float(self.splash_progress_bar.get())+0.1)
