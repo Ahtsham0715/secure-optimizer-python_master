@@ -12,6 +12,10 @@ from firebase_admin import credentials, firestore
 import scanned_animation
 from threading import Thread
 import customtkinter
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from matplotlib.figure import Figure
+from datetime import datetime
+import threading
 
 cred = credentials.Certificate(r"cleaner-app-50143-firebase-adminsdk-cej46-ef12406467.json")
 firebase_admin.initialize_app(cred)
@@ -21,7 +25,7 @@ class Screen:
     def __init__(self):
         # self.fetch_phone()
         self.root = Tk()
-        self.root.geometry("600x300+220+100")
+        self.root.geometry("600x300+350+250")
         self.root.configure(bg='#ECF0F5')
         # self.root.eval('tk::PlaceWindow . top')
 
@@ -104,12 +108,13 @@ class Screen:
                     #     f.write('')
                     if (messagebox.showinfo('success', 'You registered successfully.')):
                         break
-            else:
-                messagebox.showerror('Error', 'Wrong Activation Key\nTry Again!!!')
+            # else:
+                # messagebox.showerror('Error', 'Wrong Activation Key\nTry Again!!!')
                 
                 
         except Exception as e:
-            messagebox.showerror('Error', 'Wrong Activation Key\nTry Again!!!')     
+            # messagebox.showerror('Error', 'Wrong Activation Key\nTry Again!!!')
+            print(e)     
 
 
     def bar(self):
@@ -159,7 +164,7 @@ class Screen:
         self.root.wm_iconbitmap('icon.ico')
         self.root.title('Secure Optimizer')
         self.root.wm_overrideredirect(False)
-        self.root.geometry("1000x600+220+100")
+        self.root.geometry("1000x650+220+50")
         
         # appbar
         appbar = Frame(self.root, bg='#004AAD', height=70, relief='flat')
@@ -264,8 +269,10 @@ class Screen:
         def activation_key_func():
             app_name_lbl['text'] = 'Secure Optimizer'
             self.dashboard.pack_forget()
+            self.dashboard_frame.pack_forget()
             self.memory_cleaner_frame.pack_forget()
             self.finished_scan_frame.pack_forget()
+            self.cleaner_diagnosis.pack_forget()
             self.activationkey_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
 
 
@@ -337,11 +344,18 @@ class Screen:
         dashboard_top_bar2 = Frame(self.dashboard_frame, bg='#004AAD', height=40,  relief='solid', borderwidth=1,border=0, bd= 1)
         dashboard_top_bar2.pack(fill=X, side='top', anchor='ne')        
 
-        last_scan_lbl = Label(dashboard_top_bar2, text='Last Scan:', font= ("DM Sans", 11, 'bold'), fg = '#e1e0e0', bg = '#004AAD', relief='flat')
+        last_scan_lbl = Label(dashboard_top_bar2, text='Last Scan: ', font= ("DM Sans", 11, 'bold'), fg = '#e1e0e0', bg = '#004AAD', relief='flat')
         last_scan_lbl.pack(side= 'left', pady= 5, anchor='center', padx = 8)
+        
+        if not os.path.exists('last_scan.txt'):
+            with open('last_scan.txt', 'w') as f:
+                f.write('')
         
         last_scan_time_lbl = Label(dashboard_top_bar2, text='10.10.2022. 21:02:12', font= ("DM Sans", 11, 'bold'), fg = 'white', bg = '#004AAD', relief='flat')
         last_scan_time_lbl.pack(side= 'left', pady= 5, anchor='center')
+        
+        with open('last_scan.txt', 'r') as f:
+            last_scan_time_lbl['text'] = f'{f.read()}'
         
         smart_menu_lbl = Label(self.dashboard_frame, text='Smart Menu', font= ("DM Sans", 12, 'bold'), fg = 'black', bg = '#ECF0F5', relief='flat')
         smart_menu_lbl.pack(side= 'top', pady= 10, anchor='center')
@@ -422,10 +436,10 @@ class Screen:
         self.pc_lbl_cd.pack(side= 'left', anchor = 'nw', ipadx = 10)
       
         self.smart_pc_cleaner_lbl = Label(self.cleaner_diagnosis, text='Secure Optimizer Diagnosis', font= ("DM Sans", 12, 'bold'), fg = 'black', bg = '#ECF0F5', relief='flat')
-        self.smart_pc_cleaner_lbl.pack(side= 'top', anchor='center', pady= 10) 
+        self.smart_pc_cleaner_lbl.pack(side= 'top', anchor='center', pady= 5) 
        
         self.cleaner_diagnosis_frame = Frame(self.cleaner_diagnosis, bg='#e3e3e3', relief='solid', borderwidth=1,border=0, bd= 1)
-        self.cleaner_diagnosis_frame.pack(fill=X, side='top', anchor='center', padx = 20,ipady = 20, expand= True)  
+        self.cleaner_diagnosis_frame.pack(fill=X, side='top', anchor='center', padx = 20,ipady = 10, expand= True)  
        
         self.cleaner_diagnosis_left_frame = Frame(self.cleaner_diagnosis_frame, bg='#e3e3e3', relief='flat')
         self.cleaner_diagnosis_left_frame.pack(side='left', anchor='w' , padx = 20,)  
@@ -442,17 +456,24 @@ class Screen:
                 self.files_count += 1
        
        
-        self.cleaner_diagnosis_right_frame = Frame(self.cleaner_diagnosis_frame, bg='#e3e3e3', relief='flat')
-        self.cleaner_diagnosis_right_frame.pack(side='right', anchor='ne', expand= True, fill=Y)  
+        self.cleaner_diagnosis_right_frame = Frame(self.cleaner_diagnosis_frame, bg='#e3e3e3', relief='flat',)
+        self.cleaner_diagnosis_right_frame.pack(side='right', anchor='ne', expand = True, fill= Y,)  
        
-        self.smart_pccleaner_lbl = Label(self.cleaner_diagnosis_right_frame, font= ("DM Sans", 13, 'bold') ,text= 'Secure Optimizer' , bg='#e3e3e3', fg='black')
-        self.smart_pccleaner_lbl.pack(side='top', anchor = 'center', pady = 5, padx= 10)
+        self.smart_pccleaner_lbl = Label(self.cleaner_diagnosis_right_frame, font= ("DM Sans", 11, 'bold') ,text= 'Memory Usage Chart' , bg='#e3e3e3', fg='black')
+        self.smart_pccleaner_lbl.pack(side='top', anchor = 'center', padx= 5)
        
-        self.pc_icon_s_pc_c = Label(self.cleaner_diagnosis_right_frame, image= self.pc_icon, width= 80 , height= 100, bg='#e3e3e3')
-        self.pc_icon_s_pc_c.pack(side= 'top', pady= 5, anchor='center', padx= 10)
-       
-        self.unknown_lbl = Label(self.cleaner_diagnosis_right_frame, font= ("DM Sans", 15, 'bold') ,text= 'Unknown' , bg='#e3e3e3', fg='black')
-        self.unknown_lbl.pack(side='top', anchor = 'center',  padx= 10)
+        mermory_chart_label = ['Used' , 'Free']
+        memory_chart_value = [int(psutil.disk_usage('/').used),int(psutil.disk_usage('/').free)]
+        memory_chart_colors = ['red', 'green']
+        fig = Figure(facecolor='#e3e3e3',) # create a figure object
+        fig.set_size_inches(2,2)
+        ax = fig.add_subplot(111, ) # add an Axes to the figure
+
+        ax.pie(memory_chart_value, radius=1, labels=mermory_chart_label, colors=memory_chart_colors ,autopct='%0.2f%%', shadow=False,)
+
+        chart1 = FigureCanvasTkAgg(fig,self.cleaner_diagnosis_right_frame, )
+        chart1.get_tk_widget().pack(side= 'top', anchor='ne', padx= 5)
+    
        
         self.percentage_lbl = Label(self.cleaner_diagnosis_right_frame, font= ("DM Sans", 13, 'bold') ,text= '0 %' , bg='#e3e3e3', fg='black')
         self.percentage_lbl.pack(side='bottom', anchor = 'e',padx=1,)
@@ -474,61 +495,90 @@ class Screen:
         self.progress_bar.set(0.0)
     
         self.progress_bar.pack(side = 'top', anchor = 'center', fill = X, padx = 20, pady= 5)       
+
+        def scanner():
+            folder = 'C:\Windows\Prefetch'
+            folder2 = 'C:\Windows\Temp'
+            directory_list1 = os.listdir(folder)
+            directory_list2 = os.listdir(folder2)
+            directory_list = directory_list1 + directory_list2
+            self.scan_status_lbl['font'] = ("DM Sans", 11, )
+            t = threading.currentThread()
+            while getattr(t, "do_run", True):
+                for file in directory_list:
+                    time.sleep(0.06)
+                    self.scan_status_lbl['text'] = str(file)
+                else:
+                    break
+            # if 
+            scanner()
+
+        def getThreadByName(name):
+            threads = threading.enumerate() #Threads list
+            for thread in threads:
+                if thread.name == name:
+                    return thread
     
-        def bar():
+        def mybar():
             self.start_scan_btn.configure(state= DISABLED)
+            
+            # self.scan_status_lbl['text'] = 'Scan Status: In Progress...'
             # self.start_scan_btn.configure(fg_color= 'grey')
             import time, random
             self.progress = 0.1
-            rand_time = random.randint(5,15)
+            rand_time = random.randint(15,40)
             rem_time = rand_time
+            filethread = Thread(target = scanner, name='1123' ,daemon=True,)
+            filethread.start()
+            
             self.elapsed_time_lbl['text'] = f'00:00:{rem_time}'
             for i in range(0,rand_time,1):
                 self.progress_bar.set(self.progress)
-                rem_time = rem_time - 1
+                rem_time = rem_time - random.randint(2,4)
                 if self.progress >= 1.0:                    
                     self.elapsed_time_lbl['text'] = f'00:00:00'
+                    self.percentage_lbl['text'] = '100 %'
+                    t = getThreadByName('1123')
+                    t.do_run = False
+                    t.join()
+                    time.sleep(0.3)
+                    messagebox.showinfo('Success', 'Scan Completed Successfully')
+                    break
                 else:
+                    if self.progress >= 7.5:
+                        rem_time = 5
                     self.elapsed_time_lbl['text'] = f'00:00:{rem_time}'
+                    percentage = (float(self.progress_bar.get())/1.0) *100
+                    self.percentage_lbl['text'] = f'{int(percentage)} %'
                 self.root.update_idletasks()
                 time.sleep(i)
-                self.progress += 0.15
+                self.progress += random.uniform(0.05,0.1)
                 
             
-            # self.progress_bar.set(0.15)
-            # self.root.update_idletasks()
-            # time.sleep(1)
-            
-            
-            # self.progress_bar.set(0.3)
-            # self.root.update_idletasks()
-            # time.sleep(1)
-            
-            
-            # self.progress_bar.set(0.45)
-            # self.root.update_idletasks()
-            # time.sleep(1)
-            
-            
-            # self.progress_bar.set(0.75)
-            # self.root.update_idletasks()
-            # time.sleep(1)
-            
-            # self.progress_bar.set(0.9)
-            # self.root.update_idletasks()
-            # time.sleep(1)
 
             self.progress_bar.set(1.0)
             self.start_scan_btn.configure(state= NORMAL)
+            self.scan_status_lbl['font'] = ("DM Sans", 12, 'bold')
+            self.scan_status_lbl['text'] = 'Scan Status: Waiting...'
+            
+            self.percentage_lbl['text'] = '0 %'
+            self.elapsed_time_lbl['text'] = f'00:00:00'
+            with open('last_scan.txt', 'w') as f:
+                f.write(f'{datetime.now()}')
+            self.last_scanlbl['text'] = f'Last Scan: {datetime.now()}'
             # self.start_scan_btn['fg_color'] = '#004AAD'
 
     
         def bar_thread():
-            self.thread = Thread(target = bar)
+            self.thread = Thread(target = mybar)
             self.thread.start()
+    
     
         self.last_scanlbl = Label(self.cleaner_diagnosis, compound= 'left' ,text= f'Last Scan: 01.01.2022', font= ("DM Sans", 11, 'bold'), fg = 'white', bg = '#004AAD', relief='solid', borderwidth=1, border=1, bd=1)
         self.last_scanlbl.pack(side= 'bottom', anchor ='sw', fill = X)
+        
+        with open('last_scan.txt', 'r') as f:
+            self.last_scanlbl['text'] = f'Last Scan: {f.read()}'
     
         self.start_scan_btn = customtkinter.CTkButton(master= self.cleaner_diagnosis, command= bar_thread ,corner_radius=25, text='Start Scan', height= 40,  text_color='white', fg_color= '#004AAD', hover=False, text_font=("DM Sans", 11, ))
         self.start_scan_btn.pack(side = 'bottom', anchor = 'center', pady=5)

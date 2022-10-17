@@ -1,76 +1,99 @@
 import os
 import shutil
-import time
 from tkinter import *
-from PIL import ImageTk, Image
-
+import customtkinter
+from PIL import Image, ImageTk
 class CleanedAnimation:
     def __init__(self, root, path):
         self.root = root
         self.path = path
-        self.main_frame = Frame(self.root, bg='#ECF0F5')
-        self.main_frame.pack(expand=True, fill= BOTH, anchor = 'ne')
+        
+        self.dialog = customtkinter.CTkToplevel(self.root, fg_color='#ECF0F5')
+        self.dialog.title('Secure Optimizer')
+        self.dialog.wm_iconbitmap('icon.ico')
+        self.dialog.geometry("500x200+350+250")
+        
+        # self.empty_label = Label(self.dialog,text='', bg = 'white', fg='white')
+        # self.empty_label.pack(side = 'top', anchor = 'center', pady= 5)
+        
+        self.icon_path = ImageTk.PhotoImage(Image.open('assets/management.png').resize((70,70), Image.ADAPTIVE))
+        
+        self.logo_label = Label(self.dialog,image=self.icon_path, bg = 'white')
+        self.logo_label.pack(side = 'top', anchor = 'center',)
 
-        self.image_label = Label(self.main_frame,image="", bg = '#ECF0F5')
-        self.image_label.pack(pady=100)
-        if os.path.exists('gif_frames'):
-            shutil.rmtree('gif_frames')
-        os.mkdir('gif_frames')
-        self.start = time.time()
+        self.splash_progress_bar = customtkinter.CTkProgressBar(master=self.main_frame, fg_color='#e6e6e6', )
+        self.splash_progress_bar.set(0.0)
+    
+        self.splash_progress_bar.pack(side = 'bottom', anchor = 'center', fill = X,) 
+    
+        self.clearing_label = Label(self.main_frame,text = ' Cleaning Files... ', font= ("DM Sans", 15), bg = 'white', fg = 'black')
+        self.clearing_label.pack(side = 'bottom', anchor = 'center',pady=10)
+        
+        self.bar()
+        
+    def bar(self):
+        if float(self.splash_progress_bar.get()) >= 1.0:
+            self.root.after_cancel(self.x)
+            self.main_app(self.main_frame)
+            self.root.wm_overrideredirect(False)
+        else:
+            self.x = self.root.after(400,self.bar)
+            self.splash_progress_bar.set(float(self.splash_progress_bar.get())+0.1)
+        
+    #     if os.path.exists('gif_frames'):
+    #         shutil.rmtree('gif_frames')
+    #     os.mkdir('gif_frames')
+    #     self.start = time.time()
 
-        self.gif_frames = []
-        self.images = []
-        self.animation()
+    #     self.gif_frames = []
+    #     self.images = []
+    #     self.animation()
 
-        root.mainloop()
-    def animation(self):
-        gif = Image.open('assets/scanned21.gif')
-        self.no_of_frames = gif.n_frames
+    #     root.mainloop()
+    # def animation(self):
+    #     gif = Image.open('assets/scanned21.gif')
+    #     self.no_of_frames = gif.n_frames
 
-        for i in range(self.no_of_frames):
-            gif.seek(i)
-            gif.save(os.path.join('gif_frames',f'splash{i}.png'))
-            self.gif_frames.append(os.path.join('gif_frames',f'splash{i}.png'))
+    #     for i in range(self.no_of_frames):
+    #         gif.seek(i)
+    #         gif.save(os.path.join('gif_frames',f'splash{i}.png'))
+    #         self.gif_frames.append(os.path.join('gif_frames',f'splash{i}.png'))
 
-        for images in self.gif_frames:
-            im = Image.open(images)
-            im = im.resize((690,388),)
-            im = ImageTk.PhotoImage(im)
-            self.images.append(im)
+    #     for images in self.gif_frames:
+    #         im = Image.open(images)
+    #         im = im.resize((690,388),)
+    #         im = ImageTk.PhotoImage(im)
+    #         self.images.append(im)
 
-        self.show_animation(0)
+    #     self.show_animation(0)
 
-    def show_animation(self,count):
-        image = self.images[count]
-        self.image_label.configure(image=image)
-        count += 1
-        if count == len(self.images)-1:
-            count = 0
+    def file_cleaner(self):
+        # image = self.images[count]
+        # self.image_label.configure(image=image)
+        # count += 1
+        # if count == len(self.images)-1:
+        #     count = 0
 
         # to show the gif only for 10 seconds
-        if int(time.time()-self.start) != 8:
-            self.x = self.root.after(100,self.show_animation,count)
-        else:
-            second_folder = self.path
-            for filename in os.listdir(second_folder):
-                file_path = os.path.join(second_folder, filename)
-                try:
-                    if os.path.isfile(file_path) or os.path.islink(file_path):
-                        os.unlink(file_path)
-                    elif os.path.isdir(file_path):
-                        shutil.rmtree(file_path)
-                    print('removed')
-                except Exception as e:
-                    print(e)
-            self.root.after_cancel(self.x)
-            self.main_frame.pack_forget()
+        # if int(time.time()-self.start) != 8:
+        #     self.x = self.root.after(100,self.show_animation,count)
+        # else:
+        second_folder = self.path
+        for filename in os.listdir(second_folder):
+            file_path = os.path.join(second_folder, filename)
+            try:
+                if os.path.isfile(file_path) or os.path.islink(file_path):
+                    os.unlink(file_path)
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+                print('removed')
+            except Exception as e:
+                print(e)
+        # self.root.after_cancel(self.x)
+        # self.main_frame.pack_forget()
             # self.root.destroy()
             # self.main_app(self.main_frame)
 
-            """
-            to delete the gif_frames folder and images inside it so that when we run the program again
-            then we don't get the error saying gif_frames folder already exists.
-            """
             # shutil.rmtree('gif_frames')
             
 # root = Tk()
