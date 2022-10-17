@@ -72,6 +72,7 @@ class Screen:
         self.check_icon_path = ImageTk.PhotoImage(Image.open('assets/checked.png').resize((180,180), Image.ANTIALIAS))
         self.update_key_btn_path = ImageTk.PhotoImage(Image.open('assets/update_key.png').resize((140,45), Image.ANTIALIAS))
         self.folder_icon = ImageTk.PhotoImage(Image.open('assets/folder.png').resize((30,30), Image.ANTIALIAS))
+        self.folder1_icon = ImageTk.PhotoImage(Image.open('assets/folder1.png').resize((30,30), Image.ANTIALIAS))
         self.pc_icon = ImageTk.PhotoImage(Image.open('assets/pc.png').resize((100,100), Image.ANTIALIAS))
         self.windows_pc_icon = ImageTk.PhotoImage(Image.open('assets/pc1.png').resize((30,30), Image.ANTIALIAS))
         self.antivirus_icon = ImageTk.PhotoImage(Image.open('assets/antivirus.png').resize((50,50), Image.ANTIALIAS))
@@ -90,9 +91,14 @@ class Screen:
         self.open_folder_icon = ImageTk.PhotoImage(Image.open('assets/open-folder.png').resize((50,50), Image.ANTIALIAS))
         self.photo_icon = ImageTk.PhotoImage(Image.open('assets/photo.png').resize((40,40), Image.ANTIALIAS))
         self.recycle_bin_icon = ImageTk.PhotoImage(Image.open('assets/recycle-bin.png').resize((50,50), Image.ANTIALIAS))
+        self.recycle_bin1_icon = ImageTk.PhotoImage(Image.open('assets/recycle-bin1.png').resize((50,50), Image.ANTIALIAS))
         self.sound_waves_icon = ImageTk.PhotoImage(Image.open('assets/sound-waves.png').resize((50,50), Image.ANTIALIAS))
         self.usb_icon = ImageTk.PhotoImage(Image.open('assets/usb.png').resize((30,30), Image.ANTIALIAS))
         self.video_icon = ImageTk.PhotoImage(Image.open('assets/video.png').resize((30,30), Image.ANTIALIAS))
+        self.video_camera_icon = ImageTk.PhotoImage(Image.open('assets/video-camera.png').resize((30,30), Image.ANTIALIAS))
+        self.frame_icon = ImageTk.PhotoImage(Image.open('assets/frame.png').resize((30,30), Image.ANTIALIAS))
+        self.floppy_disk_icon = ImageTk.PhotoImage(Image.open('assets/floppy-disk.png').resize((30,30), Image.ANTIALIAS))
+        self.playlist_icon = ImageTk.PhotoImage(Image.open('assets/playlist.png').resize((30,30), Image.ANTIALIAS))
         
         
         self.activationkey_frame = Frame(self.root, bg='#ECF0F5',)
@@ -511,9 +517,9 @@ class Screen:
         self.cleaner_diagnosis_left_frame = Frame(self.cleaner_diagnosis_frame, bg='#e3e3e3', relief='flat')
         self.cleaner_diagnosis_left_frame.pack(side='left', anchor='w' , padx = 20,)  
        
-        self.file_icons = [self.sound_waves_icon, self.contract_icon, self.recycle_bin_icon, self.compact_disk_icon, self.open_folder_icon, self.photo_icon]
+        self.file_icons = [self.folder1_icon, self.frame_icon, self.video_camera_icon, self.playlist_icon, self.floppy_disk_icon, self.recycle_bin1_icon]
        
-        self.file_names = [' audio ', ' Xlsx ', ' log ', ' tmp ', ' folder ',' pictures ']
+        self.file_names = [' Files ', ' Pictures ', ' Videos ', ' Audios ', ' Drives ',' Junk ']
         self.files_count = 0
         
         for i in range(2):
