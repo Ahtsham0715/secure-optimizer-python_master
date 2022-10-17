@@ -6,7 +6,6 @@ import os
 import shutil
 import time
 from tkinter import messagebox
-from click import progressbar
 import psutil
 import firebase_admin
 from firebase_admin import credentials, firestore
@@ -22,26 +21,43 @@ class Screen:
     def __init__(self):
         # self.fetch_phone()
         self.root = Tk()
-        self.root.geometry("1000x600+220+100")
+        self.root.geometry("600x300+220+100")
         self.root.configure(bg='#ECF0F5')
         # self.root.eval('tk::PlaceWindow . top')
 
         # to remove the title bar
         self.root.wm_overrideredirect(True)
 
-        self.main_frame = Frame(self.root, bg='black')
-        self.main_frame.pack(fill="both",expand=True)
+        self.main_frame = Frame(self.root, bg='white')
+        self.main_frame.pack(fill="both",expand=True) 
+        
+        self.icon_path = ImageTk.PhotoImage(Image.open('assets/logo.png').resize((300,150), Image.ADAPTIVE))
+              
+        self.empty_label = Label(self.main_frame,text='', bg = 'white', fg='white')
+        self.empty_label.pack(side = 'top', anchor = 'center', pady= 20)
+        
+        
+        self.logo_label = Label(self.main_frame,image=self.icon_path, bg = 'white')
+        self.logo_label.pack(side = 'top', anchor = 'center',)
+        
+        self.initializing_label = Label(self.main_frame,text = ' Initializing... ', font= ("DM Sans", 15), bg = 'white', fg = 'black')
+        self.initializing_label.pack(side = 'top', anchor = 'center',)
+        
+        self.splash_progress_bar = customtkinter.CTkProgressBar(master=self.main_frame, fg_color='#e6e6e6', )
+        self.splash_progress_bar.set(0.0)
+    
+        self.splash_progress_bar.pack(side = 'bottom', anchor = 'center', fill = X,) 
+        
+        # if os.path.exists('gif_frames'):
+        #     shutil.rmtree('gif_frames')
+        # os.mkdir('gif_frames')
+        # self.start = time.time()
 
-        self.image_label = Label(self.main_frame,image="", bg = 'black')
-        self.image_label.pack(pady=100)
-        if os.path.exists('gif_frames'):
-            shutil.rmtree('gif_frames')
-        os.mkdir('gif_frames')
-        self.start = time.time()
-
-        self.gif_frames = []
-        self.images = []
-        self.animation()
+        # self.gif_frames = []
+        # self.images = []
+        # self.animation()
+        self.bar()
+                
         self.logo_path = ImageTk.PhotoImage(Image.open('assets/icon.png').resize((140,70), Image.ANTIALIAS))
         self.phone_icon_path = ImageTk.PhotoImage(Image.open('assets/phone.png').resize((30,30), Image.ANTIALIAS))
         self.caution_icon_path = PhotoImage(file='assets/caution.png')
@@ -81,6 +97,8 @@ class Screen:
         self.activationkey_frame = Frame(self.root, bg='#ECF0F5',)
         self.finished_scan_frame = Frame(self.root, bg='#ECF0F5',)
         self.memory_cleaner_frame = Frame(self.root, bg='#ECF0F5')
+
+
         
         self.root.mainloop()
 
@@ -100,44 +118,55 @@ class Screen:
                 
                 
         except Exception as e:
-            messagebox.showerror('Error', 'Wrong Activation Key\nTry Again!!!')
+            messagebox.showerror('Error', 'Wrong Activation Key\nTry Again!!!')     
 
-    def animation(self):
-        gif = Image.open('assets/splash.gif')
-        self.no_of_frames = gif.n_frames
 
-        for i in range(self.no_of_frames):
-            gif.seek(i)
-            gif.save(os.path.join('gif_frames',f'splash{i}.png'))
-            self.gif_frames.append(os.path.join('gif_frames',f'splash{i}.png'))
+    def bar(self):
+            # time.sleep(0.1)
+            if float(self.splash_progress_bar.get()) >= 1.0:
+                self.root.after_cancel(self.x)
+                self.main_app(self.main_frame)
+                self.root.wm_overrideredirect(False)
+            else:
+                self.x = self.root.after(300,self.bar)
+                self.splash_progress_bar.set(float(self.splash_progress_bar.get())+0.1)
+            # self.progress += 0.15
+    # def animation(self):
+    #     gif = Image.open('assets/splash.gif')
+    #     self.no_of_frames = gif.n_frames
 
-        for images in self.gif_frames:
-            im = Image.open(images)
-            im = im.resize((690,388),)
-            im = ImageTk.PhotoImage(im)
-            self.images.append(im)
+    #     for i in range(self.no_of_frames):
+    #         gif.seek(i)
+    #         gif.save(os.path.join('gif_frames',f'splash{i}.png'))
+    #         self.gif_frames.append(os.path.join('gif_frames',f'splash{i}.png'))
 
-        self.show_animation(0)
+    #     for images in self.gif_frames:
+    #         im = Image.open(images)
+    #         im = im.resize((690,388),)
+    #         im = ImageTk.PhotoImage(im)
+    #         self.images.append(im)
 
-    def show_animation(self,count):
-        image = self.images[count]
-        self.image_label.configure(image=image)
-        count += 1
-        if count == len(self.images)-1:
-            count = 0
+        # self.show_animation(0)
 
-        # to show the gif only for 10 seconds
-        if int(time.time()-self.start) != 5:
-            self.x = self.root.after(80,self.show_animation,count)
-        else:
-            self.root.after_cancel(self.x)
-            # self.root.destroy()
-            self.main_app(self.main_frame)
+    # def show_animation(self,count):
+    #     image = self.images[count]
+    #     self.image_label.configure(image=image)
+    #     count += 1
+    #     if count == len(self.images)-1:
+    #         count = 0
+
+    #     # to show the gif only for 10 seconds
+    #     if int(time.time()-self.start) != 5:
+    #         self.x = self.root.after(80,self.show_animation,count)
+    #     else:
+    #         self.root.after_cancel(self.x)
+    #         # self.root.destroy()
+            # self.main_app(self.main_frame)
 
             # shutil.rmtree('gif_frames')
 
             # to show the title bar
-            self.root.wm_overrideredirect(False)
+            # self.root.wm_overrideredirect(False) #TODO
     
     def changeOnHover(self,button, bgcolorOnHover, fgcolorOnHover, bgcolorOnLeave, fgcolorOnLeave):
 
@@ -175,6 +204,8 @@ class Screen:
         self.root.wm_iconbitmap('icon.ico')
         self.root.title('Secure Optimizer')
         self.root.wm_overrideredirect(False)
+        self.root.geometry("1000x600+220+100")
+        
         # appbar
         appbar = Frame(self.root, bg='#004AAD', height=70, relief='flat')
         appbar.pack(fill=X, side='top', anchor='ne')
@@ -419,7 +450,7 @@ class Screen:
         self.critical_lbl = Label(self.health_status_frame, text='Critical', font= ("DM Sans", 14, 'bold'), fg = 'red', bg = '#e3e3e3', relief='flat')
         self.critical_lbl.pack(side= 'left', anchor = CENTER, padx = 5)
 
-        self.smart_pc_lbl = Label(self.health_status, text='Smart PC Cleaner Health', font= ("DM Sans", 12, 'bold'), fg = 'black', bg = '#ECF0F5', relief='flat')
+        self.smart_pc_lbl = Label(self.health_status, text='Secure Optimizer Health', font= ("DM Sans", 12, 'bold'), fg = 'black', bg = '#ECF0F5', relief='flat')
         self.smart_pc_lbl.pack(side= 'right', pady= 0, anchor = 'nw', padx = 5)
 
 
@@ -435,7 +466,7 @@ class Screen:
         self.pc_lbl_cd = Label(self.cleaner_top_frame, image= self.windows_pc_icon, compound= 'left', font= ("DM Sans", 12, 'bold') ,text= '    Press Start Scan' , bg='#004AAD', fg='white')
         self.pc_lbl_cd.pack(side= 'left', anchor = 'nw', ipadx = 10)
       
-        self.smart_pc_cleaner_lbl = Label(self.cleaner_diagnosis, text='Smart PC Cleaner Diagnosis', font= ("DM Sans", 12, 'bold'), fg = 'black', bg = '#ECF0F5', relief='flat')
+        self.smart_pc_cleaner_lbl = Label(self.cleaner_diagnosis, text='Secure Optimizer Diagnosis', font= ("DM Sans", 12, 'bold'), fg = 'black', bg = '#ECF0F5', relief='flat')
         self.smart_pc_cleaner_lbl.pack(side= 'top', anchor='center', pady= 10) 
        
         self.cleaner_diagnosis_frame = Frame(self.cleaner_diagnosis, bg='#e3e3e3', relief='solid', borderwidth=1,border=0, bd= 1)
@@ -459,7 +490,7 @@ class Screen:
         self.cleaner_diagnosis_right_frame = Frame(self.cleaner_diagnosis_frame, bg='#e3e3e3', relief='flat')
         self.cleaner_diagnosis_right_frame.pack(side='right', anchor='ne', expand= True, fill=Y)  
        
-        self.smart_pccleaner_lbl = Label(self.cleaner_diagnosis_right_frame, font= ("DM Sans", 13, 'bold') ,text= 'Smart PC Cleaner' , bg='#e3e3e3', fg='black')
+        self.smart_pccleaner_lbl = Label(self.cleaner_diagnosis_right_frame, font= ("DM Sans", 13, 'bold') ,text= 'Secure Optimizer' , bg='#e3e3e3', fg='black')
         self.smart_pccleaner_lbl.pack(side='top', anchor = 'center', pady = 5, padx= 10)
        
         self.pc_icon_s_pc_c = Label(self.cleaner_diagnosis_right_frame, image= self.pc_icon, width= 80 , height= 100, bg='#e3e3e3')
