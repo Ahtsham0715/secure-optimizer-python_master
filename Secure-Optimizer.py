@@ -6,6 +6,7 @@ import os
 import shutil
 import time
 from tkinter import messagebox
+import matplotlib
 import psutil
 import firebase_admin
 from firebase_admin import credentials, firestore
@@ -94,8 +95,22 @@ class Screen:
         self.memory_cleaner_frame = Frame(self.root, bg='#ECF0F5')
 
 
-        
+        Thread(target = self.fetch_phone).start()
+
         self.root.mainloop()
+
+    def fetch_phone(self):
+        try:
+            db = firestore.client()
+            self.doc_ref = db.collection(u'users').document(u'data').get()
+            self.doc_data = self.doc_ref.to_dict()
+            self.contact_lbl['text'] = self.doc_data['phone']
+            print(self.doc_data['phone'])
+                    
+        except Exception as e:
+            print(e)
+            self.contact_lbl['text'] = self.doc_data['phone']
+    
 
     def check_registration(self):
         try:
@@ -145,18 +160,6 @@ class Screen:
     
     def main_app(self, f):
         
-        def fetch_phone():
-            try:
-                db = firestore.client()
-                self.doc_ref = db.collection(u'users').document(u'data').get()
-                self.doc_data = self.doc_ref.to_dict()
-                self.contact_lbl['text'] = self.doc_data['phone']
-                print(self.doc_data['phone'])
-                       
-            except Exception as e:
-                print(e)
-                self.contact_lbl['text'] = self.doc_data['phone']
-        Thread(target = fetch_phone).start()
         screen_height = 700
         screen_width = 1000
         
@@ -233,6 +236,7 @@ class Screen:
             self.cleaner_diagnosis.pack_forget()
             self.dashboard.pack_forget()
             self.finished_scan_frame.pack_forget()
+            # self.cleaner_diagnosis.pack_forget()
             self.memory_cleaner_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
             folder = 'C:\Windows\Prefetch'
             # sleep(1)
@@ -357,7 +361,7 @@ class Screen:
         with open('last_scan.txt', 'r') as f:
             last_scan_time_lbl['text'] = f'{f.read()}'
         
-        smart_menu_lbl = Label(self.dashboard_frame, text='Smart Menu', font= ("DM Sans", 12, 'bold'), fg = 'black', bg = '#ECF0F5', relief='flat')
+        smart_menu_lbl = Label(self.dashboard_frame, text='Secure Optimizer Menu', font= ("DM Sans", 12, 'bold'), fg = 'black', bg = '#ECF0F5', relief='flat')
         smart_menu_lbl.pack(side= 'top', pady= 10, anchor='center')
         
         
@@ -462,6 +466,7 @@ class Screen:
         self.smart_pccleaner_lbl = Label(self.cleaner_diagnosis_right_frame, font= ("DM Sans", 11, 'bold') ,text= 'Memory Usage Chart' , bg='#e3e3e3', fg='black')
         self.smart_pccleaner_lbl.pack(side='top', anchor = 'center', padx= 5)
        
+        matplotlib.rcParams["font.family"] = "DM Sans"
         mermory_chart_label = ['Used' , 'Free']
         memory_chart_value = [int(psutil.disk_usage('/').used),int(psutil.disk_usage('/').free)]
         memory_chart_colors = ['red', 'green']
@@ -506,7 +511,7 @@ class Screen:
             t = threading.currentThread()
             while getattr(t, "do_run", True):
                 for file in directory_list:
-                    time.sleep(0.06)
+                    time.sleep(0.05)
                     self.scan_status_lbl['text'] = str(file)
                 else:
                     break
@@ -534,7 +539,10 @@ class Screen:
             self.elapsed_time_lbl['text'] = f'00:00:{rem_time}'
             for i in range(0,rand_time,1):
                 self.progress_bar.set(self.progress)
-                rem_time = rem_time - random.randint(2,4)
+                if rem_time > 5:
+                    rem_time = rem_time - random.randint(1,3)
+                else:
+                    rem_time = rem_time - 0
                 if self.progress >= 1.0:                    
                     self.elapsed_time_lbl['text'] = f'00:00:00'
                     self.percentage_lbl['text'] = '100 %'
@@ -545,16 +553,19 @@ class Screen:
                     messagebox.showinfo('Success', 'Scan Completed Successfully')
                     break
                 else:
-                    if self.progress >= 7.5:
-                        rem_time = 5
+                    if self.progress >= 8.0:
+                        if rem_time > 9:
+                            rem_time = 7
                     self.elapsed_time_lbl['text'] = f'00:00:{rem_time}'
                     percentage = (float(self.progress_bar.get())/1.0) *100
                     self.percentage_lbl['text'] = f'{int(percentage)} %'
                 self.root.update_idletasks()
                 time.sleep(i)
                 self.progress += random.uniform(0.05,0.1)
-                
+            scan_btn_thread()
+            # scanned_animation.CleanedAnimation(self.root, path='C:\Windows\Prefetch')
             
+    
 
             self.progress_bar.set(1.0)
             self.start_scan_btn.configure(state= NORMAL)
@@ -692,6 +703,12 @@ class Screen:
             # self.activationkey_frame.pack_forget()
             # self.memory_cleaner_frame.pack_forget()
             self.root.withdraw()
+            self.dashboard_frame.pack( expand=True, fill= BOTH, anchor = 'ne')
+            self.dashboard.pack_forget()
+            self.cleaner_diagnosis.pack_forget()
+            self.activationkey_frame.pack_forget()
+            self.finished_scan_frame.pack_forget()
+            self.memory_cleaner_frame.pack_forget()
             scanned_animation.CleanedAnimation(self.root, path='C:\Windows\Prefetch')
 
         def clean_now_func():

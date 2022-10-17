@@ -19,7 +19,7 @@ class CleanedAnimation:
         
         self.icon_path = ImageTk.PhotoImage(Image.open('assets/management.png').resize((70,70), Image.ADAPTIVE))
         
-        self.logo_label = Label(self.dialog,image=self.icon_path, bg = 'white')
+        self.logo_label = Label(self.dialog,image=self.icon_path, bg = '#ECF0F5')
         self.logo_label.pack(side = 'top', anchor = 'center', pady = 15)
 
         self.splash_progress_bar = customtkinter.CTkProgressBar(master=self.dialog, fg_color='#ECF0F5', )
