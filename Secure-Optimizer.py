@@ -31,31 +31,22 @@ class Screen:
         self.main_frame = Frame(self.root, bg='white')
         self.main_frame.pack(fill="both",expand=True) 
         
-        self.icon_path = ImageTk.PhotoImage(Image.open('assets/logo.png').resize((300,150), Image.ADAPTIVE))
+        self.icon_path = ImageTk.PhotoImage(Image.open('assets/logo.png').resize((400,200), Image.ADAPTIVE))
               
         self.empty_label = Label(self.main_frame,text='', bg = 'white', fg='white')
-        self.empty_label.pack(side = 'top', anchor = 'center', pady= 20)
-        
+        self.empty_label.pack(side = 'top', anchor = 'center', pady= 5)
         
         self.logo_label = Label(self.main_frame,image=self.icon_path, bg = 'white')
         self.logo_label.pack(side = 'top', anchor = 'center',)
-        
-        self.initializing_label = Label(self.main_frame,text = ' Initializing... ', font= ("DM Sans", 15), bg = 'white', fg = 'black')
-        self.initializing_label.pack(side = 'top', anchor = 'center',)
         
         self.splash_progress_bar = customtkinter.CTkProgressBar(master=self.main_frame, fg_color='#e6e6e6', )
         self.splash_progress_bar.set(0.0)
     
         self.splash_progress_bar.pack(side = 'bottom', anchor = 'center', fill = X,) 
         
-        # if os.path.exists('gif_frames'):
-        #     shutil.rmtree('gif_frames')
-        # os.mkdir('gif_frames')
-        # self.start = time.time()
+        self.initializing_label = Label(self.main_frame,text = ' Initializing... ', font= ("DM Sans", 15), bg = 'white', fg = 'black')
+        self.initializing_label.pack(side = 'bottom', anchor = 'center',pady=5)
 
-        # self.gif_frames = []
-        # self.images = []
-        # self.animation()
         self.bar()
                 
         self.logo_path = ImageTk.PhotoImage(Image.open('assets/icon.png').resize((140,70), Image.ANTIALIAS))
@@ -122,7 +113,6 @@ class Screen:
 
 
     def bar(self):
-            # time.sleep(0.1)
             if float(self.splash_progress_bar.get()) >= 1.0:
                 self.root.after_cancel(self.x)
                 self.main_app(self.main_frame)
@@ -130,43 +120,8 @@ class Screen:
             else:
                 self.x = self.root.after(300,self.bar)
                 self.splash_progress_bar.set(float(self.splash_progress_bar.get())+0.1)
-            # self.progress += 0.15
-    # def animation(self):
-    #     gif = Image.open('assets/splash.gif')
-    #     self.no_of_frames = gif.n_frames
-
-    #     for i in range(self.no_of_frames):
-    #         gif.seek(i)
-    #         gif.save(os.path.join('gif_frames',f'splash{i}.png'))
-    #         self.gif_frames.append(os.path.join('gif_frames',f'splash{i}.png'))
-
-    #     for images in self.gif_frames:
-    #         im = Image.open(images)
-    #         im = im.resize((690,388),)
-    #         im = ImageTk.PhotoImage(im)
-    #         self.images.append(im)
-
-        # self.show_animation(0)
-
-    # def show_animation(self,count):
-    #     image = self.images[count]
-    #     self.image_label.configure(image=image)
-    #     count += 1
-    #     if count == len(self.images)-1:
-    #         count = 0
-
-    #     # to show the gif only for 10 seconds
-    #     if int(time.time()-self.start) != 5:
-    #         self.x = self.root.after(80,self.show_animation,count)
-    #     else:
-    #         self.root.after_cancel(self.x)
-    #         # self.root.destroy()
-            # self.main_app(self.main_frame)
-
-            # shutil.rmtree('gif_frames')
-
-            # to show the title bar
-            # self.root.wm_overrideredirect(False) #TODO
+    
+    
     
     def changeOnHover(self,button, bgcolorOnHover, fgcolorOnHover, bgcolorOnLeave, fgcolorOnLeave):
 
