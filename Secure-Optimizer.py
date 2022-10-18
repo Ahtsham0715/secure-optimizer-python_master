@@ -95,10 +95,10 @@ class Screen:
         self.sound_waves_icon = ImageTk.PhotoImage(Image.open('assets/sound-waves.png').resize((50,50), Image.ANTIALIAS))
         self.usb_icon = ImageTk.PhotoImage(Image.open('assets/usb.png').resize((30,30), Image.ANTIALIAS))
         self.video_icon = ImageTk.PhotoImage(Image.open('assets/video.png').resize((30,30), Image.ANTIALIAS))
-        self.video_camera_icon = ImageTk.PhotoImage(Image.open('assets/video-camera.png').resize((30,30), Image.ANTIALIAS))
+        self.video_camera_icon = ImageTk.PhotoImage(Image.open('assets/video1.png').resize((30,30), Image.ANTIALIAS))
         self.frame_icon = ImageTk.PhotoImage(Image.open('assets/frame.png').resize((30,30), Image.ANTIALIAS))
         self.floppy_disk_icon = ImageTk.PhotoImage(Image.open('assets/floppy-disk.png').resize((30,30), Image.ANTIALIAS))
-        self.playlist_icon = ImageTk.PhotoImage(Image.open('assets/playlist.png').resize((30,30), Image.ANTIALIAS))
+        self.playlist_icon = ImageTk.PhotoImage(Image.open('assets/audio.png').resize((30,30), Image.ANTIALIAS))
         
         
         self.activationkey_frame = Frame(self.root, bg='#ECF0F5',)
@@ -538,7 +538,7 @@ class Screen:
         matplotlib.rcParams["font.family"] = "DM Sans"
         mermory_chart_label = ['Used' , 'Free']
         memory_chart_value = [int(psutil.disk_usage('/').used),int(psutil.disk_usage('/').free)]
-        memory_chart_colors = ['red', 'green']
+        memory_chart_colors = ['#ff3333', '#00e600']
         fig = Figure(facecolor='#e3e3e3',) # create a figure object
         fig.set_size_inches(2,2)
         ax = fig.add_subplot(111, ) # add an Axes to the figure
