@@ -83,9 +83,11 @@ class Screen:
         self.clean_code_icon = ImageTk.PhotoImage(Image.open('assets/clean-code.png').resize((50,50), Image.ANTIALIAS))
         self.compact_disk_icon = ImageTk.PhotoImage(Image.open('assets/compact-disk.png').resize((50,50), Image.ANTIALIAS))
         self.code_icon = ImageTk.PhotoImage(Image.open('assets/code.png').resize((50,50), Image.ANTIALIAS))
+        self.code1_icon = ImageTk.PhotoImage(Image.open('assets/code.png').resize((150,150), Image.ANTIALIAS))
         self.contract_icon = ImageTk.PhotoImage(Image.open('assets/contract.png').resize((50,50), Image.ANTIALIAS))
         self.folder_search_icon = ImageTk.PhotoImage(Image.open('assets/folder_search.png').resize((50,50), Image.ANTIALIAS))
         self.harddisk_icon = ImageTk.PhotoImage(Image.open('assets/harddisk.png').resize((50,50), Image.ANTIALIAS))
+        self.harddisk1_icon = ImageTk.PhotoImage(Image.open('assets/harddisk.png').resize((150,150), Image.ANTIALIAS))
         self.key_icon = ImageTk.PhotoImage(Image.open('assets/key.png').resize((50,50), Image.ANTIALIAS))
         self.management_icon = ImageTk.PhotoImage(Image.open('assets/management.png').resize((30,30), Image.ANTIALIAS))
         self.message_icon = ImageTk.PhotoImage(Image.open('assets/message.png').resize((50,50), Image.ANTIALIAS))
@@ -332,7 +334,7 @@ class Screen:
                 activation_key_func()
             
         def quick_clean_thread():
-            self.check_icon['image'] = self.harddisk_icon
+            self.check_icon['image'] = self.harddisk1_icon
             self.clean_now_btn['text'] = 'Quick Clean'
             self.clean_now_btn['bg'] = '#cc66ff'
             
@@ -348,7 +350,7 @@ class Screen:
                 activation_key_func()
                 
         def deep_clean_thread():
-            self.check_icon['image'] = self.code_icon
+            self.check_icon['image'] = self.code1_icon
             self.clean_now_btn['text'] = 'Deep Clean'
             self.clean_now_btn['bg'] = '#cc8800'
             scan_btn_thread()
