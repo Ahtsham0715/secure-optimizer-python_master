@@ -104,6 +104,7 @@ class Screen:
         self.activationkey_frame = Frame(self.root, bg='#ECF0F5',)
         self.finished_scan_frame = Frame(self.root, bg='#ECF0F5',)
         self.memory_cleaner_frame = Frame(self.root, bg='#ECF0F5')
+        self.dashboard_frame = Frame(self.root, bg='#ECF0F5')
         
 
         self.root.mainloop()
@@ -178,8 +179,10 @@ class Screen:
         with open('temp.txt', 'r') as file:
             if file.read() == 'True':
                 self.isActivated = True
+                # self.dashboard_frame.pack( expand=True, fill= BOTH, anchor = 'ne')
             else:
                 self.isActivated = False
+                # self.activationkey_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
                 
         def fetch_phone():
             try:
@@ -276,8 +279,9 @@ class Screen:
                 app_name_lbl['text'] = 'Secure Optimizer'
                 self.activationkey_frame.pack_forget()
                 self.dashboard_frame.pack_forget()
-                self.cleaner_diagnosis.pack_forget()
-                self.dashboard.pack( expand=True, fill= BOTH, anchor = 'ne')
+                self.dashboard.pack_forget()
+                # self.cleaner_diagnosis.pack_forget()
+                self.cleaner_diagnosis.pack( expand=True, fill= BOTH, anchor = 'ne')
                 self.memory_cleaner_frame.pack_forget()
                 self.finished_scan_frame.pack_forget()
             else:
@@ -341,7 +345,7 @@ class Screen:
         activation_key_btn.pack(side= 'top', pady= 20)
 
           # main content area
-        self.dashboard_frame = Frame(self.root, bg='#ECF0F5')
+        # self.dashboard_frame = Frame(self.root, bg='#ECF0F5')
         if self.isActivated:
             self.dashboard_frame.pack( expand=True, fill= BOTH, anchor = 'ne')
         else:
