@@ -149,11 +149,9 @@ class Screen:
 
 
     def bar(self):
-        # isactive = ''
-        # with open('temp.txt', 'r') as f:
-        #     isactive = f.read()
         if float(self.splash_progress_bar.get()) >= 1.0:
             self.root.after_cancel(self.x)
+            
             self.main_app(self.main_frame)
             self.root.wm_overrideredirect(False)
         else:
@@ -178,18 +176,18 @@ class Screen:
         foreground=fgcolorOnLeave))
     
     def main_app(self, f):
-        with open('temp.txt', 'r') as file:
-            print(f'{file.read()} main app')
-            fdata = file.read()
-            # print(type(fdata))
-        if fdata == 'True':
-            print('in true')
-            self.isActivated = True
-            self.root.update_idletasks()
-        else:
-            print('in false')
-            self.isActivated = False
-            self.root.update_idletasks()
+        # with open('temp.txt', 'r') as file:
+        #     print(f'{file.read()} main app')
+        #     fdata = file.read()
+        #     # print(type(fdata))
+        #     if bool(fdata):
+        #         print('in true')
+        #         self.isActivated = True
+        #         # self.root.update_idletasks()
+        #     else:
+        #         print('in false')
+        #         self.isActivated = False
+            # self.root.update_idletasks()
 
         print(self.isActivated)
         def fetch_phone():
@@ -324,8 +322,41 @@ class Screen:
             
             
         def scan_btn_func():
+            self.check_icon['image'] = self.check_icon_path
+            self.clean_now_btn['text'] = 'Clean Now'
+            self.clean_now_btn['bg'] = '#004AAD'
             if self.isActivated:
                 self.thread = Thread(target = scan_btn_thread)
+                self.thread.start()
+            else:
+                activation_key_func()
+            
+        def quick_clean_thread():
+            self.check_icon['image'] = self.harddisk_icon
+            self.clean_now_btn['text'] = 'Quick Clean'
+            self.clean_now_btn['bg'] = '#cc66ff'
+            
+            scan_btn_thread()
+            
+            
+            
+        def quick_btn_func():
+            if self.isActivated:
+                self.thread = Thread(target = quick_clean_thread)
+                self.thread.start()
+            else:
+                activation_key_func()
+                
+        def deep_clean_thread():
+            self.check_icon['image'] = self.code_icon
+            self.clean_now_btn['text'] = 'Deep Clean'
+            self.clean_now_btn['bg'] = '#cc8800'
+            scan_btn_thread()
+            
+            
+        def deep_btn_func():
+            if self.isActivated:
+                self.thread = Thread(target = deep_clean_thread)
                 self.thread.start()
             else:
                 activation_key_func()
@@ -342,11 +373,11 @@ class Screen:
 
 
 
-        quick_clean_btn = Button(sidebar, text='Quick Clean', fg = 'black', font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat', command= scan_btn_func)
+        quick_clean_btn = Button(sidebar, text='Quick Clean', fg = 'black', font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat', command= quick_btn_func)
         quick_clean_btn.pack(side= 'top', pady= 20)
 
 
-        deep_clean_btn = Button(sidebar, text='Deep Clean', fg = 'black', font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat', command= scan_btn_func)
+        deep_clean_btn = Button(sidebar, text='Deep Clean', fg = 'black', font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat', command= deep_btn_func)
         deep_clean_btn.pack(side= 'top', pady= 20)
 
         activation_key_btn = Button(sidebar, text='Activation Key', fg = 'black', font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat', command= activation_key_func)
@@ -452,7 +483,7 @@ class Screen:
 
 
         self.memory_cleaner_button = Button(master=self.clean_frame, image=self.antivirus_icon, font= ("DM Sans", 10, 'bold','underline') , text="\nMemory Cleaner",
-                                                compound="top", relief='flat', bg='#ECF0F5', fg='black', command= mem_btn_func , cursor= 'hand2',)
+                                                compound="top", relief='flat', bg='#ECF0F5', fg='black', command= mem_cleaner_func , cursor= 'hand2',)
         self.memory_cleaner_button.pack(side = 'left', anchor = 'center', padx = 30, pady= 2, ipady = 5)
          
        
@@ -462,14 +493,14 @@ class Screen:
          
        
         self.deep_clean_button = Button(master=self.clean_frame, image=self.code_icon, font= ("DM Sans", 10, 'bold','underline') , text="\nDeep Clean",
-                                                compound="top", relief='flat', bg='#ECF0F5', fg='black', command= scan_btn_func,  cursor= 'hand2',)
+                                                compound="top", relief='flat', bg='#ECF0F5', fg='black', command= deep_btn_func,  cursor= 'hand2',)
         self.deep_clean_button.pack(side = 'left', anchor = 'center', padx = 30, pady= 2, ipady = 5)
 
         self.active_key_frame = Frame(self.dashboard_frame, bg='#ECF0F5')
         self.active_key_frame.pack(side = 'top', expand=True, anchor = 'center', pady = 2)
        
         self.quick_clean_button = Button(master=self.active_key_frame, image=self.harddisk_icon, font= ("DM Sans", 10, 'bold','underline') , text="\nQuick Clean",
-                                                compound="top", relief='flat', bg='#ECF0F5', fg='black', command= scan_btn_func , cursor= 'hand2',)
+                                                compound="top", relief='flat', bg='#ECF0F5', fg='black', command= quick_btn_func , cursor= 'hand2',)
         self.quick_clean_button.pack(side = 'left', anchor = 'center', padx = 30, pady= 2, ipady = 5)
          
        
@@ -768,8 +799,8 @@ class Screen:
         scanning_doc.pack(side= 'top', anchor = CENTER)
 
 
-        check_icon = Label(self.finished_scan_frame, image= self.check_icon_path ,width= 230 , height= 230, bg='#ECF0F5')
-        check_icon.pack(anchor = 'nw', side= TOP, padx= 70, pady= 20)
+        self.check_icon = Label(self.finished_scan_frame, image= self.check_icon_path ,width= 230 , height= 230, bg='#ECF0F5')
+        self.check_icon.pack(anchor = 'nw', side= TOP, padx= 70, pady= 20)
 
         total_data_frame = Frame(self.finished_scan_frame, bg='#ECF0F5',)
         total_data_frame.place(x=screen_width * 0.5, y=screen_height * 0.05)
@@ -800,8 +831,8 @@ class Screen:
             self.thread = Thread(target = clean_now_thread)
             self.thread.start()
 
-        clean_now_btn = Button(total_data_frame, text='Clean Now', command= clean_now_func, relief='flat' , font= ("DM Sans", 13, ), bg='#004AAD', fg='white')
-        clean_now_btn.pack(side= 'top', anchor = 'nw', pady=20, ipadx=120, ipady=5)
+        self.clean_now_btn = Button(total_data_frame, text='Clean Now', command= clean_now_func, relief='flat' , font= ("DM Sans", 13, ), bg='#004AAD', fg='white')
+        self.clean_now_btn.pack(side= 'top', anchor = 'nw', pady=20, ipadx=120, ipady=5)
 
 
         rect_frame = Frame(self.finished_scan_frame, bg='#ECF0F5', width=100,background='#ECF0F5', relief='solid', border=1, borderwidth=1)
@@ -863,7 +894,13 @@ class Screen:
                         # u'activation_key': str(activation_key_var.get()),
                     }, merge=True)
                     
-                    messagebox.showinfo('success', 'You registered successfully.\nRestart Application to get access')
+                    if messagebox.showinfo('success', 'You registered successfully.\nRestart application to get access'):
+                        self.root.destroy()
+                        # self.activationkey_frame.pack_forget()
+                        # self.cleaner_diagnosis.pack_forget()
+                        # self.dashboard.pack_forget()
+                        # self.finished_scan_frame.pack_forget()
+                        # self.dashboard_frame.pack( expand=True, fill= BOTH, anchor = 'ne')
                     update_key_btn['text'] = 'Update Key'
                     update_key_btn['state'] = NORMAL
                     update_key_btn['image'] = self.update_key_btn_path
