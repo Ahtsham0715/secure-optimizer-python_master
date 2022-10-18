@@ -830,19 +830,33 @@ class Screen:
             
             
             try:
+                self.isfound = False
                 db = firestore.client()
-                # doc_ref = db.collection(u'activationKeys').stream()
                 doc_ref = db.collection(u'allowed_users').document()
-                doc_ref.set({
-                    u'user_id': str(getpass.getuser()),
-                    u'machine_id': str(socket.gethostname()),
-                    u'activation_key': str(activation_key_var.get()),
-                }, merge=True)
-                
-                messagebox.showinfo('success', 'You registered successfully.\nRestart Application to get access')
-                update_key_btn['text'] = 'Update Key'
-                update_key_btn['state'] = NORMAL
-                update_key_btn['image'] = self.update_key_btn_path
+                collection_ref = db.collection(u'allowed_users').stream()
+                for doc in collection_ref:
+                    data = doc.to_dict()
+                    if data['activation_key'] == str(activation_key_var.get()):
+                        self.isfound = True
+                        break
+                    else:
+                        self.isfound = False
+                if self.isfound:
+                    doc_ref.set({
+                        u'user_id': str(getpass.getuser()),
+                        u'machine_id': str(socket.gethostname()),
+                        u'activation_key': str(activation_key_var.get()),
+                    }, merge=True)
+                    
+                    messagebox.showinfo('success', 'You registered successfully.\nRestart Application to get access')
+                    update_key_btn['text'] = 'Update Key'
+                    update_key_btn['state'] = NORMAL
+                    update_key_btn['image'] = self.update_key_btn_path
+                else:
+                    messagebox.showerror('Error', 'Wrong Activation Key\nTry Again!!!')
+                    update_key_btn['text'] = 'Update Key'
+                    update_key_btn['state'] = NORMAL
+                    update_key_btn['image'] = self.update_key_btn_path
                 
             except Exception as e:
                 messagebox.showerror('Error', 'Wrong Activation Key\nTry Again!!!')
