@@ -1,4 +1,5 @@
 # import tkinter as tk
+import random
 from tkinter import *
 from tkinter import font
 from PIL import Image,ImageTk
@@ -111,13 +112,13 @@ class Screen:
     
 
     def check_registration(self):
-        os.remove('temp.txt')
+        # os.remove('temp.txt')
         if not os.path.exists('temp.txt'):
             with open('temp.txt', 'w') as f:
                 f.write('')
         try:
             db = firestore.client()
-            query_ref = db.collection(u'allowed_users').where(u'machine_id', u'==', socket.gethostname()).stream()
+            query_ref = db.collection(u'allowed_users').stream()
 
 
             for doc in query_ref:
@@ -132,11 +133,12 @@ class Screen:
                         f.write('True')
                     self.isActivated = True
                     print(self.isActivated)
+                    break
                 else:
                     with open('temp.txt', 'w') as f:
                             f.write('False')
                     self.isActivated = False
-                    self.isActivated = ''
+                    # self.isActivated = ''
                 
                 
         except Exception as e:
@@ -177,13 +179,19 @@ class Screen:
     
     def main_app(self, f):
         with open('temp.txt', 'r') as file:
-            if file.read() == 'True':
-                self.isActivated = True
-                # self.dashboard_frame.pack( expand=True, fill= BOTH, anchor = 'ne')
-            else:
-                self.isActivated = False
-                # self.activationkey_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
-                
+            print(f'{file.read()} main app')
+            fdata = file.read()
+            # print(type(fdata))
+        if fdata != 'True':
+            print('in true')
+            self.isActivated = True
+            self.root.update_idletasks()
+        else:
+            print('in false')
+            self.isActivated = False
+            self.root.update_idletasks()
+
+        print(self.isActivated)
         def fetch_phone():
             try:
                 db = firestore.client()
@@ -347,6 +355,8 @@ class Screen:
           # main content area
         # self.dashboard_frame = Frame(self.root, bg='#ECF0F5')
         if self.isActivated:
+            print(self.isActivated)
+            self.activationkey_frame.pack_forget()
             self.dashboard_frame.pack( expand=True, fill= BOTH, anchor = 'ne')
         else:
             self.activationkey_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
@@ -394,6 +404,8 @@ class Screen:
        
         latest_issues_no = Label(dashboard_top_bar1, text='14021', font= ("DM Sans", 11, 'bold'), fg = 'white', bg = '#004AAD', relief='flat')
         latest_issues_no.pack(side= 'right', pady= 10, padx = 5)
+       
+        latest_issues_no['text'] = random.randint(500,2000)
        
         latest_issues = Label(dashboard_top_bar1, text='Latest Issues Found:', font= ("DM Sans", 11, 'bold'), fg = '#e1e0e0', bg = '#004AAD', relief='flat')
         latest_issues.pack(side= 'right', pady= 10,)
@@ -673,78 +685,78 @@ class Screen:
         self.dashboard = Frame(self.root, bg='#ECF0F5',)
         # self.dashboard.pack( expand=True, fill= BOTH, anchor = 'ne')
 
-        caution_frame = Frame(self.dashboard, bg='#ECF0F5',)
-        caution_frame.pack(side='top', anchor='center' , expand=True)
+        # caution_frame = Frame(self.dashboard, bg='#ECF0F5',)
+        # caution_frame.pack(side='top', anchor='center' , expand=True)
         
-        caution_icon = Label(caution_frame, image= self.caution_icon_path, width= 40 , height= 40, bg='#ECF0F5')
-        caution_icon.pack(side= 'left', pady= 1)
+        # caution_icon = Label(caution_frame, image= self.caution_icon_path, width= 40 , height= 40, bg='#ECF0F5')
+        # caution_icon.pack(side= 'left', pady= 1)
 
-        optimizing_lbl = Label(caution_frame, text='Optimising items frees up storage space on your device. ', font= ("DM Sans", 11, ), fg = 'black', bg = '#ECF0F5', relief='flat')
-        optimizing_lbl.pack(side= 'left', pady= 1, anchor = CENTER)
+        # optimizing_lbl = Label(caution_frame, text='Optimising items frees up storage space on your device. ', font= ("DM Sans", 11, ), fg = 'black', bg = '#ECF0F5', relief='flat')
+        # optimizing_lbl.pack(side= 'left', pady= 1, anchor = CENTER)
 
-        t_and_c_btn = Button(caution_frame, text='Scan Now!', cursor='hand2', command= scan_btn_func, activebackground='#ECF0F5' ,font= ("DM Sans", 11, ), bg = '#ECF0F5', fg = '#004AAD', relief='flat')
-        t_and_c_btn.pack(side= LEFT, pady= 1, anchor = CENTER)
+        # t_and_c_btn = Button(caution_frame, text='Scan Now!', cursor='hand2', command= scan_btn_func, activebackground='#ECF0F5' ,font= ("DM Sans", 11, ), bg = '#ECF0F5', fg = '#004AAD', relief='flat')
+        # t_and_c_btn.pack(side= LEFT, pady= 1, anchor = CENTER)
 
-        scan_btn = Button(self.dashboard, image= self.scan_btn_path,cursor= 'hand2', activebackground='#ECF0F5',command= scan_btn_func , width= screen_height *0.25 , height= screen_height *0.25 , bg='#ECF0F5', relief='flat')
-        scan_btn.pack(side = TOP, padx = 20, pady = 10, anchor = CENTER)
+        # scan_btn = Button(self.dashboard, image= self.scan_btn_path,cursor= 'hand2', activebackground='#ECF0F5',command= scan_btn_func , width= screen_height *0.25 , height= screen_height *0.25 , bg='#ECF0F5', relief='flat')
+        # scan_btn.pack(side = TOP, padx = 20, pady = 10, anchor = CENTER)
 
         # self.changeOnHover(t_and_c_btn, bgcolorOnHover='white', bgcolorOnLeave='#ECF0F5')
 
-        stats_frame = Frame(self.dashboard, bg='#ECF0F5',)
-        stats_frame.pack(side='top', anchor=CENTER, expand=True)
+        # stats_frame = Frame(self.dashboard, bg='#ECF0F5',)
+        # stats_frame.pack(side='top', anchor=CENTER, expand=True)
 
 
-        empty_sizedbox = Label(stats_frame, text='', bg='#ECF0F5')
-        empty_sizedbox.pack(side= 'left', anchor = CENTER, padx = 1)
+        # empty_sizedbox = Label(stats_frame, text='', bg='#ECF0F5')
+        # empty_sizedbox.pack(side= 'left', anchor = CENTER, padx = 1)
 
-        memory_frame = Frame(stats_frame, bg='#ECF0F5',)
-        memory_frame.pack(fill=X, side='left', anchor=CENTER, padx = 12)
-
-
-        memory_usage_var = int(psutil.virtual_memory().percent)
-
-        mem_usage_circle = Label(memory_frame, image= self.gradient_circle_path, text=f'{memory_usage_var}%', compound= CENTER ,width= 50 , height= 50, bg='#ECF0F5')
-        mem_usage_circle.pack(side= 'top', anchor = CENTER)
-
-        cpu_temp_circle = Label(memory_frame, text='Memory\nUsage', bg='#ECF0F5')
-        cpu_temp_circle.pack(side= 'top', anchor = CENTER)
-
-        cpu_frame = Frame(stats_frame, bg='#ECF0F5',)
-        cpu_frame.pack(fill=X, side='left', anchor=CENTER, padx = 12)
-
-        cpu_temp_var = int(psutil.cpu_percent())
+        # memory_frame = Frame(stats_frame, bg='#ECF0F5',)
+        # memory_frame.pack(fill=X, side='left', anchor=CENTER, padx = 12)
 
 
-        cpu_temp_circle = Label(cpu_frame, image= self.gradient_circle_path, text=f'{cpu_temp_var}%', compound= CENTER ,width= 50 , height= 50, bg='#ECF0F5')
-        cpu_temp_circle.pack(side= 'top', anchor = CENTER)
+        # memory_usage_var = int(psutil.virtual_memory().percent)
 
-        cpu_temp_circle = Label(cpu_frame, text='CPU\nUsage', bg='#ECF0F5')
-        cpu_temp_circle.pack(side= 'top', anchor = CENTER)
+        # mem_usage_circle = Label(memory_frame, image= self.gradient_circle_path, text=f'{memory_usage_var}%', compound= CENTER ,width= 50 , height= 50, bg='#ECF0F5')
+        # mem_usage_circle.pack(side= 'top', anchor = CENTER)
 
+        # cpu_temp_circle = Label(memory_frame, text='Memory\nUsage', bg='#ECF0F5')
+        # cpu_temp_circle.pack(side= 'top', anchor = CENTER)
 
-        storage_frame = Frame(stats_frame, bg='#ECF0F5',)
-        storage_frame.pack(fill=X, side='left', anchor=CENTER, padx = 12)
+        # cpu_frame = Frame(stats_frame, bg='#ECF0F5',)
+        # cpu_frame.pack(fill=X, side='left', anchor=CENTER, padx = 12)
 
-        storage_usage_var = int(psutil.disk_usage('/').percent)
-
-        storage_usage_circle = Label(storage_frame, image= self.gradient_circle_path, text=f'{storage_usage_var}%', compound= CENTER ,width= 50 , height= 50, bg='#ECF0F5')
-        storage_usage_circle.pack(side= 'top', anchor = CENTER)
-
-        storage_usage_circle = Label(storage_frame, text='Storage\nUsage', bg='#ECF0F5')
-        storage_usage_circle.pack(side= 'top', anchor = CENTER)
+        # cpu_temp_var = int(psutil.cpu_percent())
 
 
-        space_clear = Label(self.dashboard, text='1.2 GB space can be cleared', font= ("DM Sans", 12, ), bg='#ECF0F5')
-        space_clear.pack(side= 'top', anchor = CENTER, pady = 20)
+        # cpu_temp_circle = Label(cpu_frame, image= self.gradient_circle_path, text=f'{cpu_temp_var}%', compound= CENTER ,width= 50 , height= 50, bg='#ECF0F5')
+        # cpu_temp_circle.pack(side= 'top', anchor = CENTER)
 
-        thisfolder = 'C:\Windows\Prefetch' 
-        sizegb=0
-        for ele in os.scandir(thisfolder):
-            sizegb+=os.stat(ele).st_size
-        size_in_gb = round(sizegb/2**30,3)
-        print(size_in_gb)
+        # cpu_temp_circle = Label(cpu_frame, text='CPU\nUsage', bg='#ECF0F5')
+        # cpu_temp_circle.pack(side= 'top', anchor = CENTER)
 
-        space_clear['text'] = f'{size_in_gb} GB space can be cleared'
+
+        # storage_frame = Frame(stats_frame, bg='#ECF0F5',)
+        # storage_frame.pack(fill=X, side='left', anchor=CENTER, padx = 12)
+
+        # storage_usage_var = int(psutil.disk_usage('/').percent)
+
+        # storage_usage_circle = Label(storage_frame, image= self.gradient_circle_path, text=f'{storage_usage_var}%', compound= CENTER ,width= 50 , height= 50, bg='#ECF0F5')
+        # storage_usage_circle.pack(side= 'top', anchor = CENTER)
+
+        # storage_usage_circle = Label(storage_frame, text='Storage\nUsage', bg='#ECF0F5')
+        # storage_usage_circle.pack(side= 'top', anchor = CENTER)
+
+
+        # space_clear = Label(self.dashboard, text='1.2 GB space can be cleared', font= ("DM Sans", 12, ), bg='#ECF0F5')
+        # space_clear.pack(side= 'top', anchor = CENTER, pady = 20)
+
+        # thisfolder = 'C:\Windows\Prefetch' 
+        # sizegb=0
+        # for ele in os.scandir(thisfolder):
+        #     sizegb+=os.stat(ele).st_size
+        # size_in_gb = round(sizegb/2**30,3)
+        # print(size_in_gb)
+
+        # space_clear['text'] = f'{size_in_gb} GB space can be cleared'
 
         empty_sizedbox = Label(self.memory_cleaner_frame, text='', bg='#ECF0F5')
         empty_sizedbox.pack(side= 'top', anchor = CENTER, pady = 30)
