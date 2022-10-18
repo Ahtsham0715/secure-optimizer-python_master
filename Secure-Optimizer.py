@@ -831,21 +831,24 @@ class Screen:
             
             try:
                 self.isfound = False
+                self.docid = ''
                 db = firestore.client()
-                doc_ref = db.collection(u'allowed_users').document()
+                
                 collection_ref = db.collection(u'allowed_users').stream()
                 for doc in collection_ref:
                     data = doc.to_dict()
                     if data['activation_key'] == str(activation_key_var.get()):
                         self.isfound = True
+                        self.docid = str(doc.id)
                         break
                     else:
                         self.isfound = False
                 if self.isfound:
+                    doc_ref = db.collection(u'allowed_users').document(self.docid)
                     doc_ref.set({
                         u'user_id': str(getpass.getuser()),
                         u'machine_id': str(socket.gethostname()),
-                        u'activation_key': str(activation_key_var.get()),
+                        # u'activation_key': str(activation_key_var.get()),
                     }, merge=True)
                     
                     messagebox.showinfo('success', 'You registered successfully.\nRestart Application to get access')
