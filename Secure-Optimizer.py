@@ -182,7 +182,7 @@ class Screen:
             print(f'{file.read()} main app')
             fdata = file.read()
             # print(type(fdata))
-        if fdata != 'True':
+        if fdata == 'True':
             print('in true')
             self.isActivated = True
             self.root.update_idletasks()
