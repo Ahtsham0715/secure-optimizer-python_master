@@ -27,10 +27,20 @@ firebase_admin.initialize_app(cred)
 
 class Screen:
     def __init__(self):
-        Thread(target = self.check_registration).start()
-        # self.fetch_phone()
         self.activation_key = ''
         self.isActivated = False
+        if not os.path.exists('temp.txt'):
+            with open('temp.txt', 'w') as f:
+                f.write('')
+            Thread(target = self.check_registration).start()
+        else:
+            with open('temp.txt', 'r') as f:
+                tempdata = f.read()
+            if tempdata == '' or tempdata == 'False':
+                Thread(target = self.check_registration).start()
+            else:
+                self.isActivated = bool(tempdata)
+        # self.fetch_phone()
         self.root = Tk()
         self.root.geometry("600x300+350+250")
         self.root.configure(bg='#ECF0F5')
@@ -114,10 +124,8 @@ class Screen:
     
 
     def check_registration(self):
+        print('checking registration')
         # os.remove('temp.txt')
-        if not os.path.exists('temp.txt'):
-            with open('temp.txt', 'w') as f:
-                f.write('')
         try:
             db = firestore.client()
             query_ref = db.collection(u'allowed_users').stream()
@@ -272,11 +280,11 @@ class Screen:
             self.dashboard_frame.pack( expand=True, fill= BOTH, anchor = 'ne')
 
         def dashboard_btn_func():
-            if self.isActivated:
-                self.thread = Thread(target = dashboard_btn_thread)
-                self.thread.start()
-            else:
-                activation_key_func()
+            # if self.isActivated:
+            self.thread = Thread(target = dashboard_btn_thread)
+            self.thread.start()
+            # else:
+                # activation_key_func()
             
 
         dashboard_btn = Button(sidebar, text='Dashboard', fg = 'black', command= dashboard_btn_func, font= ("DM Sans", 11, 'bold'), bg = '#ECF0F5', relief='flat')
@@ -293,6 +301,7 @@ class Screen:
                 self.memory_cleaner_frame.pack_forget()
                 self.finished_scan_frame.pack_forget()
             else:
+                self.dashboard_frame.pack_forget()
                 self.activationkey_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
         
         def scan_btn_thread():
@@ -387,12 +396,12 @@ class Screen:
 
           # main content area
         # self.dashboard_frame = Frame(self.root, bg='#ECF0F5')
-        if self.isActivated:
-            print(self.isActivated)
-            self.activationkey_frame.pack_forget()
-            self.dashboard_frame.pack( expand=True, fill= BOTH, anchor = 'ne')
-        else:
-            self.activationkey_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
+        # if self.isActivated:
+            # print(self.isActivated)
+            # self.activationkey_frame.pack_forget()
+        self.dashboard_frame.pack( expand=True, fill= BOTH, anchor = 'ne')
+        # else:
+            # self.activationkey_frame.pack(expand = True, fill = BOTH, anchor = 'ne')
 
         dashboard_bottom_bar = Frame(self.dashboard_frame, bg='#004AAD', height=30, relief='solid', borderwidth=1,border=0,bd=1)
         dashboard_bottom_bar.pack(fill=X, side=BOTTOM, anchor = 'sw', expand= True)
@@ -644,9 +653,7 @@ class Screen:
     
         def mybar():
             self.start_scan_btn.configure(state= DISABLED)
-            
-            # self.scan_status_lbl['text'] = 'Scan Status: In Progress...'
-            # self.start_scan_btn.configure(fg_color= 'grey')
+
             import time, random
             self.progress = 0.1
             rand_time = random.randint(15,40)
@@ -717,79 +724,6 @@ class Screen:
         # memory cleaner
         self.dashboard = Frame(self.root, bg='#ECF0F5',)
         # self.dashboard.pack( expand=True, fill= BOTH, anchor = 'ne')
-
-        # caution_frame = Frame(self.dashboard, bg='#ECF0F5',)
-        # caution_frame.pack(side='top', anchor='center' , expand=True)
-        
-        # caution_icon = Label(caution_frame, image= self.caution_icon_path, width= 40 , height= 40, bg='#ECF0F5')
-        # caution_icon.pack(side= 'left', pady= 1)
-
-        # optimizing_lbl = Label(caution_frame, text='Optimising items frees up storage space on your device. ', font= ("DM Sans", 11, ), fg = 'black', bg = '#ECF0F5', relief='flat')
-        # optimizing_lbl.pack(side= 'left', pady= 1, anchor = CENTER)
-
-        # t_and_c_btn = Button(caution_frame, text='Scan Now!', cursor='hand2', command= scan_btn_func, activebackground='#ECF0F5' ,font= ("DM Sans", 11, ), bg = '#ECF0F5', fg = '#004AAD', relief='flat')
-        # t_and_c_btn.pack(side= LEFT, pady= 1, anchor = CENTER)
-
-        # scan_btn = Button(self.dashboard, image= self.scan_btn_path,cursor= 'hand2', activebackground='#ECF0F5',command= scan_btn_func , width= screen_height *0.25 , height= screen_height *0.25 , bg='#ECF0F5', relief='flat')
-        # scan_btn.pack(side = TOP, padx = 20, pady = 10, anchor = CENTER)
-
-        # self.changeOnHover(t_and_c_btn, bgcolorOnHover='white', bgcolorOnLeave='#ECF0F5')
-
-        # stats_frame = Frame(self.dashboard, bg='#ECF0F5',)
-        # stats_frame.pack(side='top', anchor=CENTER, expand=True)
-
-
-        # empty_sizedbox = Label(stats_frame, text='', bg='#ECF0F5')
-        # empty_sizedbox.pack(side= 'left', anchor = CENTER, padx = 1)
-
-        # memory_frame = Frame(stats_frame, bg='#ECF0F5',)
-        # memory_frame.pack(fill=X, side='left', anchor=CENTER, padx = 12)
-
-
-        # memory_usage_var = int(psutil.virtual_memory().percent)
-
-        # mem_usage_circle = Label(memory_frame, image= self.gradient_circle_path, text=f'{memory_usage_var}%', compound= CENTER ,width= 50 , height= 50, bg='#ECF0F5')
-        # mem_usage_circle.pack(side= 'top', anchor = CENTER)
-
-        # cpu_temp_circle = Label(memory_frame, text='Memory\nUsage', bg='#ECF0F5')
-        # cpu_temp_circle.pack(side= 'top', anchor = CENTER)
-
-        # cpu_frame = Frame(stats_frame, bg='#ECF0F5',)
-        # cpu_frame.pack(fill=X, side='left', anchor=CENTER, padx = 12)
-
-        # cpu_temp_var = int(psutil.cpu_percent())
-
-
-        # cpu_temp_circle = Label(cpu_frame, image= self.gradient_circle_path, text=f'{cpu_temp_var}%', compound= CENTER ,width= 50 , height= 50, bg='#ECF0F5')
-        # cpu_temp_circle.pack(side= 'top', anchor = CENTER)
-
-        # cpu_temp_circle = Label(cpu_frame, text='CPU\nUsage', bg='#ECF0F5')
-        # cpu_temp_circle.pack(side= 'top', anchor = CENTER)
-
-
-        # storage_frame = Frame(stats_frame, bg='#ECF0F5',)
-        # storage_frame.pack(fill=X, side='left', anchor=CENTER, padx = 12)
-
-        # storage_usage_var = int(psutil.disk_usage('/').percent)
-
-        # storage_usage_circle = Label(storage_frame, image= self.gradient_circle_path, text=f'{storage_usage_var}%', compound= CENTER ,width= 50 , height= 50, bg='#ECF0F5')
-        # storage_usage_circle.pack(side= 'top', anchor = CENTER)
-
-        # storage_usage_circle = Label(storage_frame, text='Storage\nUsage', bg='#ECF0F5')
-        # storage_usage_circle.pack(side= 'top', anchor = CENTER)
-
-
-        # space_clear = Label(self.dashboard, text='1.2 GB space can be cleared', font= ("DM Sans", 12, ), bg='#ECF0F5')
-        # space_clear.pack(side= 'top', anchor = CENTER, pady = 20)
-
-        # thisfolder = 'C:\Windows\Prefetch' 
-        # sizegb=0
-        # for ele in os.scandir(thisfolder):
-        #     sizegb+=os.stat(ele).st_size
-        # size_in_gb = round(sizegb/2**30,3)
-        # print(size_in_gb)
-
-        # space_clear['text'] = f'{size_in_gb} GB space can be cleared'
 
         empty_sizedbox = Label(self.memory_cleaner_frame, text='', bg='#ECF0F5')
         empty_sizedbox.pack(side= 'top', anchor = CENTER, pady = 30)
@@ -897,12 +831,12 @@ class Screen:
                     }, merge=True)
                     
                     if messagebox.showinfo('success', 'You registered successfully.\nRestart application to get access'):
-                        self.root.destroy()
-                        # self.activationkey_frame.pack_forget()
-                        # self.cleaner_diagnosis.pack_forget()
-                        # self.dashboard.pack_forget()
-                        # self.finished_scan_frame.pack_forget()
-                        # self.dashboard_frame.pack( expand=True, fill= BOTH, anchor = 'ne')
+                        # self.root.destroy()
+                        with open('temp.txt', 'w') as f:
+                            f.write('True')
+                        self.isActivated = True
+                        self.activationkey_frame.pack_forget()
+                        self.dashboard_frame.pack( expand=True, fill= BOTH, anchor = 'ne')
                     update_key_btn['text'] = 'Update Key'
                     update_key_btn['state'] = NORMAL
                     update_key_btn['image'] = self.update_key_btn_path
